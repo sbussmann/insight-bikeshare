@@ -1,0 +1,14 @@
+*.swp
+*.swo
+Data/BayArea
+Data/Minneapolis
+Data/NYC
+Data/WashingtonDC
+Data/climate
+Data/zipcode
+Data/Boston/hubway_hack_day_treat
+Data/Boston/hubway_trips.csv
+Data/Boston/hubway_trips_datetime.csv
+Data/Boston/hubway_trips_med.csv
+Data/Boston/hubway_trips_riderate.csv
+Data/Boston/bostonstation/stationstatus.csv

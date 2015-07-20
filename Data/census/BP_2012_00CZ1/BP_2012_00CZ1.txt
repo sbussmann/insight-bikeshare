@@ -1,0 +1,80 @@
+CB1200CZ11
+ZIP Code Business Statistics: Total for Zip Code
+
+Release Date : 06/26/2014
+
+NOTE: Data based on the 2012 Zip Business Patterns. For information on confidentiality protection, nonsampling error, and definitions, see  Survey Methodology.
+
+ 
+ 
+  Table Name
+  ZIP Code Business Statistics: Total for Zip Code: 2012 
+  
+ 
+  Release Schedule
+  The data in this file were released on June 26, 2014.
+  
+ 
+  Key Table Information
+  Beginning with reference year 2007, ZBP data are released using the Noise disclosure methodology to protect confidentiality. See Survey Methodology (http://www.census.gov/econ/cbp/methodology.htm) for complete information on the coverage and methodology of the ZIP Code Business Patterns data series. 
+  
+ 
+  Universe
+  The universe of this file is all operating establishments with one or more paid employees. This universe includes most establishments classified in the North American Industry Classification System (NAICS) Codes 11 through 813990. For specific exclusions and inclusions, see Industry Classification of Establishments. 
+  
+ 
+  Geography Coverage
+  The data are shown at the 5-digit ZIP Code level only. 
+  
+ 
+  Industry Coverage
+  The data are shown for NAICS code 00 (Total for all sectors) only. 
+  
+ 
+  Data Items and Other Identifying Records
+  This file contains data on the number of establishments, total employment, first quarter payroll and annual payroll. 
+  
+ 
+  Sort Order
+  Data are presented in ascending ZIP Code sequence. 
+  
+ 
+  FTP Download
+  Download the entire table at http://www2.census.gov/econ2012/CB/sector00/CB1200CZ11.zip. 
+  
+ 
+  Contact Information
+  U.S. Census Bureau Economic Planning and Coordination Division Register Analysis Branch Tel: (301)763-2580 Email: epcd.county.business.patterns@census.gov 
+  
+
+
+a	0 to 19 employees
+
+D	Withheld to avoid disclosing data for individual companies; data are included in higher level totals
+
+c	100 to 249 employees
+
+h	2,500 to 4,999 employees
+
+b	20 to 99 employees
+
+f	500 to 999 employees
+
+i	5,000 to 9,999 employees
+
+S	Withheld because estimate did not meet publication standards.
+
+e	250 to 499 employees
+
+g	1,000 to 2,499 employees
+
+j	10,000 to 24,999 employees
+
+l	50,000 to 99,999 employees
+
+k	25,000 to 49,999 employees
+
+m	100,000 employees or more
+
+Source: U.S. Census Bureau, 2012 ZIP Code Business Patterns.
+

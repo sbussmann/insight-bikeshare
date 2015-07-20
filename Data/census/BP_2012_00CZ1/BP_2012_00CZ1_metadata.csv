@@ -1,0 +1,10 @@
+GEO.id,Geographic identifier code
+GEO.id2,Id2
+GEO.display-label,Geographic area name
+NAICS.id,2012 NAICS code
+NAICS.display-label,Meaning of 2012 NAICS code
+YEAR.id,Year
+ESTAB,Number of establishments
+EMP,Paid employees for pay period including March 12 (number)
+PAYQTR1,"First-quarter payroll ($1,000)"
+PAYANN,"Annual payroll ($1,000)"
