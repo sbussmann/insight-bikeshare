@@ -83,23 +83,22 @@ def getscores(latvec, longvec, popmap, workmap, stationlat, stationlong,
     """
 
     nstation = len(stationlat)
-    popmeasures = []
-    workmeasures = []
+    originpop = []
+    originwork = []
     stationcoupling = np.zeros([nstation, nstation])
     for i in range(nstation):
         inlat = stationlat[i]
         inlong = stationlong[i]
         distancemap = distmap(latvec, longvec, inlat, inlong)
         close = distancemap < closeradius
-        popmeasures.append(popmap[close].mean())
-        workmeasures.append(workmap[close].mean())
+        originpop.append(popmap[close].mean())
+        originwork.append(workmap[close].mean())
         stationcoupling[i, :] = coupling(latvec, longvec, distancemap, 
                 stationlat, stationlong, scaledistance)
-        values = (i, popmeasures[i], workmeasures[i], 
+        fmt = '{0:3} {1:.2f} {2:.2f} {3:.5f} {4:.3f} {5:.3f}'
+        print(fmt.format(i, originpop[i], originwork[i], 
                 stationcoupling[i, :].min(), stationcoupling[i, :].max(),
-                stationcoupling[i, :].mean())
-        fmt = '{0} {1:.2f} {2:.2f} {3:.5f} {4:.3f} {5:.3f}'
-        print(fmt.format(values))
+                stationcoupling[i, :].mean()))
 
     # test: Is there a station in stationcoupling that is ~1?  Are stations
     # that are known to be far from each other correctly assigned a low
@@ -108,16 +107,15 @@ def getscores(latvec, longvec, popmap, workmap, stationlat, stationlong,
     #import pdb; pdb.set_trace()
 
 
-    popscore = []
-    workscore = []
+    destpop = []
+    destwork = []
     for i in range(nstation):
-        popscore.append(np.average(popmeasures, 
+        destpop.append(np.average(originpop, 
             weights=stationcoupling[i, :]))
-        workscore.append(np.average(workmeasures, 
+        destwork.append(np.average(originwork, 
             weights=stationcoupling[i, :]))
 
-    import pdb; pdb.set_trace()
-    scores = [popscore, workscore]
+    scores = [originpop, originwork, destpop, destwork]
     return scores
 
 #station['popdensity'] = popdensity

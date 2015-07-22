@@ -56,4 +56,11 @@ plt.xlabel('Population density')
 plt.ylabel('Employee density')
 plt.show()
 
+station['originpop'] = scores[0]
+station['originwork'] = scores[1]
+station['destpop'] = scores[2]
+station['destwork'] = scores[3]
+
+station.to_csv('../Data/Boston/LinkedStationDensity.csv')
+
 import pdb; pdb.set_trace()
