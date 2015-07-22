@@ -35,7 +35,7 @@ z = employee['EMP']
 workmap = mlab.griddata(x, y, z, xi, yi, interp='linear')
 x = population['latitude']
 y = population['longitude']
-z = population['SUBHD0401']
+z = population['HD01']
 popmap = mlab.griddata(x, y, z, xi, yi, interp='linear')
 #origdest = origin * destination
 
@@ -58,8 +58,10 @@ plt.show()
 
 station['originpop'] = scores[0]
 station['originwork'] = scores[1]
-station['destpop'] = scores[2]
-station['destwork'] = scores[3]
+station['originsubway'] = scores[2]
+station['destpop'] = scores[3]
+station['destwork'] = scores[4]
+station['destsubway'] = scores[5]
 
 station.to_csv('../Data/Boston/LinkedStationDensity.csv')
 
