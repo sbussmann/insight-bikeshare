@@ -2,6 +2,33 @@ import numpy as np
 from geopy.distance import vincenty
 
 
+def distvec(latvec, longvec, inlat, inlong):
+
+    """
+
+    Compute the distance in miles from a given latitude and longitude.
+    
+    Input: 
+        latvec: vector of latitudes [numpy 1D array]
+        longvec: vector of longitudes [numpy 1D array]
+        inlat: latitude of station [float]
+        inlong: longitude of station [float]
+
+    Output: 
+        distancevec: distance in miles from (inlat, inlong) [numpy 1D array]
+
+    """
+
+
+    origin = (inlat, inlong)
+    nlat = len(latvec)
+    distancevec = np.zeros(nlat)
+    for ilat in range(nlat):
+        destination = (latvec[ilat], longvec[ilat])
+        distancevec[ilat] = vincenty(origin, destination).miles
+
+    return distancevec
+
 def distmap(latvec, longvec, inlat, inlong):
 
     """
@@ -9,8 +36,8 @@ def distmap(latvec, longvec, inlat, inlong):
     Map the distance in miles from a given latitude and longitude.
     
     Input: 
-        xvec: high resolution vector of latitudes [numpy array]
-        yvec: high resolution vector of longitudes [numpy array]
+        latvec: vector of latitudes [numpy array]
+        longvec: vector of longitudes [numpy array]
         inlat: latitude of station [float]
         inlong: longitude of station [float]
 
@@ -31,41 +58,31 @@ def distmap(latvec, longvec, inlat, inlong):
 
     return distancemap
 
-def coupling(latvec, longvec, distancemap, stationlat, stationlong,
-        scaledistance):
+def coupling(distancevec, scaledistance):
 
     """
 
-    Compute the coupling efficiency between a given station and all other
-    stations.  Model coupling efficiency with a Gaussian.
+    Compute the coupling efficiency between a given location and a set of
+    different locations.  Model coupling efficiency with a Gaussian.
 
     Inputs: 
-        stationlat: station latitudes [list]
-        stationlong: station longitudes [list]
-        distancemap: map of distance from given station to all other points
+        distancevec: vector of distances from given station to all other points
         in Greater Boston area [numpy array]
         scaledistance: length scale over which coupling efficiency is expected
         to decrease by 1/e [float]
 
     Outputs:
-        eta_coupling: coupling efficiencies for each station [list]
+        couplingfactor: coupling efficiencies for each station [list]
 
     """
 
-    from scipy.interpolate import interp2d
+    couplingfactor = np.exp(-0.5 * (distancevec / scaledistance) ** 2)
 
-    sdfunc = interp2d(latvec, longvec, distancemap, kind='cubic')
-    stationdistance = []
-    for i in range(len(stationlat)):
-        interp = sdfunc(stationlat[i], stationlong[i])
-        stationdistance.append(interp[0])
-    stationdistance = np.array(stationdistance)
-    stationcoupling = np.exp(-0.5 * (stationdistance / scaledistance) ** 2)
+    return couplingfactor
 
-    return stationcoupling
-
-def getscores(latvec, longvec, popmap, workmap, stationlat, stationlong,
-        closeradius, scaledistance):
+def getscores(latbyzip, longbyzip, latbysubway, longbysubway, popbyzip, 
+        workbyzip, subwayrides, stationlat, stationlong, zipscale, 
+        stationscale, subwayscale):
 
     """
 
@@ -74,31 +91,46 @@ def getscores(latvec, longvec, popmap, workmap, stationlat, stationlong,
     TO DO: add MBTA T stop data.
 
     inputs:
-        latvec: vector of high resolution latitudes [numpy array]
-        longvec: vector of high resolution longitudes [numpy array]
-        popmap: high resolution map of population density [numpy array]
-        workmap: high resolution map of employee density [numpy array]
-        stationcoupling: coupling efficiency
+        latvec: vector of latitudes [numpy array]
+        longvec: vector of longitudes [numpy array]
+        popvec: vector of population size [numpy array]
+        workvec: vector of employee size [numpy array]
 
     """
 
+    # for each station, compute the population score as the weighted average of
+    # all zip codes
     nstation = len(stationlat)
+    nsubway = len(latbysubway)
     originpop = []
     originwork = []
-    stationcoupling = np.zeros([nstation, nstation])
+    originsubway = []
+    distancematrix = np.zeros([nstation, nstation])
+    distancematrixsubway = np.zeros([nstation, nsubway])
     for i in range(nstation):
         inlat = stationlat[i]
         inlong = stationlong[i]
-        distancemap = distmap(latvec, longvec, inlat, inlong)
-        close = distancemap < closeradius
-        originpop.append(popmap[close].mean())
-        originwork.append(workmap[close].mean())
-        stationcoupling[i, :] = coupling(latvec, longvec, distancemap, 
-                stationlat, stationlong, scaledistance)
-        fmt = '{0:3} {1:.2f} {2:.2f} {3:.5f} {4:.3f} {5:.3f}'
-        print(fmt.format(i, originpop[i], originwork[i], 
-                stationcoupling[i, :].min(), stationcoupling[i, :].max(),
-                stationcoupling[i, :].mean()))
+        distancevec = distvec(latbyzip, longbyzip, inlat, inlong)
+        couplingzip = coupling(distancevec, zipscale)
+        originpop.append(np.sum(popbyzip * couplingzip))
+        originwork.append(np.sum(workbyzip * couplingzip))
+
+        distancevecsubway = distvec(latbysubway, longbysubway, inlat, inlong)
+
+        # coupling efficiency between this station and all subway stops
+        couplingsubway = coupling(distancevecsubway, subwayscale)
+
+        # weighted sum of subway rides
+        originsubway.append(np.sum(subwayrides * couplingsubway))
+
+        # store the distance metric for each station so we don't have to
+        # recompute
+        distancematrix[i, :] = distancevec
+        distancematrixsubway[i, :] = distancevecsubway
+        fmt = '{0:3} {1:.5f} {2:.5f} {3:.2f} {4:.2f} {5:.5f} {6:.3f} {7:.3f} {8:.3f}'
+        print(fmt.format(i, inlat, inlong, originpop[i], originwork[i], 
+            originsubway[i], distancematrix[i, :].min(), 
+            distancematrix[i, :].max(), distancematrix[i, :].mean()))
 
     # test: Is there a station in stationcoupling that is ~1?  Are stations
     # that are known to be far from each other correctly assigned a low
@@ -107,15 +139,27 @@ def getscores(latvec, longvec, popmap, workmap, stationlat, stationlong,
     #import pdb; pdb.set_trace()
 
 
+    # population close to input station
     destpop = []
-    destwork = []
-    for i in range(nstation):
-        destpop.append(np.average(originpop, 
-            weights=stationcoupling[i, :]))
-        destwork.append(np.average(originwork, 
-            weights=stationcoupling[i, :]))
 
-    scores = [originpop, originwork, destpop, destwork]
+    # employees close to input station
+    destwork = []
+
+    # subway stops close to input station [shape = (142,)]
+    destsubway = []
+
+    for i in range(nstation):
+        distancevec = distancematrix[i, :]
+
+        # station to station coupling
+        stationcoupling = coupling(distancevec, stationscale)
+
+        destpop.append(np.sum(originpop * stationcoupling))
+        destwork.append(np.sum(originwork * stationcoupling))
+        destsubway.append(np.sum(originsubway * stationcoupling))
+
+    scores = [originpop, originwork, originsubway, destpop, destwork,
+            destsubway]
     return scores
 
 #station['popdensity'] = popdensity
