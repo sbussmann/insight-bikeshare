@@ -1,10 +1,3 @@
-
-# coding: utf-8
-
-# # Aim is to get zip code for each station for each day
-
-# In[1]:
-
 import pandas as pd
 #import numpy as np
 import densitymetric
@@ -12,39 +5,9 @@ import densitymetric
 import matplotlib.pyplot as plt
 
 
-# In[2]:
+""" User Defined Parameters """
 
-# skip first 4 cells and just read in the csv files
-popemp = pd.read_csv('../Data/Boston/popemp.csv')
-#employee = pd.read_csv('../Data/Boston/employee.csv')
-station = pd.read_csv('../Data/Boston/hubway_stations.csv')
-mbta = pd.read_csv('../Data/Boston/mbtarideratelocation.csv')
-
-# Generate a regular grid to interpolate the data.
-#xmin = 42.29
-#xmax = 42.43
-#ymin = -71.19
-#ymax = -70.98
-#nx = 200
-#ny = 200
-#xvec = np.linspace(xmin, xmax, nx)
-#yvec = np.linspace(ymin, ymax, ny)
-#xi, yi = np.meshgrid(xvec, yvec)
-#x = employee['latitude']
-#y = employee['longitude']
-#z = employee['EMP']
-#workmap = mlab.griddata(x, y, z, xi, yi, interp='linear')
-#x = population['latitude']
-#y = population['longitude']
-#z = population['HD01']
-#popmap = mlab.griddata(x, y, z, xi, yi, interp='linear')
-#origdest = origin * destination
-
-
-# In[3]:
-
-stationlat = station['lat'].values
-stationlong = station['lng'].values
+groupnum = 'Group4'
 
 # scale radius by which to weight complementary zip codes
 zipscale = 0.5
@@ -54,6 +17,13 @@ stationscale = 1.0
 
 # scale radius by which to weight complementary subway stops
 subwayscale = 0.25
+
+popemp = pd.read_csv('../Data/Boston/popemp.csv')
+station = pd.read_csv('../Data/Boston/hubway_stations.csv')
+mbta = pd.read_csv('../Data/Boston/mbtarideratelocation.csv')
+
+stationlat = station['lat'].values
+stationlong = station['lng'].values
 
 # latbyzip = latitudes for each zip code
 latbyzip = popemp['latitude'].values
@@ -94,16 +64,16 @@ station['destpop'] = scores[3]
 station['destwork'] = scores[4]
 station['destsubway'] = scores[5]
 
-station.to_csv('../Data/Boston/StationGroup4.csv')
+station.to_csv('../Data/Boston/Station' + groupnum + '.csv')
 
-import pdb; pdb.set_trace()
 databystation = pd.read_csv('../Data/Boston/HubwayRidesDays.csv')
-station = pd.read_csv('../Data/Boston/StationGroup4.csv')
+station = pd.read_csv('../Data/Boston/Station' + groupnum + '.csv')
 station = station.rename(columns = {'id': 'stationid'})
 station = station.drop('Unnamed: 0', axis=1)
 databystation = databystation.merge(station, on='stationid')
 databystation = databystation.drop(['terminal', 'station', 'status', 'municipal'], axis=1)
 databystation = databystation.drop('Unnamed: 0', axis=1)
 databystation['ridesperday'] = databystation['nrides'] / databystation['ndays']
-databystation.to_csv('../Data/Boston/FeaturesGroup4.csv')
+databystation.to_csv('../Data/Boston/Features' + groupnum + '.csv')
 
+import pdb; pdb.set_trace()
