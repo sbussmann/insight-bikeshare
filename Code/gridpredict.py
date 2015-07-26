@@ -10,7 +10,6 @@ import densitymetric
 import pandas as pd
 #from sklearn import cross_validation
 from sklearn import linear_model
-from pylab import savefig
 import loadutil
 
 
@@ -121,76 +120,6 @@ def getpercentile(nride, stationfeatures):
     place = len(stationfeatures[indx])
     return place
 
-def autoinput(iternum):
-
-    # load the data
-    loaddata = loadutil.load(iternum)
-    popemp = loaddata[0]
-    mbta = loaddata[1]
-    station = loaddata[2]
-    zipscale = loaddata[3]
-    stationscale = loaddata[4]
-    subwayscale = loaddata[5]
-    stationpop = loaddata[6]
-    stationwork = loaddata[7]
-    stationsubway = loaddata[8]
-    stationfeatures = loaddata[9]
-
-    ilat, ilong = peakfind(iternum)
-
-    # predict the number of rides for this location
-    nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
-            stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures)
-
-    # compute how many existing stations would be worse than this station
-    place = getpercentile(nrides, stationfeatures)
-
-    # add the new station, 
-    addnewstation(station, ilat, ilong, iternum)
-
-    # recompute stationfeatures
-    updatefeatures(stationfeatures, ilat, ilong, iternum)
-
-    # update the grid of predicted rides
-    makemap(iternum)
-
-    return nrides, place
-
-def userinput(ilat, ilong, iternum):
-
-    # load the data
-    loaddata = loadutil.load(iternum)
-    popemp = loaddata[0]
-    mbta = loaddata[1]
-    station = loaddata[2]
-    zipscale = loaddata[3]
-    stationscale = loaddata[4]
-    subwayscale = loaddata[5]
-    stationpop = loaddata[6]
-    stationwork = loaddata[7]
-    stationsubway = loaddata[8]
-    stationfeatures = loaddata[9]
-
-    # predict the number of rides for this location
-    nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
-            stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures)
-
-    # compute how many existing stations would be worse than this station
-    place = getpercentile(nrides, stationfeatures)
-
-    # add the new station, 
-    addnewstation(station, ilat, ilong, iternum)
-
-    # recompute stationfeatures
-    updatefeatures(stationfeatures, ilat, ilong, iternum)
-
-    # update the grid of predicted rides
-    makemap(iternum)
-
-    return nrides, place
-
 def makemap(iternum):
 
     # Generate a regular grid of latitudes and longitudes
@@ -267,3 +196,70 @@ def peakfind(iternum):
     longmax = longmap[maxindx]
 
     return latmax, longmax
+
+def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
+            stationscale, subwayscale, stationpop, stationwork, 
+            stationsubway, stationfeatures, iternum):
+
+    # predict the number of rides for this location
+    nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
+            stationscale, subwayscale, stationpop, stationwork, 
+            stationsubway, stationfeatures)
+
+    # compute how many existing stations would be worse than this station
+    place = getpercentile(nrides, stationfeatures)
+
+    # add the new station, 
+    addnewstation(station, ilat, ilong, iternum)
+
+    # recompute stationfeatures
+    updatefeatures(stationfeatures, ilat, ilong, iternum)
+
+    # update the grid of predicted rides
+    makemap(iternum)
+
+    return nrides, place
+
+def autoinput(iternum):
+
+    # load the data
+    loaddata = loadutil.load(iternum)
+    popemp = loaddata[0]
+    mbta = loaddata[1]
+    station = loaddata[2]
+    zipscale = loaddata[3]
+    stationscale = loaddata[4]
+    subwayscale = loaddata[5]
+    stationpop = loaddata[6]
+    stationwork = loaddata[7]
+    stationsubway = loaddata[8]
+    stationfeatures = loaddata[9]
+
+    ilat, ilong = peakfind(iternum)
+
+    nrides, place = giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
+            stationscale, subwayscale, stationpop, stationwork, 
+            stationsubway, stationfeatures, iternum)
+
+    return nrides, place
+
+def userinput(ilat, ilong, iternum):
+
+    # load the data
+    loaddata = loadutil.load(iternum)
+    popemp = loaddata[0]
+    mbta = loaddata[1]
+    station = loaddata[2]
+    zipscale = loaddata[3]
+    stationscale = loaddata[4]
+    subwayscale = loaddata[5]
+    stationpop = loaddata[6]
+    stationwork = loaddata[7]
+    stationsubway = loaddata[8]
+    stationfeatures = loaddata[9]
+
+    nrides, place = giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
+            stationscale, subwayscale, stationpop, stationwork, 
+            stationsubway, stationfeatures, iternum)
+
+    return nrides, place
