@@ -166,7 +166,7 @@ def makemap(iterstring):
     ridedict = {'nrides': nridelist, 'latitude': latlist, 'longitude':
             longlist}
     ridedf = pd.DataFrame(ridedict)
-    ridedf.to_csv('../Data/Boston/ridemap_iteration' + iterstring + '.csv')
+    ridedf.to_csv('../Data/Boston/nridemaps_iteration' + iterstring + '.csv')
             #slat = str(ilat)
             #slong = str(ilong)
             #sride = str(iride)
@@ -186,7 +186,7 @@ def peakfind(iterstring):
     
     """
 
-    ridedf = pd.read_csv('../Data/Boston/ridemap_iteration' + \
+    ridedf = pd.read_csv('../Data/Boston/nridesmap_iteration' + \
             iterstring + '.csv')
     latmap = ridedf['latitude'].reshape(100, 100)
     longmap = ridedf['longitude'].reshape(100, 100)
@@ -266,7 +266,7 @@ def giveninput(ilat, ilong, popemp, mbta, station, zipscale,
 def autoinput(iterstring):
 
     # load the data
-    loaddata = loadutil.load(iterstring)
+    loaddata = loadutil.load(iterstring=iterstring)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
@@ -289,7 +289,7 @@ def autoinput(iterstring):
 def userinput(ilat, ilong, iterstring):
 
     # load the data
-    loaddata = loadutil.load(iterstring)
+    loaddata = loadutil.load(iterstring=iterstring)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
@@ -329,4 +329,8 @@ def resetiteration():
 
     cmd = 'cp ' + dataloc + 'FeaturesGroup4.csv ' + dataloc + \
             'FeaturesGroup4_iteration0.csv'
+    call(cmd, shell=True)
+
+    cmd = 'cp ' + dataloc + 'hubway_stations.csv ' + dataloc + \
+            'hubway_stations_iteration0.csv'
     call(cmd, shell=True)
