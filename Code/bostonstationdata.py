@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 """ User Defined Parameters """
 
-groupnum = 'Group4'
+groupnum = 'Group5'
 
 # scale radius by which to weight complementary zip codes
 zipscale = 0.5
@@ -41,10 +41,10 @@ longbysubway = mbta['longitude']
 popbyzip = popemp['HD01'].values
 
 # workbyzip = number of employees for each zip code
-workbyzip = popemp['EMP']
+workbyzip = popemp['EMP'].values
 
 # subwayrides = average number of daily mbta rides in 2013
-subwayrides = mbta['ridesperday']
+subwayrides = mbta['ridesperday'].values
 
 scores = densitymetric.getscores(latbyzip, longbyzip, latbysubway,
         longbysubway, popbyzip, workbyzip, subwayrides, stationlat, 

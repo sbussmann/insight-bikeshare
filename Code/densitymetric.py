@@ -63,7 +63,7 @@ def coupling(distancevec, scaledistance):
     """
 
     Compute the coupling efficiency between a given location and a set of
-    different locations.  Model coupling efficiency with a Gaussian.
+    different locations.  Model coupling efficiency with a normal distribution.
 
     Inputs: 
         distancevec: vector of distances from given station to all other points
@@ -76,6 +76,7 @@ def coupling(distancevec, scaledistance):
 
     """
 
+    #ridelengthdf = pd.read_csv('../Data/Boston/ridelengthpdf.csv')
     couplingfactor = np.exp(-0.5 * (distancevec / scaledistance) ** 2)
 
     return couplingfactor
