@@ -120,7 +120,7 @@ def getpercentile(nride, stationfeatures):
     place = len(stationfeatures[indx])
     return place
 
-def makemap(iternum):
+def makemap(iterstring):
 
     # Generate a regular grid of latitudes and longitudes
     latvec, longvec = loadutil.grid()
@@ -128,7 +128,7 @@ def makemap(iternum):
     nlong = len(longvec)
 
     # load the data
-    loaddata = loadutil.load(iternum)
+    loaddata = loadutil.load(iterstring)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
@@ -165,7 +165,7 @@ def makemap(iternum):
     ridedict = {'nrides': nridelist, 'latitude': latlist, 'longitude':
             longlist}
     ridedf = pd.DataFrame(ridedict)
-    ridedf.to_csv('../Data/Boston/ridemap_iteration' + iternum + '.csv')
+    ridedf.to_csv('../Data/Boston/ridemap_iteration' + iterstring + '.csv')
             #slat = str(ilat)
             #slong = str(ilong)
             #sride = str(iride)
@@ -177,7 +177,7 @@ def makemap(iternum):
 
     #frides.close()
 
-def peakfind(iternum):
+def peakfind(iterstring):
 
     """ 
     
@@ -186,7 +186,7 @@ def peakfind(iternum):
     """
 
     ridedf = pd.read_csv('../Data/Boston/ridemap_iteration' + \
-            iternum + '.csv')
+            iterstring + '.csv')
     latmap = ridedf['latitude'].reshape(100, 100)
     longmap = ridedf['longitude'].reshape(100, 100)
     ridemap = ridedf['nrides'].reshape(100, 100)
@@ -197,7 +197,7 @@ def peakfind(iternum):
 
     return latmax, longmax
 
-def addnewstation(station, ilat, ilong, iternum):
+def addnewstation(station, ilat, ilong, iterstring):
 
     """
 
@@ -208,11 +208,11 @@ def addnewstation(station, ilat, ilong, iternum):
     newdic = {'lat': [ilat], 'lng': [ilong], 'station': ['proposed']}
     df1 = pd.DataFrame(newdic)
     station = station.append(df1)
-    station.to_csv('../Data/Boston/hubway_station_iteration' + iternum + \
+    station.to_csv('../Data/Boston/hubway_station_iteration' + iterstring + \
             '.csv')
     return 
 
-def updatefeatures(stationfeatures, features, nrides, groupnum, iternum):
+def updatefeatures(stationfeatures, features, nrides, groupnum, iterstring):
 
     """
 
@@ -227,13 +227,13 @@ def updatefeatures(stationfeatures, features, nrides, groupnum, iternum):
     df1 = pd.DataFrame(newdic)
     stationfeatures = stationfeatures.append(df1)
     stationfeatures.to_csv('../Data/Boston/Features' + groupnum + \
-            '_iteration' + iternum + '.csv')
+            '_iteration' + iterstring + '.csv')
 
     return
 
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
             stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures, iternum, groupnum='Group4'):
+            stationsubway, stationfeatures, iterstring, groupnum='Group4'):
 
     # predict the number of daily rides for this location
     nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
@@ -243,24 +243,29 @@ def giveninput(ilat, ilong, popemp, mbta, station, zipscale,
     # compute how many existing stations would be worse than this station
     place = getpercentile(nrides, stationfeatures)
 
+    # update the counter
+    iternum = iterstring.astype('float')
+    iternum += 1
+    iterstring = str(iternum)
+
     # add the new station, 
-    addnewstation(station, ilat, ilong, iternum)
+    addnewstation(station, ilat, ilong, iterstring)
 
     # recompute stationfeatures
     ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
             station, zipscale, stationscale, subwayscale, stationpop, 
             stationwork, stationsubway)
-    updatefeatures(stationfeatures, ifeatures, groupnum, iternum)
+    updatefeatures(stationfeatures, ifeatures, groupnum, iterstring)
 
     # update the grid of predicted rides
-    makemap(iternum)
+    makemap(iterstring)
 
-    return nrides, place
+    return nrides, place, iterstring
 
-def autoinput(iternum):
+def autoinput(iterstring):
 
     # load the data
-    loaddata = loadutil.load(iternum)
+    loaddata = loadutil.load(iterstring)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
@@ -272,18 +277,18 @@ def autoinput(iternum):
     stationsubway = loaddata[8]
     stationfeatures = loaddata[9]
 
-    ilat, ilong = peakfind(iternum)
+    ilat, ilong = peakfind(iterstring)
 
-    nrides, place = giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
-            stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures, iternum)
+    nrides, place, iterstring = giveninput(ilat, ilong, popemp, mbta, station,
+            zipscale, stationscale, subwayscale, stationpop, stationwork,
+            stationsubway, stationfeatures, iterstring)
 
-    return nrides, place
+    return nrides, place, iterstring
 
-def userinput(ilat, ilong, iternum):
+def userinput(ilat, ilong, iterstring):
 
     # load the data
-    loaddata = loadutil.load(iternum)
+    loaddata = loadutil.load(iterstring)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
@@ -295,8 +300,8 @@ def userinput(ilat, ilong, iternum):
     stationsubway = loaddata[8]
     stationfeatures = loaddata[9]
 
-    nrides, place = giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
-            stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures, iternum)
+    nrides, place, iterstring = giveninput(ilat, ilong, popemp, mbta, station,
+            zipscale, stationscale, subwayscale, stationpop, stationwork,
+            stationsubway, stationfeatures, iterstring)
 
-    return nrides, place
+    return nrides, place, iterstring
