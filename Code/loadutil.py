@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-def load(groupnum='Group4'):
+def load(groupnum='Group4', iternum = ''):
 
     """ Helper function to load data. """
 
@@ -15,7 +15,10 @@ def load(groupnum='Group4'):
     # scale radius by which to weight complementary subway stops
     subwayscale = 0.25
 
-    stationfeatures = pd.read_csv('../Data/Boston/Features' + groupnum + '.csv')
+    stationfeatures = pd.read_csv('../Data/Boston/Features' + groupnum + \
+            '_iteration' + iternum + '.csv')
+    station = pd.read_csv('../Data/Boston/hubway_stations' + \
+            '_iteration' + iternum + '.csv')
 
     #popular = 45
     #stationfeatures = stationfeatures[stationfeatures['ridesperday'] < popular]
@@ -25,7 +28,6 @@ def load(groupnum='Group4'):
     stationsubway = stationfeatures['originsubway'].values
 
     popemp = pd.read_csv('../Data/Boston/popemp.csv')
-    station = pd.read_csv('../Data/Boston/hubway_stations.csv')
     mbta = pd.read_csv('../Data/Boston/mbtarideratelocation.csv')
 
     return popemp, mbta, station, zipscale, stationscale, \

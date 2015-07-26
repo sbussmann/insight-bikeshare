@@ -121,10 +121,46 @@ def getpercentile(nride, stationfeatures):
     place = len(stationfeatures[indx])
     return place
 
-def userinput(ilat, ilong):
+def autoinput(iternum):
 
     # load the data
-    loaddata = loadutil.load()
+    loaddata = loadutil.load(iternum)
+    popemp = loaddata[0]
+    mbta = loaddata[1]
+    station = loaddata[2]
+    zipscale = loaddata[3]
+    stationscale = loaddata[4]
+    subwayscale = loaddata[5]
+    stationpop = loaddata[6]
+    stationwork = loaddata[7]
+    stationsubway = loaddata[8]
+    stationfeatures = loaddata[9]
+
+    ilat, ilong = peakfind(iternum)
+
+    # predict the number of rides for this location
+    nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
+            stationscale, subwayscale, stationpop, stationwork, 
+            stationsubway, stationfeatures)
+
+    # compute how many existing stations would be worse than this station
+    place = getpercentile(nrides, stationfeatures)
+
+    # add the new station, 
+    addnewstation(station, ilat, ilong, iternum)
+
+    # recompute stationfeatures
+    updatefeatures(stationfeatures, ilat, ilong, iternum)
+
+    # update the grid of predicted rides
+    makemap(iternum)
+
+    return nrides, place
+
+def userinput(ilat, ilong, iternum):
+
+    # load the data
+    loaddata = loadutil.load(iternum)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
@@ -145,17 +181,17 @@ def userinput(ilat, ilong):
     place = getpercentile(nrides, stationfeatures)
 
     # add the new station, 
-    station = addnewstation(station, ilat, ilong)
+    addnewstation(station, ilat, ilong, iternum)
 
     # recompute stationfeatures
-    stationfeatures = updatefeatures(stationfeatures, ilat, ilong)
+    updatefeatures(stationfeatures, ilat, ilong, iternum)
 
     # update the grid of predicted rides
-
+    makemap(iternum)
 
     return nrides, place
 
-def makemap():
+def makemap(iternum):
 
     # Generate a regular grid of latitudes and longitudes
     latvec, longvec = loadutil.grid()
@@ -163,7 +199,7 @@ def makemap():
     nlong = len(longvec)
 
     # load the data
-    loaddata = loadutil.load()
+    loaddata = loadutil.load(iternum)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
@@ -200,7 +236,7 @@ def makemap():
     ridedict = {'nrides': nridelist, 'latitude': latlist, 'longitude':
             longlist}
     ridedf = pd.DataFrame(ridedict)
-    ridedf.to_csv('../Data/Boston/ridemap.csv')
+    ridedf.to_csv('../Data/Boston/ridemap_iteration' + iternum + '.csv')
             #slat = str(ilat)
             #slong = str(ilong)
             #sride = str(iride)
@@ -211,29 +247,23 @@ def makemap():
                 #ifeatures[2], ifeatures[3], ifeatures[4], ifeatures[5], iride))
 
     #frides.close()
-#import seaborn as sns
-import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
-#ax = sns.heatmap(nrides, vmin=0, vmax=50, extent=[longmin,longmax,latmin,latmax])
-#plt.imshow(nrides, vmin=0, vmax=100, extent=[longmin,longmax,latmin,latmax], origin='lower')
-plt.clf()
-my_map = Basemap(projection='merc',
-    resolution = 'f', area_thresh = 0.001,
-    llcrnrlon=-72, llcrnrlat=42,
-    urcrnrlon=-70, urcrnrlat=44)
- 
-my_map.drawcoastlines()
-my_map.drawrivers()
-my_map.fillcontinents(color='coral', lake_color='aqua', zorder=0)
-#my_map.drawmapboundary()
-#my_map.pcolormesh(longvec, latvec, nrides, cmap='Blues', vmin=0, vmax=25, latlon=True)
-#cbar = my_map.colorbar()
-#cbar.set_label('Predicted number of daily rides')
-#my_map.scatter(station['lng'], station['lat'], s=stationfeatures['ridesperday'], alpha=0.4, color='white', edgecolor='black', label='Hubway stations, sized by \n observed number of daily rides', latlon=True)
-#plt.axis([longmin, longmax, latmin, latmax])
-plt.xlabel('Longitude')
-plt.ylabel('Latitude')
-plt.legend(loc='best')
-plt.tight_layout()
-savefig('../Figures/predictedridebasemap.png')
-import pdb; pdb.set_trace()
+
+def peakfind(iternum):
+
+    """ 
+    
+    Find the lat/long location with the highest predicted daily rides. 
+    
+    """
+
+    ridedf = pd.read_csv('../Data/Boston/ridemap_iteration' + \
+            iternum + '.csv')
+    latmap = ridedf['latitude'].reshape(100, 100)
+    longmap = ridedf['longitude'].reshape(100, 100)
+    ridemap = ridedf['nrides'].reshape(100, 100)
+
+    maxindx = np.argmax(ridemap)
+    latmax = latmap[maxindx]
+    longmax = longmap[maxindx]
+
+    return latmax, longmax
