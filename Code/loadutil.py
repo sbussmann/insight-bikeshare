@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-def load(groupnum='Group4', iternum = ''):
+def load(groupnum='Group4', iterstring = '0'):
 
     """ Helper function to load data. """
 
@@ -16,9 +16,9 @@ def load(groupnum='Group4', iternum = ''):
     subwayscale = 0.25
 
     stationfeatures = pd.read_csv('../Data/Boston/Features' + groupnum + \
-            '_iteration' + iternum + '.csv')
+            '_iteration' + iterstring + '.csv')
     station = pd.read_csv('../Data/Boston/hubway_stations' + \
-            '_iteration' + iternum + '.csv')
+            '_iteration' + iterstring + '.csv')
 
     #popular = 45
     #stationfeatures = stationfeatures[stationfeatures['ridesperday'] < popular]

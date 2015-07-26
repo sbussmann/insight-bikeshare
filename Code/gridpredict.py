@@ -11,6 +11,7 @@ import pandas as pd
 #from sklearn import cross_validation
 from sklearn import linear_model
 import loadutil
+from subprocess import call
 
 
 def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
@@ -305,3 +306,27 @@ def userinput(ilat, ilong, iterstring):
             stationsubway, stationfeatures, iterstring)
 
     return nrides, place, iterstring
+
+def resetiteration():
+
+    """
+
+    Remove all new stations from the database and start over.
+
+    """
+
+    dataloc = '../Data/Boston/'
+    cmd = 'rm -f ' + dataloc + '*iteration*'
+    call(cmd, shell=True)
+
+    cmd = 'cp ' + dataloc + 'nridesmap.csv ' + dataloc + \
+            'nridesmap_iteration0.csv'
+    call(cmd, shell=True)
+
+    cmd = 'cp ' + dataloc + 'StationGroup4.csv ' + dataloc + \
+            'StationGroup4_iteration0.csv'
+    call(cmd, shell=True)
+
+    cmd = 'cp ' + dataloc + 'FeaturesGroup4.csv ' + dataloc + \
+            'FeaturesGroup4_iteration0.csv'
+    call(cmd, shell=True)
