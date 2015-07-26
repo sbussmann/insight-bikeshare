@@ -212,11 +212,30 @@ def addnewstation(station, ilat, ilong, iternum):
             '.csv')
     return 
 
+def updatefeatures(stationfeatures, features, nrides, groupnum, iternum):
+
+    """
+
+    Add a row to stationfeatures dataframe with features of new station.
+
+    """
+
+    newdic = {'ridesperday': [nrides], 'originpop': [features[0]], \
+            'originwork': [features[1]], 'originsubway': [features[2]], \
+            'destpop': [features[3]], 'destwork': [features[4]], \
+            'destsubway': [features[5]]}
+    df1 = pd.DataFrame(newdic)
+    stationfeatures = stationfeatures.append(df1)
+    stationfeatures.to_csv('../Data/Boston/Features' + groupnum + \
+            '_iteration' + iternum + '.csv')
+
+    return
+
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
             stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures, iternum):
+            stationsubway, stationfeatures, iternum, groupnum='Group4'):
 
-    # predict the number of rides for this location
+    # predict the number of daily rides for this location
     nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
             stationscale, subwayscale, stationpop, stationwork, 
             stationsubway, stationfeatures)
@@ -228,7 +247,10 @@ def giveninput(ilat, ilong, popemp, mbta, station, zipscale,
     addnewstation(station, ilat, ilong, iternum)
 
     # recompute stationfeatures
-    updatefeatures(stationfeatures, ilat, ilong, iternum)
+    ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
+            station, zipscale, stationscale, subwayscale, stationpop, 
+            stationwork, stationsubway)
+    updatefeatures(stationfeatures, ifeatures, groupnum, iternum)
 
     # update the grid of predicted rides
     makemap(iternum)
