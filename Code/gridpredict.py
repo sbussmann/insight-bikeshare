@@ -197,6 +197,21 @@ def peakfind(iternum):
 
     return latmax, longmax
 
+def addnewstation(station, ilat, ilong, iternum):
+
+    """
+
+    Add a row to station dataframe with location of new station.
+
+    """
+
+    newdic = {'lat': [ilat], 'lng': [ilong], 'station': ['proposed']}
+    df1 = pd.DataFrame(newdic)
+    station = station.append(df1)
+    station.to_csv('../Data/Boston/hubway_station_iteration' + iternum + \
+            '.csv')
+    return 
+
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
             stationscale, subwayscale, stationpop, stationwork, 
             stationsubway, stationfeatures, iternum):
