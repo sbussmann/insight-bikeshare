@@ -3,6 +3,7 @@ import gridpredict
 gridpredict.resetiteration()
 test1 = gridpredict.autoinput('0')
 print(test1)
+import pdb; pdb.set_trace()
 test1 = gridpredict.autoinput('1')
 print(test1)
 test1 = gridpredict.autoinput('2')

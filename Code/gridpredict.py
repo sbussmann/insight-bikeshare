@@ -123,54 +123,6 @@ def getpercentile(nride, stationfeatures):
     place = len(stationfeatures[indx])
     return place
 
-def getmask(latvec, longvec):
-
-    """
-
-    Make a mask for the Charles River.
-
-    """
-
-    maskdata = pd.read_csv('../Data/Boston/charlesrivercoast.csv')
-    biglat = maskdata['latitude']
-    biglong = maskdata['longitude']
-    nlat = len(latvec)
-    nlong = len(longvec)
-    dlat = latvec[1] - latvec[0]
-    #dlong = longvec[1] - longvec[0]
-    mask = np.ones([nlat, nlong])
-
-    # mask the perimeter of the Charles River
-    for i in range(nlat):
-        for j in range(nlong):
-            ilat = latvec[i]
-            ilong = longvec[j]
-            offlat = np.abs(biglat - ilat)
-            offlong = np.abs(biglong - ilong)
-            offdist = np.sqrt(offlat ** 2 + offlong ** 2)
-            if offdist.min() < 0.01:
-                print(offdist.min())
-            if offdist.min() < dlat:
-                mask[i, j] = 0
-
-    # fill in the mask
-    for i in range(nlat):
-        imask = mask[i, :]
-        masked = np.where(imask == 0)
-        if masked[0].size > 1:
-            print(masked[0])
-            mask[i, masked[0][0]: masked[0][-1]] = 0
-
-    #import matplotlib.pyplot as plt
-    #extent = [longvec.min(), longvec.max(), latvec.min(), latvec.max()]
-    #plt.imshow(mask, extent=extent, origin='lower')
-    #plt.scatter(biglong, biglat)
-    #plt.show()
-    #import pdb; pdb.set_trace()
-
-    return mask
-
-
 def makemap():
 
     # Generate a sub grid of latitudes and longitudes
@@ -179,7 +131,14 @@ def makemap():
     nlong = len(longvec)
 
     # get the mask
-    mask = getmask(latvec, longvec)
+    mask = loadutil.getmask()
+    #import matplotlib.pyplot as plt
+    #extent = [longvec.min(), longvec.max(), latvec.min(), latvec.max()]
+    #plt.imshow(mask, extent=extent, origin='lower')
+    ##plt.scatter(biglong, biglat)
+    #plt.show()
+    #import pdb; pdb.set_trace()
+    
 
     # load the data
     loaddata = loadutil.load()
@@ -206,29 +165,38 @@ def makemap():
                     station, zipscale, stationscale, subwayscale, stationpop, 
                     stationwork, stationsubway)
             iride = predictride(ifeatures, stationfeatures)
+            iride = iride[0]  - iride[0] * icannibal
             if iride > 10:
-                print(i, j, ilat, ilong, iride[0])
+                print(i, j, ilat, ilong, iride)
 
-            nrides.append(iride[0])
+            nrides.append(iride)
             latlist.append(ilat)
             longlist.append(ilong)
 
     nrides = np.array(nrides)
-    nrides *= mask
+    nrides *= (1 - mask)
+    nrides = list(nrides)
 
     ridedatadict = {'nrides': nrides, 'latitude': latlist, 'longitude':
             longlist}
     ridedata = pd.DataFrame(ridedatadict)
-    ridedata.to_csv('../Data/Boston/nridesmap_withmask.csv')
+    ridedata.to_csv('../Data/Boston/nridesmap.csv')
     
 
 def remakemap(ilat, ilong, iterstring):
+
+    """
+
+    Remake the map for a subgrid of 10x10 cells, since after adding a single
+    station the impact on the predicted daily rides should be localalized.
+
+    """
 
     # Generate a sub grid of latitudes and longitudes
     latvec, longvec = loadutil.grid()
 
     # Generate a sub grid of latitudes and longitudes
-    sublatvec, sublongvec = loadutil.subgrid(ilat, ilong)
+    sublatvec, sublongvec = loadutil.subgrid(ilat, ilong, nsub=10)
 
     # load the data
     loaddata = loadutil.load(iterstring=iterstring)
@@ -251,6 +219,8 @@ def remakemap(ilat, ilong, iterstring):
             iterprevious + '.csv')
     #cannibalmap = np.zeros([nlat, nlong])
     #frides = open('../Data/Boston/nridesmap.csv', 'w')
+    import time
+    currenttime = time.time()
     ngrid = len(nrides)
     for i in range(ngrid):
         ilat = nrides['latitude'][i]
@@ -286,6 +256,9 @@ def remakemap(ilat, ilong, iterstring):
         #    print(fmt.format(i, ilat, ilong, ifeatures[0], ifeatures[1],
         #    ifeatures[2], ifeatures[3], ifeatures[4], ifeatures[5], iride))
 
+    newtime = time.time()
+    runtime = newtime - currenttime
+    print("Took %d seconds to re-process the map." % runtime)
     nrides.to_csv('../Data/Boston/nridesmap_iteration' + iterstring + '.csv', \
             index=False)
 

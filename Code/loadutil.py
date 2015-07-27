@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import glob
 
 
 def load(groupnum='Group4', iterstring = '0'):
@@ -76,3 +77,77 @@ def subgrid(lat0, long0, nsub=10):
     longvec = findsub(biglongvec, long0, nsub)
 
     return latvec, longvec
+
+
+def makemask():
+
+    """
+
+    Make a mask for the Charles River.
+
+    """
+
+    latvec, longvec = grid()
+    nlat = len(latvec)
+    nlong = len(longvec)
+
+    dlat = latvec[1] - latvec[0]
+    #dlong = longvec[1] - longvec[0]
+    mask = np.zeros([nlat, nlong])
+
+    masklist = glob.glob('../Data/Boston/charlesriver_*csv')
+    for maskfile in masklist:
+        tmpmask = np.zeros([nlat, nlong])
+        maskdata = pd.read_csv(maskfile)
+        biglat = maskdata['latitude']
+        biglong = maskdata['longitude']
+
+        # mask the perimeter of the Charles River
+        for i in range(nlat):
+            for j in range(nlong):
+                ilat = latvec[i]
+                ilong = longvec[j]
+                offlat = np.abs(biglat - ilat)
+                offlong = np.abs(biglong - ilong)
+                offdist = np.sqrt(offlat ** 2 + offlong ** 2)
+                #if offdist.min() < 0.01:
+                #    print(offdist.min())
+                if offdist.min() < dlat:
+                    tmpmask[i, j] = 1
+
+        # fill in the mask
+        for i in range(nlat):
+            imask = tmpmask[i, :]
+            masked = np.where(imask == 1)
+            if masked[0].size > 1:
+                mask[i, masked[0][0]: masked[0][-1]] = 1
+
+        print("Done with " + maskfile)
+
+    #import matplotlib.pyplot as plt
+    #extent = [longvec.min(), longvec.max(), latvec.min(), latvec.max()]
+    #plt.imshow(mask, extent=extent, origin='lower')
+    #plt.scatter(biglong, biglat)
+    #plt.show()
+    #import pdb; pdb.set_trace()
+
+    masklist = []
+    for i in range(nlat):
+        for j in range(nlong):
+            masklist.append(mask[i, j])
+
+    mask_df = pd.DataFrame({"mask": masklist})
+    mask_df.to_csv('../Data/Boston/maskmap.csv')
+
+    return mask
+
+def getmask():
+
+
+    latvec, longvec = grid()
+    mask_df = pd.read_csv('../Data/Boston/maskmap.csv')
+    #maskmap = np.zeros([nlat, nlong])
+    maskmap = mask_df['mask'].values
+
+    return maskmap
+
