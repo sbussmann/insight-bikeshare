@@ -52,3 +52,27 @@ def grid():
     longvec = np.linspace(longmin, longmax, nlong)
     return latvec, longvec
 
+def findsub(vector, value, nsub):
+    dvec = vector[1] - vector[0]
+    subvecmin = value - nsub / 2 * dvec
+    diffvecmin = np.abs(vector - subvecmin)
+    minloc = diffvecmin.argmin()
+    subvec = vector[minloc: minloc + nsub + 1]
+
+    return subvec
+
+def subgrid(lat0, long0, nsub=10):
+
+    """ 
+    
+    Helper function to generate a regular sub grid of latitudes and longitudes.
+    Intended to be used for re-making a portion of the predicted ride map.
+
+    """
+
+    biglatvec, biglongvec = grid()
+
+    latvec = findsub(biglatvec, lat0, nsub)
+    longvec = findsub(biglongvec, long0, nsub)
+
+    return latvec, longvec

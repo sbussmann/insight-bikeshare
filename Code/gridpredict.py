@@ -12,6 +12,8 @@ import pandas as pd
 from sklearn import linear_model
 import loadutil
 from subprocess import call
+import matplotlib.pyplot as plt
+from pylab import savefig
 
 
 def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
@@ -121,15 +123,66 @@ def getpercentile(nride, stationfeatures):
     place = len(stationfeatures[indx])
     return place
 
-def makemap(iterstring):
+def getmask(latvec, longvec):
 
-    # Generate a regular grid of latitudes and longitudes
+    """
+
+    Make a mask for the Charles River.
+
+    """
+
+    maskdata = pd.read_csv('../Data/Boston/charlesrivercoast.csv')
+    biglat = maskdata['latitude']
+    biglong = maskdata['longitude']
+    nlat = len(latvec)
+    nlong = len(longvec)
+    dlat = latvec[1] - latvec[0]
+    #dlong = longvec[1] - longvec[0]
+    mask = np.ones([nlat, nlong])
+
+    # mask the perimeter of the Charles River
+    for i in range(nlat):
+        for j in range(nlong):
+            ilat = latvec[i]
+            ilong = longvec[j]
+            offlat = np.abs(biglat - ilat)
+            offlong = np.abs(biglong - ilong)
+            offdist = np.sqrt(offlat ** 2 + offlong ** 2)
+            if offdist.min() < 0.01:
+                print(offdist.min())
+            if offdist.min() < dlat:
+                mask[i, j] = 0
+
+    # fill in the mask
+    for i in range(nlat):
+        imask = mask[i, :]
+        masked = np.where(imask == 0)
+        if masked[0].size > 1:
+            print(masked[0])
+            mask[i, masked[0][0]: masked[0][-1]] = 0
+
+    #import matplotlib.pyplot as plt
+    #extent = [longvec.min(), longvec.max(), latvec.min(), latvec.max()]
+    #plt.imshow(mask, extent=extent, origin='lower')
+    #plt.scatter(biglong, biglat)
+    #plt.show()
+    #import pdb; pdb.set_trace()
+
+    return mask
+
+
+def makemap():
+
+    # Generate a sub grid of latitudes and longitudes
     latvec, longvec = loadutil.grid()
     nlat = len(latvec)
     nlong = len(longvec)
 
+    # get the mask
+    mask = getmask(latvec, longvec)
+
     # load the data
-    loaddata = loadutil.load(iterstring)
+    loaddata = loadutil.load()
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
@@ -141,40 +194,100 @@ def makemap(iterstring):
     stationsubway = loaddata[8]
     stationfeatures = loaddata[9]
 
-    nrides = np.zeros([nlat, nlong])
-    #cannibalmap = np.zeros([nlat, nlong])
-    #frides = open('../Data/Boston/nridesmap.csv', 'w')
+    nrides = []
     latlist = []
     longlist = []
-    nridelist = []
     for i in range(nlat):
         ilat = latvec[i]
         for j in range(nlong):
             ilong = longvec[j]
+            #print("we're actually doing something!")
             ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
                     station, zipscale, stationscale, subwayscale, stationpop, 
                     stationwork, stationsubway)
             iride = predictride(ifeatures, stationfeatures)
-            #cannibalmap[i, j] = icannibal
+            if iride > 10:
+                print(i, j, ilat, ilong, iride[0])
 
-            iride = iride[0]  - iride[0] * icannibal
-            nrides[i, j] = iride
+            nrides.append(iride[0])
             latlist.append(ilat)
             longlist.append(ilong)
-            nridelist.append(iride)
 
-    ridedict = {'nrides': nridelist, 'latitude': latlist, 'longitude':
+    nrides = np.array(nrides)
+    nrides *= mask
+
+    ridedatadict = {'nrides': nrides, 'latitude': latlist, 'longitude':
             longlist}
-    ridedf = pd.DataFrame(ridedict)
-    ridedf.to_csv('../Data/Boston/nridemaps_iteration' + iterstring + '.csv')
-            #slat = str(ilat)
-            #slong = str(ilong)
-            #sride = str(iride)
-            #frides.write(slat + ',' + slong + ',' + sride + '\n')
-            #fmt = '{0:2} {1:2} {2:9.5f} {3:9.5f} {4:8.1f} {5:8.1f} {6:8.1f} {7:8.1f} {8:8.1f} {9:8.1f} {10:6.1f}'
-            #if iride > 10:
-                #print(fmt.format(i, j, ilat, ilong, ifeatures[0], ifeatures[1],
-                #ifeatures[2], ifeatures[3], ifeatures[4], ifeatures[5], iride))
+    ridedata = pd.DataFrame(ridedatadict)
+    ridedata.to_csv('../Data/Boston/nridesmap_withmask.csv')
+    
+
+def remakemap(ilat, ilong, iterstring):
+
+    # Generate a sub grid of latitudes and longitudes
+    latvec, longvec = loadutil.grid()
+
+    # Generate a sub grid of latitudes and longitudes
+    sublatvec, sublongvec = loadutil.subgrid(ilat, ilong)
+
+    # load the data
+    loaddata = loadutil.load(iterstring=iterstring)
+    popemp = loaddata[0]
+    mbta = loaddata[1]
+    station = loaddata[2]
+    zipscale = loaddata[3]
+    stationscale = loaddata[4]
+    subwayscale = loaddata[5]
+    stationpop = loaddata[6]
+    stationwork = loaddata[7]
+    stationsubway = loaddata[8]
+    stationfeatures = loaddata[9]
+
+    # read in ride map from previous iteration
+    iternum = np.int(iterstring)
+    iternum -= 1
+    iterprevious = str(iternum)
+    nrides = pd.read_csv('../Data/Boston/nridesmap_iteration' + \
+            iterprevious + '.csv')
+    #cannibalmap = np.zeros([nlat, nlong])
+    #frides = open('../Data/Boston/nridesmap.csv', 'w')
+    ngrid = len(nrides)
+    for i in range(ngrid):
+        ilat = nrides['latitude'][i]
+        ilong = nrides['longitude'][i]
+
+        #if ilat > 42.34:
+        #    if ilong > -71.09:
+        #        print(ilat, ilong)
+        #        import pdb; pdb.set_trace()
+        #print(ilat, ilong)
+        # skip this latitude if it isn't present in the subgrid
+        if ilat < sublatvec.min():
+            continue
+        if ilat > sublatvec.max():
+            continue
+        # skip this longitude if it isn't present in the subgrid
+        if ilong < sublongvec.min():
+            continue
+        if ilong > sublongvec.max():
+            continue
+
+        #print("we're actually doing something!")
+        ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
+                station, zipscale, stationscale, subwayscale, stationpop, 
+                stationwork, stationsubway)
+        iride = predictride(ifeatures, stationfeatures)
+        #cannibalmap[i, j] = icannibal
+
+        iride = iride[0]  - iride[0] * icannibal
+        nrides['nrides'][i] = iride
+        #fmt = '{0:2} {1:9.5f} {2:9.5f} {3:8.1f} {4:8.1f} {5:8.1f} {6:8.1f} {7:8.1f} {8:8.1f} {9:6.1f}'
+        #if iride > 10:
+        #    print(fmt.format(i, ilat, ilong, ifeatures[0], ifeatures[1],
+        #    ifeatures[2], ifeatures[3], ifeatures[4], ifeatures[5], iride))
+
+    nrides.to_csv('../Data/Boston/nridesmap_iteration' + iterstring + '.csv', \
+            index=False)
 
     #frides.close()
 
@@ -188,9 +301,9 @@ def peakfind(iterstring):
 
     ridedf = pd.read_csv('../Data/Boston/nridesmap_iteration' + \
             iterstring + '.csv')
-    latmap = ridedf['latitude'].reshape(100, 100)
-    longmap = ridedf['longitude'].reshape(100, 100)
-    ridemap = ridedf['nrides'].reshape(100, 100)
+    latmap = ridedf['latitude']
+    longmap = ridedf['longitude']
+    ridemap = ridedf['nrides']
 
     maxindx = np.argmax(ridemap)
     latmax = latmap[maxindx]
@@ -206,11 +319,11 @@ def addnewstation(station, ilat, ilong, iterstring):
 
     """
 
-    newdic = {'lat': [ilat], 'lng': [ilong], 'station': ['proposed']}
+    newdic = {'lat': [ilat], 'lng': [ilong], 'status': ['proposed']}
     df1 = pd.DataFrame(newdic)
     station = station.append(df1)
-    station.to_csv('../Data/Boston/hubway_station_iteration' + iterstring + \
-            '.csv')
+    station.to_csv('../Data/Boston/hubway_stations_iteration' + iterstring + \
+            '.csv', index=False)
     return 
 
 def updatefeatures(stationfeatures, features, nrides, groupnum, iterstring):
@@ -221,16 +334,58 @@ def updatefeatures(stationfeatures, features, nrides, groupnum, iterstring):
 
     """
 
+    maxstationid = stationfeatures['stationid'].values.max() + 1
     newdic = {'ridesperday': [nrides], 'originpop': [features[0]], \
             'originwork': [features[1]], 'originsubway': [features[2]], \
             'destpop': [features[3]], 'destwork': [features[4]], \
-            'destsubway': [features[5]]}
+            'destsubway': [features[5]], 'stationid': [maxstationid]}
     df1 = pd.DataFrame(newdic)
     stationfeatures = stationfeatures.append(df1)
     stationfeatures.to_csv('../Data/Boston/Features' + groupnum + \
-            '_iteration' + iterstring + '.csv')
+            '_iteration' + iterstring + '.csv', index=False)
 
     return
+
+def plotmap(iterstring, groupnum='Group4'):
+
+    # plot predicted ride map
+    nrides = pd.read_csv('../Data/Boston/nridesmap_iteration' + \
+            iterstring + '.csv')
+    ridemap = nrides['nrides'].values.reshape((100, 100))
+    longmin = nrides['longitude'].min()
+    longmax = nrides['longitude'].max()
+    latmin = nrides['latitude'].min()
+    latmax = nrides['latitude'].max()
+
+    plt.clf()
+    plt.imshow(ridemap, vmin=0, vmax=40, cmap="Blues",
+            extent=[longmin,longmax,latmin,latmax], origin='lower')
+    cbar = plt.colorbar()
+    cbar.set_label('Predicted Daily Rides')
+
+    # plot existing Hubway stations
+    station = pd.read_csv('../Data/Boston/hubway_stations_iteration' + \
+            iterstring + '.csv')
+    stationfeatures = pd.read_csv('../Data/Boston/Features' + groupnum + \
+            '_iteration' + iterstring + '.csv')
+    plt.scatter(station['lng'], station['lat'], 
+            s=stationfeatures['ridesperday'], alpha=0.4, 
+            color='white', edgecolor='black', 
+            label='Existing Hubway stations')
+    stationnew = station[station['status'] == 'proposed']
+    stationfeaturesnew = stationfeatures[station['status'] == 'proposed']
+    plt.scatter(stationnew['lng'], stationnew['lat'], 
+            s=stationfeaturesnew['ridesperday'], alpha=0.4, 
+            color='red', edgecolor='black', 
+            label='Proposed Hubway stations')
+    plt.axis([longmin, longmax, latmin, latmax])
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
+    #plt.legend()
+    plt.tight_layout()
+    plt.show()
+    savefig('../Figures/predictedridemap_iteration.png')
+    
 
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
             stationscale, subwayscale, stationpop, stationwork, 
@@ -245,7 +400,7 @@ def giveninput(ilat, ilong, popemp, mbta, station, zipscale,
     place = getpercentile(nrides, stationfeatures)
 
     # update the counter
-    iternum = iterstring.astype('float')
+    iternum = np.int(iterstring)
     iternum += 1
     iterstring = str(iternum)
 
@@ -256,10 +411,13 @@ def giveninput(ilat, ilong, popemp, mbta, station, zipscale,
     ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
             station, zipscale, stationscale, subwayscale, stationpop, 
             stationwork, stationsubway)
-    updatefeatures(stationfeatures, ifeatures, groupnum, iterstring)
+    updatefeatures(stationfeatures, ifeatures, nrides, groupnum, iterstring)
 
     # update the grid of predicted rides
-    makemap(iterstring)
+    remakemap(ilat, ilong, iterstring)
+
+    # remake the image showing the predicted daily rides
+    plotmap(iterstring)
 
     return nrides, place, iterstring
 
@@ -284,7 +442,7 @@ def autoinput(iterstring):
             zipscale, stationscale, subwayscale, stationpop, stationwork,
             stationsubway, stationfeatures, iterstring)
 
-    return nrides, place, iterstring
+    return ilat, ilong, nrides, place, iterstring
 
 def userinput(ilat, ilong, iterstring):
 
@@ -305,7 +463,7 @@ def userinput(ilat, ilong, iterstring):
             zipscale, stationscale, subwayscale, stationpop, stationwork,
             stationsubway, stationfeatures, iterstring)
 
-    return nrides, place, iterstring
+    return ilat, ilong, nrides, place, iterstring
 
 def resetiteration():
 
