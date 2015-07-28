@@ -6,7 +6,7 @@ from pylab import savefig
 import seaborn as sns
 
 
-groupnum = 'Group4'
+groupnum = 'Group5'
 
 ridedata = pd.read_csv('../Data/Boston/Features' + groupnum + '.csv')
 
@@ -17,8 +17,7 @@ ordinary = ridedata[ridedata['ridesperday'] < verypopular]
 
 y = ordinary['ridesperday'].values
 
-X = ordinary[['originpop', 'originwork', 'destpop', 'destwork', 'originsubway',
-'destsubway']].values
+X = ordinary[[ 'destpop', 'destwork', 'destsubway']].values
 
 
 # use linear regression

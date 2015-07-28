@@ -34,8 +34,13 @@ scores = densitymetric.getscores(popemp, mbta, station, zipscale,
 #plt.hist(scores[0], alpha=0.5)
 #plt.hist(scores[1], alpha=0.5)
 plt.scatter(scores[0], scores[1])
-plt.xlabel('Population Score')
-plt.ylabel('Employee Score')
+plt.xlabel('Origin Population Score')
+plt.ylabel('Origin Employee Score')
+plt.show()
+plt.clf()
+plt.scatter(scores[3], scores[4])
+plt.xlabel('Destination Population Score')
+plt.ylabel('Destination Employee Score')
 plt.show()
 
 station['originpop'] = scores[0]

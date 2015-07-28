@@ -82,12 +82,7 @@ def coupling(distancevec, scaledistance):
 
     return couplingfactor
 
-def getdestination(popemp, mbta, station, zipscale, stationscale, 
-        subwayscale, stationpop, stationwork, stationsubway):
-
-    return
-
-def getorigin(popemp, mbta, station, zipscale, stationscale, subwayscale):
+def getscores(popemp, mbta, station, zipscale, stationscale, subwayscale):
 
     """
 
@@ -113,6 +108,8 @@ def getorigin(popemp, mbta, station, zipscale, stationscale, subwayscale):
         originwork.append(originfeatures[1])
         originsubway.append(originfeatures[2])
 
+    print("Finished computing origin scores.")
+
     # population close to input station
     destpop = []
 
@@ -131,6 +128,7 @@ def getorigin(popemp, mbta, station, zipscale, stationscale, subwayscale):
         destpop.append(destinationfeatures[0])
         destwork.append(destinationfeatures[1])
         destsubway.append(destinationfeatures[2])
+    print("Finished computing destination scores.")
 
     scores = [originpop, originwork, originsubway, destpop, destwork,
             destsubway]
