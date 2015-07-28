@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 """ User Defined Parameters """
 
-groupnum = 'Group5'
+groupnum = 'Group6'
 
 # scale radius by which to weight complementary zip codes
 zipscale = 0.5

@@ -31,7 +31,7 @@ def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):
     longbysubway = mbta['longitude']
     subwayrides = mbta['ridesperday'].values    
     distancevec = densitymetric.distvec(latbyzip, longbyzip, ilat, ilong)
-    couplingzip = densitymetric.coupling(distancevec, zipscale)
+    couplingzip = densitymetric.zipcouple(distancevec, zipscale)
     nzip = len(workbyzip)
     originpop = np.sum(popbyzip * couplingzip) / nzip
     originwork = np.sum(workbyzip * couplingzip) / nzip
@@ -40,7 +40,7 @@ def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):
             ilat, ilong)
 
     # coupling efficiency between this station and all subway stops
-    couplingsubway = densitymetric.coupling(distancevecsubway, subwayscale)
+    couplingsubway = densitymetric.zipcouple(distancevecsubway, subwayscale)
 
     # weighted sum of subway rides
     nsubway = len(subwayrides)
@@ -61,8 +61,9 @@ def getdestination(ilat, ilong, station, stationscale,
     distancevec = densitymetric.distvec(stationlat, stationlong, ilat, ilong)
 
     # origin to origin coupling
-    stationcoupling = densitymetric.coupling(distancevec, stationscale)
+    stationcoupling = densitymetric.stationcouple(distancevec)
 
+    # i may need to investigate maxcouple
     maxcouple = stationcoupling.max()
 
     norigin = len(originpop)

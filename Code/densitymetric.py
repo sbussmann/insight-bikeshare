@@ -1,6 +1,8 @@
 import numpy as np
 from geopy.distance import vincenty
 import gridpredict
+import pandas as pd
+from scipy.interpolate import interp1d
 
 
 def distvec(latvec, longvec, inlat, inlong):
@@ -59,12 +61,45 @@ def distmap(latvec, longvec, inlat, inlong):
 
     return distancemap
 
-def coupling(distancevec, scaledistance):
+def stationcouple(distancevec):
 
     """
 
     Compute the coupling efficiency between a given location and a set of
-    different locations.  Model coupling efficiency with a normal distribution.
+    zip code locations.  Model coupling efficiency with a normal distribution.
+
+    Inputs: 
+        distancevec: vector of distances from given station to all other points
+        in Greater Boston area [numpy array]
+        scaledistance: length scale over which coupling efficiency is expected
+        to decrease by 1/e [float]
+
+    Outputs:
+        couplingfactor: coupling efficiencies for each station [list]
+
+    """
+
+    ridelengthdf = pd.read_csv('../Data/Boston/ridelengthpdf.csv')
+
+    # assume hubway users ride at 10 miles per hour
+    avgspeed = 10.
+
+    # ride times are given in minutes in this table
+    x = ridelengthdf['ridetime'].values * avgspeed * 1./60
+    y = ridelengthdf['probability'].values
+
+    couplingfunction = interp1d(x, y)
+    couplingfactor = couplingfunction(distancevec)
+    #couplingfactor = np.exp(-0.5 * (distancevec / scaledistance) ** 2)
+
+    return couplingfactor
+
+def zipcouple(distancevec, scaledistance):
+
+    """
+
+    Compute the coupling efficiency between a given location and a set of
+    zip code locations.  Model coupling efficiency with a normal distribution.
 
     Inputs: 
         distancevec: vector of distances from given station to all other points
