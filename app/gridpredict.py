@@ -12,6 +12,8 @@ import pandas as pd
 from sklearn import linear_model
 import loadutil
 from subprocess import call
+import matplotlib.pyplot as plt
+from pylab import savefig
 
 
 def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):
@@ -333,8 +335,6 @@ def plotmap(iterstring, groupnum='Group5'):
     nlat = np.sqrt(np.float(len(nrides)))
     ridemap = nrides['nrides'].values.reshape((nlat, nlat))
 
-    import matplotlib.pyplot as plt
-    from pylab import savefig
     plt.clf()
     plt.imshow(ridemap, vmin=0, vmax=40, cmap="Blues",
             extent=[longmin,longmax,latmin,latmax], origin='lower')

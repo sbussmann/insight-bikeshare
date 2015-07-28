@@ -1,3 +1,3 @@
 #!/usr/bin/env python
-from webapp import webapp
-webapp.run(debug = True)
+from app import app
+app.run(debug = True)
