@@ -1,10 +1,13 @@
-from flask import render_template, request
-from webapp import webapp
-import pymysql as mdb
-from predictride import predict
+from flask import render_template, request, Flask
+#from webapp import webapp
+#import pymysql as mdb
+#from predictride import predict
+import gridpredict
 
-db = mdb.connect(user="root", host="localhost", password="password",
-        db="BostonFeaturesByStation_db", charset='utf8')
+webapp = Flask(__name__)
+
+#db = mdb.connect(user="root", host="localhost", password="password",
+#        db="BostonFeaturesByStation_db", charset='utf8')
 
 @webapp.route('/')
 @webapp.route('/index')
@@ -13,56 +16,32 @@ def index():
         title = 'Home', user = { 'nickname': 'Shane' },
         )
 
-@webapp.route('/db')
-def cities_page():
-	with db: 
-		cur = db.cursor()
-		cur.execute("SELECT Name FROM City LIMIT 15;")
-		query_results = cur.fetchall()
-	cities = ""
-	for result in query_results:
-		cities += result[0]
-		cities += "<br>"
-	return cities
-
-
-@webapp.route("/db_fancy")
-def cities_page_fancy():
-	with db:
-		cur = db.cursor()
-		cur.execute("SELECT Name, CountryCode, \
-			Population FROM City ORDER BY Population LIMIT 15;")
-
-		query_results = cur.fetchall()
-	cities = []
-	for result in query_results:
-		cities.append(dict(name=result[0], country=result[1], population=result[2]))
-	return render_template('cities.html', cities=cities)
-
 @webapp.route('/input')
 def station_input():
   return render_template("input.html")
 
-@webapp.route('/output')
-def station_output():
+@webapp.route('/output-auto')
+def station_output_auto():
+  iterstring = '0'
+  the_results = gridpredict.autoinput(iterstring)
+  riderate = the_results[0]
+  ranking = the_results[1]
+  iterstring = the_results[2]
+  return render_template("output.html", riderate=riderate, ranking=ranking)
+
+@webapp.route('/output-user')
+def station_output_user():
   #pull 'ID' from input field and store it
   longitude = request.args.get('ID1')
   latitude = request.args.get('ID2')
 
 
-  #with db:
-  #  cur = db.cursor()
-  #  #just select the city from the world_innodb that the user inputs
-  #  cur.execute("SELECT * FROM BostonFeaturesByStation_tb;")
-  #  query_results = cur.fetchall()
-
-  #stations = []
-  #for result in query_results:
-  #  stations.append(dict(name=result[0], country=result[1], population=result[2]))
-#call a function from predictride package. note we are only pulling one result in the query
-  #pop_input = cities[0]['population']
-  the_results = predict(longitude, latitude)
+  iterstring = '0'
+  the_results = gridpredict.userinput(longitude, latitude, iterstring)
   riderate = the_results[0]
   ranking = the_results[1]
+  iterstring = the_results[2]
   return render_template("output.html", riderate=riderate, ranking=ranking)
 
+if __name__ == "__main__":
+   webapp.run(host='0.0.0.0', port=5000, debug=True)
