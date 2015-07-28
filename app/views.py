@@ -19,9 +19,12 @@ def index():
 
 @app.route('/input')
 def station_input():
+  import os
+  print(os.getcwd())
+  gridpredict.resetiteration()
   return render_template("input.html")
 
-@app.route('/output-auto')
+@app.route('/output_auto')
 def station_output_auto():
   iterstring = '0'
   the_results = gridpredict.autoinput(iterstring)
@@ -30,7 +33,7 @@ def station_output_auto():
   iterstring = the_results[2]
   return render_template("output.html", riderate=riderate, ranking=ranking)
 
-@app.route('/output-user')
+@app.route('/output_user')
 def station_output_user():
   #pull 'ID' from input field and store it
   longitude = request.args.get('ID1')
