@@ -25,30 +25,11 @@ mbta = pd.read_csv('../Data/Boston/mbtarideratelocation.csv')
 stationlat = station['lat'].values
 stationlong = station['lng'].values
 
-# latbyzip = latitudes for each zip code
-latbyzip = popemp['latitude'].values
-
-# longbyzip = longitudes for each zip code
-longbyzip = popemp['longitude'].values
-
-# latbysubway = latitudes for each subway stop
-latbysubway = mbta['latitude']
-
-# longbysubway = longitudes for each subway stop
-longbysubway = mbta['longitude']
-
-# popbyzip = population for each zip code
-popbyzip = popemp['HD01'].values
-
-# workbyzip = number of employees for each zip code
-workbyzip = popemp['EMP'].values
-
-# subwayrides = average number of daily mbta rides in 2013
-subwayrides = mbta['ridesperday'].values
-
-scores = densitymetric.getscores(latbyzip, longbyzip, latbysubway,
-        longbysubway, popbyzip, workbyzip, subwayrides, stationlat, 
-        stationlong, zipscale, stationscale, subwayscale)
+scores = densitymetric.getscores(popemp, mbta, station, zipscale, 
+        stationscale, subwayscale)
+    #latbyzip, longbyzip, latbysubway,
+    #    longbysubway, popbyzip, workbyzip, subwayrides, stationlat, 
+    #    stationlong, zipscale, stationscale, subwayscale)
 
 #plt.hist(scores[0], alpha=0.5)
 #plt.hist(scores[1], alpha=0.5)

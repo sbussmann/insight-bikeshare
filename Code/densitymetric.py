@@ -1,5 +1,6 @@
 import numpy as np
 from geopy.distance import vincenty
+import gridpredict
 
 
 def distvec(latvec, longvec, inlat, inlong):
@@ -81,64 +82,36 @@ def coupling(distancevec, scaledistance):
 
     return couplingfactor
 
-def getscores(latbyzip, longbyzip, latbysubway, longbysubway, popbyzip, 
-        workbyzip, subwayrides, stationlat, stationlong, zipscale, 
-        stationscale, subwayscale):
+def getdestination(popemp, mbta, station, zipscale, stationscale, 
+        subwayscale, stationpop, stationwork, stationsubway):
+
+    return
+
+def getorigin(popemp, mbta, station, zipscale, stationscale, subwayscale):
 
     """
 
-    Compute the metrics for population density and employee density.
-
-    TO DO: add MBTA T stop data.
-
-    inputs:
-        latvec: vector of latitudes [numpy array]
-        longvec: vector of longitudes [numpy array]
-        popvec: vector of population size [numpy array]
-        workvec: vector of employee size [numpy array]
+    Compute the scores for population, employee, and MBTA proximity.
 
     """
 
     # for each station, compute the population score as the weighted average of
     # all zip codes
+    stationlat = station['lat']
+    stationlong = station['lng']
     nstation = len(stationlat)
-    nsubway = len(latbysubway)
     originpop = []
     originwork = []
     originsubway = []
-    distancematrix = np.zeros([nstation, nstation])
-    distancematrixsubway = np.zeros([nstation, nsubway])
     for i in range(nstation):
         inlat = stationlat[i]
         inlong = stationlong[i]
-        distancevec = distvec(latbyzip, longbyzip, inlat, inlong)
-        couplingzip = coupling(distancevec, zipscale)
-        originpop.append(np.sum(popbyzip * couplingzip))
-        originwork.append(np.sum(workbyzip * couplingzip))
-
-        distancevecsubway = distvec(latbysubway, longbysubway, inlat, inlong)
-
-        # coupling efficiency between this station and all subway stops
-        couplingsubway = coupling(distancevecsubway, subwayscale)
-
-        # weighted sum of subway rides
-        originsubway.append(np.sum(subwayrides * couplingsubway))
-
-        # store the distance metric for each station so we don't have to
-        # recompute
-        distancematrix[i, :] = distancevec
-        distancematrixsubway[i, :] = distancevecsubway
-        fmt = '{0:3} {1:.5f} {2:.5f} {3:.2f} {4:.2f} {5:.5f} {6:.3f} {7:.3f} {8:.3f}'
-        print(fmt.format(i, inlat, inlong, originpop[i], originwork[i], 
-            originsubway[i], distancematrix[i, :].min(), 
-            distancematrix[i, :].max(), distancematrix[i, :].mean()))
-
-    # test: Is there a station in stationcoupling that is ~1?  Are stations
-    # that are known to be far from each other correctly assigned a low
-    # coupling efficiency?
-
-    #import pdb; pdb.set_trace()
-
+        originfeatures = gridpredict.getorigin(inlat, inlong, popemp, 
+                mbta, zipscale, subwayscale)
+        
+        originpop.append(originfeatures[0])
+        originwork.append(originfeatures[1])
+        originsubway.append(originfeatures[2])
 
     # population close to input station
     destpop = []
@@ -150,14 +123,14 @@ def getscores(latbyzip, longbyzip, latbysubway, longbysubway, popbyzip,
     destsubway = []
 
     for i in range(nstation):
-        distancevec = distancematrix[i, :]
+        inlat = stationlat[i]
+        inlong = stationlong[i]
+        destinationfeatures = gridpredict.getdestination(inlat, inlong, 
+                station, stationscale, originpop, originwork, originsubway)
 
-        # station to station coupling
-        stationcoupling = coupling(distancevec, stationscale)
-
-        destpop.append(np.sum(originpop * stationcoupling))
-        destwork.append(np.sum(originwork * stationcoupling))
-        destsubway.append(np.sum(originsubway * stationcoupling))
+        destpop.append(destinationfeatures[0])
+        destwork.append(destinationfeatures[1])
+        destsubway.append(destinationfeatures[2])
 
     scores = [originpop, originwork, originsubway, destpop, destwork,
             destsubway]

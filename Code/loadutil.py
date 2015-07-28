@@ -3,7 +3,7 @@ import numpy as np
 import glob
 
 
-def load(groupnum='Group4', iterstring = '0'):
+def load(groupnum='Group5', iterstring = '0'):
 
     """ Helper function to load data. """
 

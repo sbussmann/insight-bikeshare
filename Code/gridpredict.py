@@ -16,17 +16,8 @@ import matplotlib.pyplot as plt
 from pylab import savefig
 
 
-def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
-        subwayscale, stationpop, stationwork, stationsubway):
+def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):
 
-    """
-
-    Get the feature vector associated with the input latitude and longitude.
-
-    """
-
-    stationlat = station['lat'].values
-    stationlong = station['lng'].values
     latbyzip = popemp['latitude'].values
     longbyzip = popemp['longitude'].values
     popbyzip = popemp['HD01'].values
@@ -41,8 +32,9 @@ def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
     subwayrides = mbta['ridesperday'].values    
     distancevec = densitymetric.distvec(latbyzip, longbyzip, ilat, ilong)
     couplingzip = densitymetric.coupling(distancevec, zipscale)
-    originpop = np.sum(popbyzip * couplingzip)
-    originwork = np.sum(workbyzip * couplingzip)
+    nzip = len(workbyzip)
+    originpop = np.sum(popbyzip * couplingzip) / nzip
+    originwork = np.sum(workbyzip * couplingzip) / nzip
 
     distancevecsubway = densitymetric.distvec(latbysubway, longbysubway, 
             ilat, ilong)
@@ -51,35 +43,52 @@ def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
     couplingsubway = densitymetric.coupling(distancevecsubway, subwayscale)
 
     # weighted sum of subway rides
-    originsubway = np.sum(subwayrides * couplingsubway)
+    nsubway = len(subwayrides)
+    originsubway = np.sum(subwayrides * couplingsubway) / nsubway
 
-    #fmt = '{0:3} {1:.5f} {2:.5f} {3:.2f} {4:.2f} {5:.5f} {6:.3f} {7:.3f}'
-    #print(fmt.format(ilat, ilong, originpop, originwork, 
-    #    originsubway, distancevec.min(), 
-    #    distancevec.max(), distancevec.mean()))
+    return originpop, originwork, originsubway
 
-    # test: Is there a station in stationcoupling that is ~1?  Are stations
-    # that are known to be far from each other correctly assigned a low
-    # coupling efficiency?  Tests indicate yes.
+def getdestination(ilat, ilong, station, stationscale,
+        originpop, originwork, originsubway):
 
     # compute destination scores for population, employee, and subway
     destpop = []
     destwork = []
     destsubway = []
 
+    stationlat = station['lat'].values
+    stationlong = station['lng'].values
     distancevec = densitymetric.distvec(stationlat, stationlong, ilat, ilong)
 
-    # station to station coupling
+    # origin to origin coupling
     stationcoupling = densitymetric.coupling(distancevec, stationscale)
 
-    destpop = np.sum(stationpop * stationcoupling)
-    destwork = np.sum(stationwork * stationcoupling)
-    destsubway = np.sum(stationsubway * stationcoupling)
-
-    features = [originpop, originwork, destpop, destwork,
-            originsubway, destsubway]
-
     maxcouple = stationcoupling.max()
+
+    norigin = len(originpop)
+    destpop = np.sum(originpop * stationcoupling) / norigin
+    destwork = np.sum(originwork * stationcoupling) / norigin
+    destsubway = np.sum(originsubway * stationcoupling) / norigin
+
+    return destpop, destwork, destsubway, maxcouple
+
+def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
+        subwayscale, stationpop, stationwork, stationsubway):
+
+    """
+
+    Get the feature vector associated with the input latitude and longitude.
+
+    """
+
+
+    originpop, originwork, originsubway = getorigin(ilat, ilong, popemp, mbta, 
+            zipscale, subwayscale)
+    destpop, destwork, destsubway, maxcouple = getdestination(ilat, ilong, 
+            station, stationscale, stationpop, stationwork, stationsubway)
+
+    features = [originpop, originwork, originsubway, destpop, destwork,
+            destsubway]
 
     return features, maxcouple
     
@@ -90,8 +99,8 @@ def predictride(features, stationfeatures):
     
     y = stationfeatures['ridesperday'].values
 
-    X = stationfeatures[['originpop', 'originwork', 'destpop', \
-            'destwork', 'originsubway', 'destsubway']].values
+    X = stationfeatures[['originpop', 'originwork', 'originsubway', \
+            'destpop', 'destwork', 'destsubway']].values
     
     nrides = clf.fit(X, y).predict(features)
 
@@ -123,7 +132,7 @@ def getpercentile(nride, stationfeatures):
     place = len(stationfeatures[indx])
     return place
 
-def makemap():
+def makemap(groupnum = 'Group5'):
 
     # Generate a sub grid of latitudes and longitudes
     latvec, longvec = loadutil.grid()
@@ -161,11 +170,9 @@ def makemap():
         for j in range(nlong):
             ilong = longvec[j]
             #print("we're actually doing something!")
-            ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
-                    station, zipscale, stationscale, subwayscale, stationpop, 
-                    stationwork, stationsubway)
-            iride = predictride(ifeatures, stationfeatures)
-            iride = iride[0]  - iride[0] * icannibal
+            iride = getride(ilat, ilong, popemp, mbta, station, zipscale, 
+                    stationscale, subwayscale, stationpop, stationwork, 
+                    stationsubway, stationfeatures)
             if iride > 10:
                 print(i, j, ilat, ilong, iride)
 
@@ -180,7 +187,7 @@ def makemap():
     ridedatadict = {'nrides': nrides, 'latitude': latlist, 'longitude':
             longlist}
     ridedata = pd.DataFrame(ridedatadict)
-    ridedata.to_csv('../Data/Boston/nridesmap.csv')
+    ridedata.to_csv('../Data/Boston/nridesmap' + groupnum + '.csv')
     
 
 def remakemap(ilat, ilong, iterstring):
@@ -243,14 +250,10 @@ def remakemap(ilat, ilong, iterstring):
             continue
 
         #print("we're actually doing something!")
-        ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
-                station, zipscale, stationscale, subwayscale, stationpop, 
-                stationwork, stationsubway)
-        iride = predictride(ifeatures, stationfeatures)
-        #cannibalmap[i, j] = icannibal
-
-        iride = iride[0]  - iride[0] * icannibal
-        nrides['nrides'][i] = iride
+        iride = getride(ilat, ilong, popemp, mbta, station, zipscale, 
+                stationscale, subwayscale, stationpop, stationwork, 
+                stationsubway, stationfeatures)
+        nrides['nrides'].values[i] = iride
         #fmt = '{0:2} {1:9.5f} {2:9.5f} {3:8.1f} {4:8.1f} {5:8.1f} {6:8.1f} {7:8.1f} {8:8.1f} {9:6.1f}'
         #if iride > 10:
         #    print(fmt.format(i, ilat, ilong, ifeatures[0], ifeatures[1],
@@ -319,16 +322,17 @@ def updatefeatures(stationfeatures, features, nrides, groupnum, iterstring):
 
     return
 
-def plotmap(iterstring, groupnum='Group4'):
+def plotmap(iterstring, groupnum='Group5'):
 
     # plot predicted ride map
     nrides = pd.read_csv('../Data/Boston/nridesmap_iteration' + \
             iterstring + '.csv')
-    ridemap = nrides['nrides'].values.reshape((100, 100))
     longmin = nrides['longitude'].min()
     longmax = nrides['longitude'].max()
     latmin = nrides['latitude'].min()
     latmax = nrides['latitude'].max()
+    nlat = np.sqrt(np.float(len(nrides)))
+    ridemap = nrides['nrides'].values.reshape((nlat, nlat))
 
     plt.clf()
     plt.imshow(ridemap, vmin=0, vmax=40, cmap="Blues",
@@ -362,7 +366,7 @@ def plotmap(iterstring, groupnum='Group4'):
 
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
             stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures, iterstring, groupnum='Group4'):
+            stationsubway, stationfeatures, iterstring, groupnum='Group5'):
 
     # predict the number of daily rides for this location
     nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
@@ -438,7 +442,7 @@ def userinput(ilat, ilong, iterstring):
 
     return ilat, ilong, nrides, place, iterstring
 
-def resetiteration():
+def resetiteration(groupnum='Group5'):
 
     """
 
@@ -450,16 +454,16 @@ def resetiteration():
     cmd = 'rm -f ' + dataloc + '*iteration*'
     call(cmd, shell=True)
 
-    cmd = 'cp ' + dataloc + 'nridesmap.csv ' + dataloc + \
-            'nridesmap_iteration0.csv'
+    cmd = 'cp ' + dataloc + 'nridesmap' + groupnum + '.csv ' + dataloc + \
+            'nridesmap' + groupnum + '_iteration0.csv'
     call(cmd, shell=True)
 
-    cmd = 'cp ' + dataloc + 'StationGroup4.csv ' + dataloc + \
-            'StationGroup4_iteration0.csv'
+    cmd = 'cp ' + dataloc + 'Station' + groupnum + '.csv ' + dataloc + \
+            'Station' + groupnum + '_iteration0.csv'
     call(cmd, shell=True)
 
-    cmd = 'cp ' + dataloc + 'FeaturesGroup4.csv ' + dataloc + \
-            'FeaturesGroup4_iteration0.csv'
+    cmd = 'cp ' + dataloc + 'Features' + groupnum + '.csv ' + dataloc + \
+            'Features' + groupnum + '_iteration0.csv'
     call(cmd, shell=True)
 
     cmd = 'cp ' + dataloc + 'hubway_stations.csv ' + dataloc + \
