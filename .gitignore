@@ -1,5 +1,6 @@
 *.swp
 *.swo
+*.pyc
 Data/BayArea
 Data/Minneapolis
 Data/NYC
