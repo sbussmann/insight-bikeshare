@@ -7,8 +7,6 @@ import matplotlib.pyplot as plt
 
 """ User Defined Parameters """
 
-groupnum = 'Group6'
-
 # scale radius by which to weight complementary zip codes
 zipscale = 0.5
 
@@ -19,7 +17,7 @@ stationscale = 1.0
 subwayscale = 0.25
 
 popemp = pd.read_csv('../Data/Boston/popemp.csv')
-station = pd.read_csv('../Data/Boston/hubway_stations.csv')
+station = pd.read_csv('../Data/Boston/original/hubway_stations.csv')
 mbta = pd.read_csv('../Data/Boston/mbtarideratelocation.csv')
 
 stationlat = station['lat'].values
@@ -50,16 +48,16 @@ station['destpop'] = scores[3]
 station['destwork'] = scores[4]
 station['destsubway'] = scores[5]
 
-station.to_csv('../Data/Boston/Station' + groupnum + '.csv')
+station.to_csv('../Data/Boston/original/Station.csv')
 
 databystation = pd.read_csv('../Data/Boston/HubwayRidesDays.csv')
-station = pd.read_csv('../Data/Boston/Station' + groupnum + '.csv')
+#station = pd.read_csv('../Data/Boston/original/Station.csv')
 station = station.rename(columns = {'id': 'stationid'})
-station = station.drop('Unnamed: 0', axis=1)
+#station = station.drop('Unnamed: 0', axis=1)
 databystation = databystation.merge(station, on='stationid')
 databystation = databystation.drop(['terminal', 'station', 'status', 'municipal'], axis=1)
 databystation = databystation.drop('Unnamed: 0', axis=1)
 databystation['ridesperday'] = databystation['nrides'] / databystation['ndays']
-databystation.to_csv('../Data/Boston/Features' + groupnum + '.csv')
+databystation.to_csv('../Data/Boston/original/Features.csv')
 
 import pdb; pdb.set_trace()

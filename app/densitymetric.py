@@ -61,7 +61,7 @@ def distmap(latvec, longvec, inlat, inlong):
 
     return distancemap
 
-def stationcouple(distancevec):
+def stationcouple(distancevec, dataloc='../Data/Boston/'):
 
     """
 
@@ -72,21 +72,23 @@ def stationcouple(distancevec):
         distancevec: vector of distances from given station to all other points
         in Greater Boston area [numpy array]
         scaledistance: length scale over which coupling efficiency is expected
-        to decrease by 1/e [float]
+        to decrease to 1/e of the maximum [float]
 
     Outputs:
         couplingfactor: coupling efficiencies for each station [list]
 
     """
 
-    ridelengthdf = pd.read_csv('../Data/Boston/ridelengthpdf.csv')
+    ridelengthdf = pd.read_csv(dataloc + 'ridelengthpdf.csv')
 
     # assume hubway users ride at 10 miles per hour
     avgspeed = 10.
 
     # ride times are given in minutes in this table
     x = ridelengthdf['ridetime'].values * avgspeed * 1./60
+    x = np.append(x, 120)
     y = ridelengthdf['probability'].values
+    y = np.append(y, 0)
 
     couplingfunction = interp1d(x, y)
     couplingfactor = couplingfunction(distancevec)
@@ -112,7 +114,6 @@ def zipcouple(distancevec, scaledistance):
 
     """
 
-    #ridelengthdf = pd.read_csv('../Data/Boston/ridelengthpdf.csv')
     couplingfactor = np.exp(-0.5 * (distancevec / scaledistance) ** 2)
 
     return couplingfactor

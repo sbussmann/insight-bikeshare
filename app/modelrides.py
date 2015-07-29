@@ -13,9 +13,8 @@ from sklearn import tree
 from sklearn.ensemble import RandomForestRegressor
 
 
-groupnum = 'Group6'
 
-ridedata = pd.read_csv('../Data/Boston/Features' + groupnum + '.csv')
+ridedata = pd.read_csv('../Data/Boston/Features.csv')
 
 # stations with very numbers of rides are tourist attactions.  I want to model
 # the ordinary stations.
@@ -99,5 +98,5 @@ for isim in range(10):
     plt.plot([0,40], [0,40])
     plt.xlabel('Average number of rides per day', fontsize='xx-large')
     plt.ylabel('Predicted average number of rides per day', fontsize='xx-large')
-savefig('../Figures/ridesperdayregression_' + groupnum + '.png')
+savefig('../Figures/ridesperdayregression.png')
 import pdb; pdb.set_trace()

@@ -48,23 +48,23 @@ def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):
 
     return originpop, originwork, originsubway
 
-def getdestination(ilat, ilong, station, stationscale,
-        originpop, originwork, originsubway):
+def getdestination(ilat, ilong, station, stationscale, zipscale, 
+        stationfeatures, dataloc):
 
-    # compute destination scores for population, employee, and subway
-    destpop = []
-    destwork = []
-    destsubway = []
+    originpop = stationfeatures['originpop'].values
+    originwork = stationfeatures['originwork'].values
+    originsubway = stationfeatures['originsubway'].values
 
     stationlat = station['lat'].values
     stationlong = station['lng'].values
     distancevec = densitymetric.distvec(stationlat, stationlong, ilat, ilong)
 
     # origin to origin coupling
-    stationcoupling = densitymetric.stationcouple(distancevec)
+    stationcoupling = densitymetric.stationcouple(distancevec, dataloc)
 
     # i may need to investigate maxcouple
-    maxcouple = stationcoupling.max()
+    othercoupling = densitymetric.zipcouple(distancevec, zipscale)
+    maxcouple = othercoupling.max()
 
     norigin = len(originpop)
     destpop = np.sum(originpop * stationcoupling) / norigin
@@ -74,7 +74,7 @@ def getdestination(ilat, ilong, station, stationscale,
     return destpop, destwork, destsubway, maxcouple
 
 def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
-        subwayscale, stationpop, stationwork, stationsubway):
+        subwayscale, stationfeatures, dataloc):
 
     """
 
@@ -86,7 +86,7 @@ def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
     originpop, originwork, originsubway = getorigin(ilat, ilong, popemp, mbta, 
             zipscale, subwayscale)
     destpop, destwork, destsubway, maxcouple = getdestination(ilat, ilong, 
-            station, stationscale, stationpop, stationwork, stationsubway)
+            station, stationscale, zipscale, stationfeatures, dataloc)
 
     features = [originpop, originwork, originsubway, destpop, destwork,
             destsubway]
@@ -108,10 +108,11 @@ def predictride(features, stationfeatures):
     return nrides
 
 def getride(ilat, ilong, popemp, mbta, station, zipscale, stationscale, 
-        subwayscale, stationpop, stationwork, stationsubway, stationfeatures):
+        subwayscale, stationfeatures, dataloc):
+
     ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
-            station, zipscale, stationscale, subwayscale, stationpop, 
-            stationwork, stationsubway)
+            station, zipscale, stationscale, subwayscale, stationfeatures, 
+            dataloc)
     iride = predictride(ifeatures, stationfeatures)
     #cannibalmap[i, j] = icannibal
 
@@ -133,7 +134,7 @@ def getpercentile(nride, stationfeatures):
     place = len(stationfeatures[indx])
     return place
 
-def makemap(groupnum = 'Group5'):
+def makemap(dataloc):
 
     # Generate a sub grid of latitudes and longitudes
     latvec, longvec = loadutil.grid()
@@ -141,7 +142,7 @@ def makemap(groupnum = 'Group5'):
     nlong = len(longvec)
 
     # get the mask
-    mask = loadutil.getmask()
+    mask = loadutil.getmask(dataloc)
     #import matplotlib.pyplot as plt
     #extent = [longvec.min(), longvec.max(), latvec.min(), latvec.max()]
     #plt.imshow(mask, extent=extent, origin='lower')
@@ -151,17 +152,14 @@ def makemap(groupnum = 'Group5'):
     
 
     # load the data
-    loaddata = loadutil.load()
+    loaddata = loadutil.load(dataloc)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
     zipscale = loaddata[3]
     stationscale = loaddata[4]
     subwayscale = loaddata[5]
-    stationpop = loaddata[6]
-    stationwork = loaddata[7]
-    stationsubway = loaddata[8]
-    stationfeatures = loaddata[9]
+    stationfeatures = loaddata[6]
 
     nrides = []
     latlist = []
@@ -172,8 +170,7 @@ def makemap(groupnum = 'Group5'):
             ilong = longvec[j]
             #print("we're actually doing something!")
             iride = getride(ilat, ilong, popemp, mbta, station, zipscale, 
-                    stationscale, subwayscale, stationpop, stationwork, 
-                    stationsubway, stationfeatures)
+                    stationscale, subwayscale, stationfeatures, dataloc)
             if iride > 10:
                 print(i, j, ilat, ilong, iride)
 
@@ -188,10 +185,10 @@ def makemap(groupnum = 'Group5'):
     ridedatadict = {'nrides': nrides, 'latitude': latlist, 'longitude':
             longlist}
     ridedata = pd.DataFrame(ridedatadict)
-    ridedata.to_csv('../Data/Boston/nridesmap' + groupnum + '.csv')
+    ridedata.to_csv(dataloc + 'nridesmap.csv')
     
 
-def remakemap(ilat, ilong, iterstring):
+def remakemap(ilat, ilong, dataloc):
 
     """
 
@@ -207,24 +204,17 @@ def remakemap(ilat, ilong, iterstring):
     sublatvec, sublongvec = loadutil.subgrid(ilat, ilong, nsub=10)
 
     # load the data
-    loaddata = loadutil.load(iterstring=iterstring)
+    loaddata = loadutil.load(dataloc)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
     zipscale = loaddata[3]
     stationscale = loaddata[4]
     subwayscale = loaddata[5]
-    stationpop = loaddata[6]
-    stationwork = loaddata[7]
-    stationsubway = loaddata[8]
-    stationfeatures = loaddata[9]
+    stationfeatures = loaddata[6]
 
     # read in ride map from previous iteration
-    iternum = np.int(iterstring)
-    iternum -= 1
-    iterprevious = str(iternum)
-    nrides = pd.read_csv('../Data/Boston/nridesmap_iteration' + \
-            iterprevious + '.csv')
+    nrides = pd.read_csv(dataloc + 'nridesmap.csv')
     #cannibalmap = np.zeros([nlat, nlong])
     #frides = open('../Data/Boston/nridesmap.csv', 'w')
     import time
@@ -250,11 +240,9 @@ def remakemap(ilat, ilong, iterstring):
         if ilong > sublongvec.max():
             continue
 
-        #print("we're actually doing something!")
         iride = getride(ilat, ilong, popemp, mbta, station, zipscale, 
-                stationscale, subwayscale, stationpop, stationwork, 
-                stationsubway, stationfeatures)
-        nrides['nrides'].values[i] = iride
+                stationscale, subwayscale, stationfeatures, dataloc)
+        nrides['nrides'][i] = iride
         #fmt = '{0:2} {1:9.5f} {2:9.5f} {3:8.1f} {4:8.1f} {5:8.1f} {6:8.1f} {7:8.1f} {8:8.1f} {9:6.1f}'
         #if iride > 10:
         #    print(fmt.format(i, ilat, ilong, ifeatures[0], ifeatures[1],
@@ -263,12 +251,11 @@ def remakemap(ilat, ilong, iterstring):
     newtime = time.time()
     runtime = newtime - currenttime
     print("Took %d seconds to re-process the map." % runtime)
-    nrides.to_csv('../Data/Boston/nridesmap_iteration' + iterstring + '.csv', \
-            index=False)
+    nrides.to_csv(dataloc + 'nridesmap.csv', index=False)
 
     #frides.close()
 
-def peakfind(iterstring):
+def peakfind(dataloc):
 
     """ 
     
@@ -276,8 +263,7 @@ def peakfind(iterstring):
     
     """
 
-    ridedf = pd.read_csv('../Data/Boston/nridesmap_iteration' + \
-            iterstring + '.csv')
+    ridedf = pd.read_csv(dataloc + 'nridesmap.csv')
     latmap = ridedf['latitude']
     longmap = ridedf['longitude']
     ridemap = ridedf['nrides']
@@ -288,7 +274,7 @@ def peakfind(iterstring):
 
     return latmax, longmax
 
-def addnewstation(station, ilat, ilong, iterstring):
+def addnewstation(station, ilat, ilong, dataloc):
 
     """
 
@@ -299,11 +285,10 @@ def addnewstation(station, ilat, ilong, iterstring):
     newdic = {'lat': [ilat], 'lng': [ilong], 'status': ['proposed']}
     df1 = pd.DataFrame(newdic)
     station = station.append(df1)
-    station.to_csv('../Data/Boston/hubway_stations_iteration' + iterstring + \
-            '.csv', index=False)
-    return 
+    station.to_csv(dataloc + '/Station.csv', index=False)
+    return station
 
-def updatefeatures(stationfeatures, features, nrides, groupnum, iterstring):
+def updatefeatures(stationfeatures, features, nrides, dataloc):
 
     """
 
@@ -318,16 +303,15 @@ def updatefeatures(stationfeatures, features, nrides, groupnum, iterstring):
             'destsubway': [features[5]], 'stationid': [maxstationid]}
     df1 = pd.DataFrame(newdic)
     stationfeatures = stationfeatures.append(df1)
-    stationfeatures.to_csv('../Data/Boston/Features' + groupnum + \
-            '_iteration' + iterstring + '.csv', index=False)
+    print(dataloc)
+    stationfeatures.to_csv(dataloc + 'Features.csv', index=False)
 
-    return
+    return stationfeatures
 
-def plotmap(iterstring, groupnum='Group5'):
+def plotmap(dataloc):
 
     # plot predicted ride map
-    nrides = pd.read_csv('../Data/Boston/nridesmap_iteration' + \
-            iterstring + '.csv')
+    nrides = pd.read_csv(dataloc + 'nridesmap.csv')
     longmin = nrides['longitude'].min()
     longmax = nrides['longitude'].max()
     latmin = nrides['latitude'].min()
@@ -336,16 +320,14 @@ def plotmap(iterstring, groupnum='Group5'):
     ridemap = nrides['nrides'].values.reshape((nlat, nlat))
 
     plt.clf()
-    plt.imshow(ridemap, vmin=0, vmax=40, cmap="Blues",
+    plt.imshow(ridemap, vmin=0, cmap="Blues",
             extent=[longmin,longmax,latmin,latmax], origin='lower')
     cbar = plt.colorbar()
     cbar.set_label('Predicted Daily Rides')
 
     # plot existing Hubway stations
-    station = pd.read_csv('../Data/Boston/hubway_stations_iteration' + \
-            iterstring + '.csv')
-    stationfeatures = pd.read_csv('../Data/Boston/Features' + groupnum + \
-            '_iteration' + iterstring + '.csv')
+    station = pd.read_csv(dataloc + 'Station.csv')
+    stationfeatures = pd.read_csv(dataloc + 'Features.csv')
     plt.scatter(station['lng'], station['lat'], 
             s=stationfeatures['ridesperday'], alpha=0.4, 
             color='white', edgecolor='black', 
@@ -362,111 +344,94 @@ def plotmap(iterstring, groupnum='Group5'):
     #plt.legend()
     plt.tight_layout()
     plt.show()
-    savefig('../Figures/predictedridemap_iteration.png')
+    savefig('../Figures/predictedridemap.png')
     
 
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
-            stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures, iterstring, groupnum='Group5'):
+            stationscale, subwayscale, stationfeatures, dataloc):
 
     # predict the number of daily rides for this location
     nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
-            stationscale, subwayscale, stationpop, stationwork, 
-            stationsubway, stationfeatures)
+            stationscale, subwayscale, stationfeatures, dataloc)
 
     # compute how many existing stations would be worse than this station
     place = getpercentile(nrides, stationfeatures)
 
-    # update the counter
-    iternum = np.int(iterstring)
-    iternum += 1
-    iterstring = str(iternum)
-
-    # add the new station, 
-    addnewstation(station, ilat, ilong, iterstring)
+    print "Predicted rides = %d." % nrides
+    print "%d stations have lower rides." % place
 
     # recompute stationfeatures
     ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
-            station, zipscale, stationscale, subwayscale, stationpop, 
-            stationwork, stationsubway)
-    updatefeatures(stationfeatures, ifeatures, nrides, groupnum, iterstring)
+            station, zipscale, stationscale, subwayscale, stationfeatures, 
+            dataloc)
 
+    print "This station would have these features: ", str(ifeatures)
+
+    # add the new station, 
+    station = addnewstation(station, ilat, ilong, dataloc)
+
+    # add the new features to stationfeatures
+    stationfeatures = updatefeatures(stationfeatures, ifeatures, nrides, dataloc)
+
+    print("Remaking the grid of predicted rides")
     # update the grid of predicted rides
-    remakemap(ilat, ilong, iterstring)
+    remakemap(ilat, ilong, dataloc)
 
     # remake the image showing the predicted daily rides
-    plotmap(iterstring)
+    plotmap(dataloc)
 
-    return nrides, place, iterstring
+    return nrides, place
 
-def autoinput(iterstring):
+def autoinput(dataloc):
 
     # load the data
-    loaddata = loadutil.load(iterstring=iterstring)
+    loaddata = loadutil.load(dataloc)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
     zipscale = loaddata[3]
     stationscale = loaddata[4]
     subwayscale = loaddata[5]
-    stationpop = loaddata[6]
-    stationwork = loaddata[7]
-    stationsubway = loaddata[8]
-    stationfeatures = loaddata[9]
+    stationfeatures = loaddata[6]
 
-    ilat, ilong = peakfind(iterstring)
+    ilat, ilong = peakfind(dataloc)
 
-    nrides, place, iterstring = giveninput(ilat, ilong, popemp, mbta, station,
-            zipscale, stationscale, subwayscale, stationpop, stationwork,
-            stationsubway, stationfeatures, iterstring)
+    nrides, place = giveninput(ilat, ilong, popemp, mbta, station,
+            zipscale, stationscale, subwayscale, stationfeatures, dataloc)
 
-    return ilat, ilong, nrides, place, iterstring
+    return ilat, ilong, nrides, place
 
-def userinput(ilat, ilong, iterstring):
+def userinput(ilat, ilong, dataloc):
 
     # load the data
-    loaddata = loadutil.load(iterstring=iterstring)
+    loaddata = loadutil.load(dataloc)
     popemp = loaddata[0]
     mbta = loaddata[1]
     station = loaddata[2]
     zipscale = loaddata[3]
     stationscale = loaddata[4]
     subwayscale = loaddata[5]
-    stationpop = loaddata[6]
-    stationwork = loaddata[7]
-    stationsubway = loaddata[8]
-    stationfeatures = loaddata[9]
+    stationfeatures = loaddata[6]
 
-    nrides, place, iterstring = giveninput(ilat, ilong, popemp, mbta, station,
-            zipscale, stationscale, subwayscale, stationpop, stationwork,
-            stationsubway, stationfeatures, iterstring)
+    nrides, place = giveninput(ilat, ilong, popemp, mbta, station,
+            zipscale, stationscale, subwayscale, stationfeatures, dataloc)
 
-    return ilat, ilong, nrides, place, iterstring
+    return ilat, ilong, nrides, place
 
-def resetiteration(groupnum='Group5'):
+def resetiteration(basedir, growdir):
 
     """
 
-    Remove all new stations from the database and start over.
+    Remove all new stations from the "growing" database and start over.
 
     """
 
-    dataloc = '../Data/Boston/'
-    cmd = 'rm -f ' + dataloc + '*iteration*'
-    call(cmd, shell=True)
+    #cmd = 'rm -f ' + dataloc + '*iteration*'
+    #call(cmd, shell=True)
+    filestocopy = ['nridesmap.csv', 'Station.csv', 'Features.csv', \
+            'popemp.csv', 'mbtarideratelocation.csv', \
+            'maskmap.csv', 'ridelengthpdf.csv']
 
-    cmd = 'cp ' + dataloc + 'nridesmap' + groupnum + '.csv ' + dataloc + \
-            'nridesmap' + groupnum + '_iteration0.csv'
-    call(cmd, shell=True)
-
-    cmd = 'cp ' + dataloc + 'Station' + groupnum + '.csv ' + dataloc + \
-            'Station' + groupnum + '_iteration0.csv'
-    call(cmd, shell=True)
-
-    cmd = 'cp ' + dataloc + 'Features' + groupnum + '.csv ' + dataloc + \
-            'Features' + groupnum + '_iteration0.csv'
-    call(cmd, shell=True)
-
-    cmd = 'cp ' + dataloc + 'hubway_stations.csv ' + dataloc + \
-            'hubway_stations_iteration0.csv'
-    call(cmd, shell=True)
+    for ifile in filestocopy:
+        cmd = 'cp -f ' + basedir + ifile + ' ' + growdir + ifile
+        call(cmd, shell=True)
