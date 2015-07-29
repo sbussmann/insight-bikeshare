@@ -3,7 +3,7 @@ import numpy as np
 import glob
 
 
-def load(groupnum='Group5', iterstring = '0'):
+def load(dataloc):
 
     """ Helper function to load data. """
 
@@ -16,24 +16,17 @@ def load(groupnum='Group5', iterstring = '0'):
     # scale radius by which to weight complementary subway stops
     subwayscale = 0.25
 
-    stationfeatures = pd.read_csv('../Data/Boston/Features' + groupnum + \
-            '_iteration' + iterstring + '.csv')
-    station = pd.read_csv('../Data/Boston/hubway_stations' + \
-            '_iteration' + iterstring + '.csv')
+    stationfeatures = pd.read_csv(dataloc + 'Features.csv')
+    station = pd.read_csv(dataloc + 'Station.csv')
 
     #popular = 45
     #stationfeatures = stationfeatures[stationfeatures['ridesperday'] < popular]
 
-    stationpop = stationfeatures['originpop'].values
-    stationwork = stationfeatures['originwork'].values
-    stationsubway = stationfeatures['originsubway'].values
-
-    popemp = pd.read_csv('../Data/Boston/popemp.csv')
-    mbta = pd.read_csv('../Data/Boston/mbtarideratelocation.csv')
+    popemp = pd.read_csv(dataloc + 'popemp.csv')
+    mbta = pd.read_csv(dataloc + 'mbtarideratelocation.csv')
 
     return popemp, mbta, station, zipscale, stationscale, \
-            subwayscale, stationpop, stationwork, stationsubway, \
-            stationfeatures
+            subwayscale, stationfeatures
 
 def grid():
 
@@ -79,7 +72,7 @@ def subgrid(lat0, long0, nsub=10):
     return latvec, longvec
 
 
-def makemask():
+def makemask(dataloc):
 
     """
 
@@ -95,7 +88,7 @@ def makemask():
     #dlong = longvec[1] - longvec[0]
     mask = np.zeros([nlat, nlong])
 
-    masklist = glob.glob('../Data/Boston/charlesriver_*csv')
+    masklist = glob.glob(dataloc + 'charlesriver_*csv')
     for maskfile in masklist:
         tmpmask = np.zeros([nlat, nlong])
         maskdata = pd.read_csv(maskfile)
@@ -137,15 +130,15 @@ def makemask():
             masklist.append(mask[i, j])
 
     mask_df = pd.DataFrame({"mask": masklist})
-    mask_df.to_csv('../Data/Boston/maskmap.csv')
+    mask_df.to_csv(dataloc + 'maskmap.csv')
 
     return mask
 
-def getmask():
+def getmask(dataloc):
 
 
     latvec, longvec = grid()
-    mask_df = pd.read_csv('../Data/Boston/maskmap.csv')
+    mask_df = pd.read_csv(dataloc + 'maskmap.csv')
     #maskmap = np.zeros([nlat, nlong])
     maskmap = mask_df['mask'].values
 

@@ -1,20 +1,23 @@
 import gridpredict
 
-gridpredict.resetiteration()
-test1 = gridpredict.autoinput('0')
+basedir = '../Data/Boston/'
+growdir = '../Data/Boston/growing/'
+gridpredict.resetiteration(basedir, growdir)
+test1 = gridpredict.autoinput(growdir)
 print(test1)
 import pdb; pdb.set_trace()
-test1 = gridpredict.autoinput('1')
+test1 = gridpredict.autoinput(growdir)
 print(test1)
-test1 = gridpredict.autoinput('2')
+import pdb; pdb.set_trace()
+test1 = gridpredict.autoinput(growdir)
 print(test1)
-test1 = gridpredict.autoinput('3')
+test1 = gridpredict.autoinput(growdir)
 print(test1)
-test1 = gridpredict.autoinput('4')
+test1 = gridpredict.autoinput(growdir)
 print(test1)
-test1 = gridpredict.autoinput('5')
+test1 = gridpredict.autoinput(growdir)
 print(test1)
-test1 = gridpredict.autoinput('6')
+test1 = gridpredict.autoinput(growdir)
 print(test1)
 
 # open street map for river outline

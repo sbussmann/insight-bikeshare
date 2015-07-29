@@ -40,12 +40,12 @@
             <span class="icon-bar">test</span>
             <span class="icon-bar">test</span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#">Grow Hubway</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
+            <li><a href="#about">Technical</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -55,13 +55,42 @@
     <br><br>
 
     <div class="container">
+
+    <table width=800>
+        <tr>
+            <td>
+    <div class="container">
       <div class="starter-template">
-          <h2>Output Page</h2>
-          <p>Predict the daily rides at either the best possible location or at
-          any location of your choice.</p>
+        <h3>You added a new Hubway station!</h3>
+        <p class="lead">
+        Location: ({{longitude}}, {{latitude}}) <br>
+        Model predicts {{riderate}} rides per day<br>
+        {{ranking}} existing Hubway stations have lower rides per day</p>
       </div>
+
+
+      <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+      <script src="static/js/bootstrap.min.js"></script>
+
+
+    </div><!-- /.container -->
    
       <div class = "container">
+        <h3>Add Another Station:</h3>
+        <p>Predict the daily rides at the best possible location.</p>
+        <form  action="/output_auto" method="GET">
+      
+          <div>
+            <button type="submit" class="btn btn-default btn-lg">Predict daily
+                rides at the best location!</button>
+          </div>
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="static/js/bootstrap.min.js"></script>
+        </form>
+      </div>
+      <br>
+      <div class = "container">
+        <p>Predict the daily rides at a location of your choice.</p>
    
         <form  action="/output_user" method="GET">
           <div class="form-group">
@@ -79,34 +108,19 @@
                 rides for this location!</button>
           </div>
         </form>
-   
-        <form  action="/output_auto" method="GET">
-   
-          <div>
-            <button type="submit" class="btn btn-default btn-lg">Predict daily
-                rides at the best location!</button>
-          </div>
-        </form>
       </div>
+            </td>
+            <td>
+                <img src="../../Data/Boston/growing/predictedridemap.png"
+                alt="Predicted ride map">
+            </td>
+        </tr>
+    </table>
+
       <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
       <script src="static/js/bootstrap.min.js"></script>
    
     </div> <!-- /.container-->
-
-    <div class="container">
-      <div class="starter-template">
-        <h3>Model Output:</h3>
-        <p class="lead">Predicted average number of rides per day from July
-        2011 to November 2013 for this location: {{riderate}}.  <br>
-        Percentile ranking compared to existing stations: {{ranking}}</p>
-      </div>
-
-
-      <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-      <script src="static/js/bootstrap.min.js"></script>
-
-
-    </div><!-- /.container -->
     
 
 
