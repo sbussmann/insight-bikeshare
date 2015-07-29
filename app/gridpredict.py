@@ -148,7 +148,6 @@ def makemap(dataloc):
     #plt.imshow(mask, extent=extent, origin='lower')
     ##plt.scatter(biglong, biglat)
     #plt.show()
-    #import pdb; pdb.set_trace()
     
 
     # load the data
@@ -227,7 +226,6 @@ def remakemap(ilat, ilong, dataloc):
         #if ilat > 42.34:
         #    if ilong > -71.09:
         #        print(ilat, ilong)
-        #        import pdb; pdb.set_trace()
         #print(ilat, ilong)
         # skip this latitude if it isn't present in the subgrid
         if ilat < sublatvec.min():
@@ -343,8 +341,8 @@ def plotmap(dataloc):
     plt.ylabel('Latitude')
     #plt.legend()
     plt.tight_layout()
-    plt.show()
-    savefig('../Figures/predictedridemap.png')
+    #plt.show()
+    savefig(dataloc + '/predictedridemap.png')
     
 
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
@@ -399,6 +397,8 @@ def autoinput(dataloc):
     nrides, place = giveninput(ilat, ilong, popemp, mbta, station,
             zipscale, stationscale, subwayscale, stationfeatures, dataloc)
 
+    nrides = np.round(nrides, decimals=2)
+
     return ilat, ilong, nrides, place
 
 def userinput(ilat, ilong, dataloc):
@@ -415,6 +415,8 @@ def userinput(ilat, ilong, dataloc):
 
     nrides, place = giveninput(ilat, ilong, popemp, mbta, station,
             zipscale, stationscale, subwayscale, stationfeatures, dataloc)
+
+    nrides = np.round(nrides, decimals=2)
 
     return ilat, ilong, nrides, place
 
