@@ -1,5 +1,7 @@
 *.swp
 *.swo
+*.pyc
+supervisord.log
 Data/BayArea
 Data/Minneapolis
 Data/NYC

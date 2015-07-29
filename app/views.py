@@ -10,8 +10,8 @@ app = Flask(__name__)
 #db = mdb.connect(user="root", host="localhost", password="password",
 #        db="BostonFeaturesByStation_db", charset='utf8')
 
-#@app.route('/index')
 @app.route('/')
+@app.route('/index')
 def index():
 	return render_template("index.html",
         title = 'Home', user = { 'nickname': 'Shane' },
