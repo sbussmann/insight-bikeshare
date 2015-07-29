@@ -376,13 +376,15 @@ def giveninput(ilat, ilong, popemp, mbta, station, zipscale,
     remakemap(ilat, ilong, dataloc)
 
     # remake the image showing the predicted daily rides
-    plotmap(dataloc)
+    #plotmap(dataloc)
 
     return nrides, place
 
 def autoinput(dataloc):
 
     # load the data
+    import os
+    print(os.getcwd())
     loaddata = loadutil.load(dataloc)
     popemp = loaddata[0]
     mbta = loaddata[1]

@@ -1,4 +1,6 @@
-from flask import render_template, request, Flask
+from flask import Flask
+from flask import render_template, request
+#from app import app
 #import pymysql as mdb
 #from predictride import predict
 import gridpredict
@@ -11,16 +13,14 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def station_input():
-  import os
-  print(os.getcwd())
-  basedir = 'Data/Boston/'
-  growdir = 'Data/Boston/growing/'
+  basedir = '../Data/Boston/'
+  growdir = '../Data/Boston/growing/'
   gridpredict.resetiteration(basedir, growdir)
   return render_template("input.html")
 
 @app.route('/output_auto')
 def station_output_auto():
-  growdir = 'Data/Boston/growing/'
+  growdir = '../Data/Boston/growing/'
   the_results = gridpredict.autoinput(growdir)
   latitude = the_results[0]
   longitude = the_results[1]
@@ -34,7 +34,7 @@ def station_output_user():
   #pull 'ID' from input field and store it
   longitude = request.args.get('ID1')
   latitude = request.args.get('ID2')
-  growdir = 'Data/Boston/growing/'
+  growdir = '../Data/Boston/growing/'
   the_results = gridpredict.userinput(longitude, latitude, growdir)
   latitude = the_results[0]
   longitude = the_results[1]
