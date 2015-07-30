@@ -18,29 +18,23 @@ growdir = '../Data/Boston/growing/'
 
 #@app.route('/hubway')
 #def station_hubway():
+#def inline_map(m, width=650, height=500):
+#    """Takes a folium instance and embed HTML."""
+#    m._build_map()
+#    srcdoc = m.HTML.replace('"', '&quot;')
+#    embed = HTML('<iframe srcdoc="{}" '
+#                 'style="width: {}px; height: {}px; '
+#                 'border: none"></iframe>'.format(srcdoc, width, height))
+#    return embed
 
-@app.after_request
-def add_header(response):
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
-    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-    response.headers['Cache-Control'] = 'public, max-age=0'
-    return response
-
-@app.route('/')
-@app.route('/index')
-def station_input():
-
-    # reset to existing Hubway stations only
-    gridpredict.resetiteration(basedir, growdir)
-
+def makemap():
     # generate the map
     latvec, longvec = loadutil.grid()
     lat0 = latvec.mean()
     long0 = longvec.mean()
-    map_hubway = folium.Map(location=[lat0, long0], width=600, zoom_start=20)
+    mapwidth = 600
+    mapheight = 500
+    map_hubway = folium.Map(location=[lat0, long0], width=mapwidth, height=mapheight, zoom_start=9)
 
     # generate the station locations
     dataload = loadutil.load(growdir)
@@ -50,30 +44,37 @@ def station_input():
     for i in range(nstation):
         ilat = station['lat'][i]
         ilong = station['lng'][i]
-        iride = stationfeatures['ridesperday'][i]
+        iride = stationfeatures['ridesperday'][i] * 10
         map_hubway.circle_marker(location=[ilat, ilong], radius=iride,
-                line_color='black', fill_color='red', fill_opacity=0.2)
-    #cmd = 'rm -f app/template/hubway.html'
-    #call(cmd, shell=True)
-    #hubwayurl = url_for('static', filename='hubway.html')
-    #print(hubwayurl)
-    map_hubway.create_map(path="static/hubway.html")
-
+                fill_color='white', edge_color='none', fill_opacity=0.5)
+    map_hubway.create_map(path="templates/hubway.html")
     #import fileinput
-
     #processing_foo1s = False
+    #for i, line in enumerate(fileinput.input('templates/hubway.html', inplace=1)):
+#	if i == 0:
+#		print('{% extends "input.html" %}')
+#		print('{% block map %}')
+#        #if line.startswith('<head>'):
+#        #    processing_foo1s = True
+#        #else:
+#        #    if processing_foo1s:
+#        #        print('   <meta http-Equiv="Cache-Control" Content="no-cache" />')
+#        #        print('   <meta http-Equiv="Pragma" Content="no-cache" />')
+#        #        print('   <meta http-Equiv="Expires" Content="0" />')
+#        #    processing_foo1s = False
+#        print line,
+#	if i == len(enumerate(fileinput.input('templates/hubway.html', inplace=1))) - 1:
+#		print('{% endblock %}')
 
-    #for line in fileinput.input('static/hubway.html', inplace=1):
-    #    if line.startswith('<head>'):
-    #        processing_foo1s = True
-    #    else:
-    #        if processing_foo1s:
-    #            print('   <meta http-Equiv="Cache-Control" Content="no-cache" />')
-    #            print('   <meta http-Equiv="Pragma" Content="no-cache" />')
-    #            print('   <meta http-Equiv="Expires" Content="0" />')
-    #        processing_foo1s = False
-    #    print line,
-    ##render_template("hubway.html"
+    #foliummap = 5#inline_map(map_hubway)
+
+@app.route('/')
+@app.route('/index')
+def station_input():
+
+    # reset to existing Hubway stations only
+    gridpredict.resetiteration(basedir, growdir)
+
     return render_template("input.html")
 
 @app.route('/output_auto')
