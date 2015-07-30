@@ -75,6 +75,17 @@ def station_input():
     # reset to existing Hubway stations only
     gridpredict.resetiteration(basedir, growdir)
 
+    #for line in fileinput.input('static/hubway.html', inplace=1):
+    #    if line.startswith('<head>'):
+    #        processing_foo1s = True
+    #    else:
+    #        if processing_foo1s:
+    #            print('   <meta http-Equiv="Cache-Control" Content="no-cache" />')
+    #            print('   <meta http-Equiv="Pragma" Content="no-cache" />')
+    #            print('   <meta http-Equiv="Expires" Content="0" />')
+    #        processing_foo1s = False
+    #    print line,
+    ##render_template("hubway.html"
     return render_template("input.html")
 
 @app.route('/output_auto')
