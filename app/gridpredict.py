@@ -5,6 +5,8 @@ Boston area.
 
 """
 
+import matplotlib
+matplotlib.use('Agg')
 import numpy as np
 import densitymetric
 import pandas as pd
@@ -343,6 +345,14 @@ def plotmap(dataloc):
     #plt.legend()
     #plt.tight_layout()
     #plt.show()
+    canvas = FigureCanvas(fig)
+    png_output = StringIO.StringIO()
+    canvas.print_png(png_output)
+    response = make_response(png_output.getvalue())
+    response.headers['Content-Type'] = 'image/png'
+
+    fig.clf()
+    return response 
     plt.savefig(dataloc + '/predictedridemap.png', bbox_inches='tight')
     
 

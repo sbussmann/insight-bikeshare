@@ -1,5 +1,7 @@
+import matplotlib
+matplotlib.use('Agg')
 from flask import Flask
-from flask import render_template, request#, url_for
+from flask import render_template, request, make_response#, url_for
 #from app import app
 #import pymysql as mdb
 #from predictride import predict
@@ -110,6 +112,55 @@ def station_output_user():
     ranking = the_results[3]
     return render_template("output.html", riderate=riderate, ranking=ranking,
           latitude=latitude, longitude=longitude)
+
+@app.route("/predictedridemap.png")
+def predictedridemap():
+    from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+    from matplotlib.figure import Figure
+    from matplotlib.dates import DateFormatter
+
+
+    fig=Figure(figsize=(9,5))
+    ax=fig.add_subplot(111)
+
+    # plot predicted ride map
+    growdir = '../Data/Boston/growing/'
+    nrides = pd.read_csv(growdir + 'nridesmap.csv')
+    longmin = nrides['longitude'].min()
+    longmax = nrides['longitude'].max()
+    latmin = nrides['latitude'].min()
+    latmax = nrides['latitude'].max()
+    nlat = np.sqrt(np.float(len(nrides)))
+    ridemap = nrides['nrides'].values.reshape((nlat, nlat))
+
+    ax.imshow(ridemap, vmin=0, cmap="Blues",
+            extent=[longmin,longmax,latmin,latmax], origin='lower')
+    cbar = plt.colorbar()
+    cbar.set_label('Predicted Daily Rides')
+
+    # plot existing Hubway stations
+    station = pd.read_csv(growdir + 'Station.csv')
+    stationfeatures = pd.read_csv(growdir + 'Features.csv')
+    ax.scatter(station['lng'], station['lat'], 
+            s=stationfeatures['ridesperday'], alpha=0.4, 
+            color='white', edgecolor='black', 
+            label='Existing Hubway stations')
+    stationnew = station[station['status'] == 'proposed']
+    stationfeaturesnew = stationfeatures[station['status'] == 'proposed']
+    ax.scatter(stationnew['lng'], stationnew['lat'], 
+            s=stationfeaturesnew['ridesperday'], alpha=0.4, 
+            color='red', edgecolor='black', 
+            label='Proposed Hubway stations')
+    ax.axis([longmin, longmax, latmin, latmax])
+    ax.xlabel('Longitude')
+    ax.ylabel('Latitude')
+
+    canvas=FigureCanvas(fig)
+    png_output = StringIO.StringIO()
+    canvas.print_png(png_output)
+    response=make_response(png_output.getvalue())
+    response.headers['Content-Type'] = 'image/png'
+    return response
 
 if __name__ == "__main__":
    app.run(host='0.0.0.0', port=5000, debug=True)
