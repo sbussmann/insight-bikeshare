@@ -60,9 +60,7 @@ def station_input():
     map_hubway.create_map(path="static/hubway.html")
 
     #import fileinput
-
     #processing_foo1s = False
-
     #for line in fileinput.input('static/hubway.html', inplace=1):
     #    if line.startswith('<head>'):
     #        processing_foo1s = True

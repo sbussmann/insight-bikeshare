@@ -13,7 +13,7 @@ from sklearn import linear_model
 import loadutil
 from subprocess import call
 import matplotlib.pyplot as plt
-from pylab import savefig
+#from pylab import savefig
 
 
 def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):
@@ -318,6 +318,7 @@ def plotmap(dataloc):
     ridemap = nrides['nrides'].values.reshape((nlat, nlat))
 
     plt.clf()
+    plt.figure(figsize=(9,5))
     plt.imshow(ridemap, vmin=0, cmap="Blues",
             extent=[longmin,longmax,latmin,latmax], origin='lower')
     cbar = plt.colorbar()
@@ -340,9 +341,9 @@ def plotmap(dataloc):
     plt.xlabel('Longitude')
     plt.ylabel('Latitude')
     #plt.legend()
-    plt.tight_layout()
+    #plt.tight_layout()
     #plt.show()
-    savefig(dataloc + '/predictedridemap.png')
+    plt.savefig(dataloc + '/predictedridemap.png', bbox_inches='tight')
     
 
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
