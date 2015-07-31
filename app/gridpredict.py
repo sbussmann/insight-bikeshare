@@ -248,6 +248,8 @@ def remakemap(ilat, ilong, dataloc):
         #    print(fmt.format(i, ilat, ilong, ifeatures[0], ifeatures[1],
         #    ifeatures[2], ifeatures[3], ifeatures[4], ifeatures[5], iride))
 
+    mask = loadutil.getmask(dataloc)
+    nrides['nrides'] *= (1 - mask)
     newtime = time.time()
     runtime = newtime - currenttime
     print("Took %d seconds to re-process the map." % runtime)
@@ -303,7 +305,6 @@ def updatefeatures(stationfeatures, features, nrides, dataloc):
             'destsubway': [features[5]], 'stationid': [maxstationid]}
     df1 = pd.DataFrame(newdic)
     stationfeatures = stationfeatures.append(df1)
-    print(dataloc)
     stationfeatures.to_csv(dataloc + 'Features.csv', index=False)
 
     return stationfeatures
@@ -345,14 +346,14 @@ def plotmap(dataloc):
     #plt.legend()
     #plt.tight_layout()
     #plt.show()
-    canvas = FigureCanvas(fig)
-    png_output = StringIO.StringIO()
-    canvas.print_png(png_output)
-    response = make_response(png_output.getvalue())
-    response.headers['Content-Type'] = 'image/png'
+    #canvas = FigureCanvas(fig)
+    #png_output = StringIO.StringIO()
+    #canvas.print_png(png_output)
+    #response = make_response(png_output.getvalue())
+    #response.headers['Content-Type'] = 'image/png'
 
-    fig.clf()
-    return response 
+    #fig.clf()
+    #return response 
     plt.savefig(dataloc + '/predictedridemap.png', bbox_inches='tight')
     
 
@@ -394,8 +395,6 @@ def giveninput(ilat, ilong, popemp, mbta, station, zipscale,
 def autoinput(dataloc):
 
     # load the data
-    import os
-    print(os.getcwd())
     loaddata = loadutil.load(dataloc)
     popemp = loaddata[0]
     mbta = loaddata[1]
@@ -414,7 +413,7 @@ def autoinput(dataloc):
 
     return ilat, ilong, nrides, place
 
-def userinput(ilat, ilong, dataloc):
+def userinput(ilong, ilat, dataloc):
 
     # load the data
     loaddata = loadutil.load(dataloc)
@@ -426,6 +425,8 @@ def userinput(ilat, ilong, dataloc):
     subwayscale = loaddata[5]
     stationfeatures = loaddata[6]
 
+    ilat = np.float(ilat)
+    ilong = np.float(ilong)
     nrides, place = giveninput(ilat, ilong, popemp, mbta, station,
             zipscale, stationscale, subwayscale, stationfeatures, dataloc)
 
