@@ -48,6 +48,7 @@ def grid():
 
 def findsub(vector, value, nsub):
     dvec = vector[1] - vector[0]
+    print(value, nsub, dvec)
     subvecmin = value - nsub / 2 * dvec
     diffvecmin = np.abs(vector - subvecmin)
     minloc = diffvecmin.argmin()

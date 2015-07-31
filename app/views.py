@@ -8,6 +8,14 @@ from flask import render_template, request, make_response#, url_for
 import gridpredict
 import loadutil
 import folium
+import numpy as np
+import pandas as pd
+import StringIO
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from geopy.geocoders import Nominatim
+import googlemaps
+#from matplotlib.figure import Figure
 #from subprocess import call
 
 #print(Flask.root_path)
@@ -79,7 +87,7 @@ def station_input():
 
     #for line in fileinput.input('static/hubway.html', inplace=1):
     #    if line.startswith('<head>'):
-    #        processing_foo1s = True
+    
     #    else:
     #        if processing_foo1s:
     #            print('   <meta http-Equiv="Cache-Control" Content="no-cache" />')
@@ -97,31 +105,47 @@ def station_output_auto():
     longitude = the_results[1]
     riderate = the_results[2]
     ranking = the_results[3]
+    geolocator = Nominatim()
+    location = geolocator.reverse(str(latitude) + ',' + str(longitude))
+    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
+    api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
+    gmaps = googlemaps.Client(key=api_key)
+    location = gmaps.reverse_geocode((latitude, longitude))
+    location = location[0]['formatted_address']
     return render_template("output.html", riderate=riderate, ranking=ranking,
-          latitude=latitude, longitude=longitude)
+          latitude=latitude, longitude=longitude, location=location)
 
 @app.route('/output_user')
 def station_output_user():
+    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
+    api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
+    gmaps = googlemaps.Client(key=api_key)
     #pull 'ID' from input field and store it
-    longitude = request.args.get('ID1')
-    latitude = request.args.get('ID2')
+    useraddress = request.args.get('ID1')
+    geocode = gmaps.geocode(useraddress)
+    latitude = geocode[0]['geometry']['location']['lat']
+    longitude = geocode[0]['geometry']['location']['lng']
+    #longitude = 
+    #latitude = request.args.get('ID2')
     the_results = gridpredict.userinput(longitude, latitude, growdir)
     latitude = the_results[0]
     longitude = the_results[1]
     riderate = the_results[2]
     ranking = the_results[3]
+    location = gmaps.reverse_geocode((latitude, longitude))
+    location = location[0]['formatted_address']
     return render_template("output.html", riderate=riderate, ranking=ranking,
-          latitude=latitude, longitude=longitude)
+          latitude=latitude, longitude=longitude, location=location)
+
+#@app.route("/osmmap")
+#def osmmap():
+#    return response
 
 @app.route("/predictedridemap.png")
 def predictedridemap():
-    from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-    from matplotlib.figure import Figure
-    from matplotlib.dates import DateFormatter
 
 
-    fig=Figure(figsize=(9,5))
-    ax=fig.add_subplot(111)
+    fig = plt.figure(figsize=(9,5))
 
     # plot predicted ride map
     growdir = '../Data/Boston/growing/'
@@ -133,27 +157,31 @@ def predictedridemap():
     nlat = np.sqrt(np.float(len(nrides)))
     ridemap = nrides['nrides'].values.reshape((nlat, nlat))
 
-    ax.imshow(ridemap, vmin=0, cmap="Blues",
+    plt.imshow(ridemap, vmin=0, cmap="Blues",
             extent=[longmin,longmax,latmin,latmax], origin='lower')
     cbar = plt.colorbar()
+    #cbar = matplotlib.colorbar.ColorbarBase(ax)
     cbar.set_label('Predicted Daily Rides')
 
     # plot existing Hubway stations
     station = pd.read_csv(growdir + 'Station.csv')
     stationfeatures = pd.read_csv(growdir + 'Features.csv')
-    ax.scatter(station['lng'], station['lat'], 
+    plt.scatter(station['lng'], station['lat'], 
             s=stationfeatures['ridesperday'], alpha=0.4, 
             color='white', edgecolor='black', 
             label='Existing Hubway stations')
     stationnew = station[station['status'] == 'proposed']
     stationfeaturesnew = stationfeatures[station['status'] == 'proposed']
-    ax.scatter(stationnew['lng'], stationnew['lat'], 
+    plt.scatter(stationnew['lng'], stationnew['lat'], 
             s=stationfeaturesnew['ridesperday'], alpha=0.4, 
             color='red', edgecolor='black', 
             label='Proposed Hubway stations')
-    ax.axis([longmin, longmax, latmin, latmax])
-    ax.xlabel('Longitude')
-    ax.ylabel('Latitude')
+    plt.axis([longmin, longmax, latmin, latmax])
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
+    #ax = plt.gca()
+    fig.patch.set_facecolor('white')
+    fig.patch.set_edgecolor('black')
 
     canvas=FigureCanvas(fig)
     png_output = StringIO.StringIO()
