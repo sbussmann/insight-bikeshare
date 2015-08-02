@@ -3,7 +3,6 @@ matplotlib.use('Agg')
 from flask import Flask
 from flask import render_template, request, make_response#, url_for
 #from app import app
-#import pymysql as mdb
 #from predictride import predict
 import gridpredict
 import loadutil
@@ -13,10 +12,10 @@ import pandas as pd
 import StringIO
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from geopy.geocoders import Nominatim
 import googlemaps
 #from matplotlib.figure import Figure
 #from subprocess import call
+
 
 #print(Flask.root_path)
 app = Flask(__name__)
@@ -85,6 +84,13 @@ def station_input():
     # reset to existing Hubway stations only
     gridpredict.resetiteration(basedir, growdir)
 
+    # reset the webapp results database
+    useraddress = []
+    riderate = []
+    dictnew = {"address": useraddress, "ridesperday": riderate}
+    stations = pd.DataFrame(dictnew)
+    stations.to_csv(growdir + 'appresults.csv', index=False)
+
     #for line in fileinput.input('static/hubway.html', inplace=1):
     #    if line.startswith('<head>'):
     
@@ -100,26 +106,15 @@ def station_input():
 
 @app.route('/output_auto')
 def station_output_auto():
+    gmaps = makegmap()
     the_results = gridpredict.autoinput(growdir)
-    latitude = the_results[0]
-    longitude = the_results[1]
-    riderate = the_results[2]
-    ranking = the_results[3]
-    geolocator = Nominatim()
-    location = geolocator.reverse(str(latitude) + ',' + str(longitude))
-    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
-    api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
-    gmaps = googlemaps.Client(key=api_key)
-    location = gmaps.reverse_geocode((latitude, longitude))
-    location = location[0]['formatted_address']
+    stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
     return render_template("output.html", riderate=riderate, ranking=ranking,
-          latitude=latitude, longitude=longitude, location=location)
+          stations=stationslistdict)
 
 @app.route('/output_user')
 def station_output_user():
-    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
-    api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
-    gmaps = googlemaps.Client(key=api_key)
+    gmaps = makegmap()
     #pull 'ID' from input field and store it
     useraddress = request.args.get('ID1')
     geocode = gmaps.geocode(useraddress)
@@ -128,14 +123,47 @@ def station_output_user():
     #longitude = 
     #latitude = request.args.get('ID2')
     the_results = gridpredict.userinput(longitude, latitude, growdir)
+    stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
+
+    return render_template("output.html", riderate=riderate, ranking=ranking,
+          stations=stationslistdict)
+
+def makegmap():
+    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
+    api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
+    api_key = 'AIzaSyABlrd95eCKHV2tad5FmsfXBtlODsIZRWA'
+    gmaps = googlemaps.Client(key=api_key)
+    return(gmaps)
+
+def makeoutput(the_results, gmaps):    
     latitude = the_results[0]
     longitude = the_results[1]
     riderate = the_results[2]
     ranking = the_results[3]
     location = gmaps.reverse_geocode((latitude, longitude))
     location = location[0]['formatted_address']
-    return render_template("output.html", riderate=riderate, ranking=ranking,
-          latitude=latitude, longitude=longitude, location=location)
+
+    # load old results
+    stations = pd.read_csv(growdir + 'appresults.csv')
+    newlocation = list(stations['address'].values)
+    newriderate = list(stations['ridesperday'].values)
+
+    # append the new results
+    newlocation.append(location)
+    newriderate.append(riderate)
+    print(newlocation, newriderate)
+    dictnew = {"address": newlocation, "ridesperday": newriderate}
+    stationsnew = pd.DataFrame(dictnew)
+    stationsnew.to_csv(growdir + 'appresults.csv', index=False)
+    stationslistdict = []
+    for i in range(len(stationsnew)):
+        stindex = str(i + 1)
+        rpd = stationsnew['ridesperday'].values[i]
+        address = stationsnew['address'].values[i]
+        stationslistdict.append({"index":stindex, "ridesperday": rpd, 
+                "address": address})
+
+    return stationslistdict, riderate, ranking
 
 #@app.route("/osmmap")
 #def osmmap():
