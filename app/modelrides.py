@@ -3,14 +3,13 @@ from sklearn import linear_model
 from sklearn import cross_validation
 import matplotlib.pyplot as plt
 from pylab import savefig
-#import seaborn as sns
-#import numpy as np
+import numpy as np
 from sklearn import preprocessing
 from sklearn.preprocessing import PolynomialFeatures
-from sklearn.linear_model import LinearRegression
+#from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn import tree
-from sklearn.ensemble import RandomForestRegressor
+#from sklearn.ensemble import RandomForestRegressor
 
 
 
@@ -18,7 +17,7 @@ ridedata = pd.read_csv('../Data/Boston/Features.csv')
 
 # stations with very numbers of rides are tourist attactions.  I want to model
 # the ordinary stations.
-verypopular = 90
+verypopular = 45
 ordinary = ridedata[ridedata['ridesperday'] < verypopular]
 
 y = ordinary['ridesperday'].values
@@ -33,8 +32,13 @@ X_scaled = preprocessing.scale(X)
 clf = linear_model.LinearRegression()
 
 # compute r2 score using 5-fold cross-validation
-scores = cross_validation.cross_val_score(clf, X_scaled, y, cv=5, scoring='r2')
+scaledscores = cross_validation.cross_val_score(clf, X_scaled, y, cv=5,
+        scoring='mean_absolute_error')
+scores = cross_validation.cross_val_score(clf, X, y, cv=5,
+        scoring='median_absolute_error')
 
+print("Scores for scaled linear regression: \n", 
+        scaledscores, scaledscores.mean(), scaledscores.std())
 print("Scores for linear regression: \n", 
         scores, scores.mean(), scores.std())
 
@@ -64,11 +68,11 @@ scores = cross_validation.cross_val_score(clf, X, y, cv=5, scoring='r2')
 print("Scores for Decision Tree regression: \n", 
         scores, scores.mean(), scores.std())
 
-clf = RandomForestRegressor(n_estimators=1000)
-clf = clf.fit(X, y)
-scores = cross_validation.cross_val_score(clf, X, y, cv=5, scoring='r2')
-print("Scores for Random Forest regression: \n", 
-        scores, scores.mean(), scores.std())
+#clf = RandomForestRegressor(n_estimators=1000)
+#clf = clf.fit(X, y)
+#scores = cross_validation.cross_val_score(clf, X, y, cv=5, scoring='r2')
+#print("Scores for Random Forest regression: \n", 
+#        scores, scores.mean(), scores.std())
 #clf.fit(X, y)       
 #print(clf.alpha_, clf.coef_)
 #print("Coefficients for Polynomial regression: ")
@@ -77,7 +81,31 @@ print("Scores for Random Forest regression: \n",
 #modelfit = model.fit(X_scaled, y)
 #print(clf.coef_)
 
+# plot predicted number of rides vs. observed number of rides
+clf = linear_model.LinearRegression()
+plt.clf()
+plt.figure(figsize=(6,6))
+modelcoef = []
+for isim in range(10):
+    X_scaled_train, X_scaled_test, y_train, y_test = cross_validation.train_test_split(
+         X_scaled, y, test_size=0.2)
+    y_pred = clf.fit(X_scaled_train, y_train).predict(X_scaled_test)
+    plt.scatter(y_test, y_pred)
+    plt.plot([0,45], [0,45])
+    plt.xlabel('True Daily Rides', fontsize='xx-large')
+    plt.ylabel('Predicted Daily Rides', fontsize='xx-large')
+    plt.tight_layout()
+    print(clf.coef_)
+    modelcoef.append(clf.coef_)
+
+modelcoef = np.array(modelcoef)
+print(modelcoef.shape)
+nfeat = len(modelcoef[0, :])
+print(modelcoef.mean(axis=0))
+savefig('../Figures/ridesperdayregression.png')
+
 # plot correlations between features
+#import seaborn as sns
 #plt.clf()
 #sns.set(style="ticks", color_codes=True)
 #ordinaryfeat = ordinary[['originpop', 'originwork', 'destpop', 'destwork',
@@ -85,18 +113,5 @@ print("Scores for Random Forest regression: \n",
 #ordinaryfeat = ordinaryfeat.sort('ridesperday')
 #g = sns.pairplot(ordinaryfeat, hue="ridesperday", palette="Blues", size=4)
 #plt.tight_layout()
-#savefig('../Figures/FeatureCorrelation_' + groupnum + '.png')
-
-# plot predicted number of rides vs. observed number of rides
-plt.clf()
-plt.figure(figsize=(6,6))
-for isim in range(10):
-    X_scaled_train, X_scaled_test, y_train, y_test = cross_validation.train_test_split(
-         X_scaled, y, test_size=0.2)
-    y_pred = clf.fit(X_scaled_train, y_train).predict(X_scaled_test)
-    plt.scatter(y_test, y_pred)
-    plt.plot([0,40], [0,40])
-    plt.xlabel('Average number of rides per day', fontsize='xx-large')
-    plt.ylabel('Predicted average number of rides per day', fontsize='xx-large')
-savefig('../Figures/ridesperdayregression.png')
+#savefig('../Figures/FeatureCorrelation.png')
 import pdb; pdb.set_trace()

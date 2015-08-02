@@ -409,7 +409,7 @@ def autoinput(dataloc):
     nrides, place = giveninput(ilat, ilong, popemp, mbta, station,
             zipscale, stationscale, subwayscale, stationfeatures, dataloc)
 
-    nrides = np.round(nrides, decimals=2)
+    nrides = np.round(nrides, decimals=1)
 
     return ilat, ilong, nrides, place
 

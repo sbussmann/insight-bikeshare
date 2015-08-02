@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block navbar %}
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">Under The Hood</a></li>
+            <li class="active"><a href="/contact">Contact</a></li>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+<h3>About Me</h3>
+
+<p>Hi!  My name is Shane Bussmann.  I have a PhD in astronomy from the
+University of Arizona in 2010.  I completed a post-doc at the Harvard-Smithsonian
+Center for Astrophysics in 2013, and just finished up another post-doc at
+Cornell University.  I am currently a Fellow in the Insight Health Data Science
+program, because I am actively seeking to make a career change into data
+science.  In my research as an astronomer, I learned about how stars form in
+distant galaxies by studying gravitationally lensed galaxies.</p>
+
+<p>Here is a fun picture of me demonstrating that the stem of a wine glass
+distorts light in much the same way as a massive galaxy!<p>
+
+<img src="/static/gravlensingpic.png">
+
+  </div> <!-- /.container-->
+{% endblock %}

@@ -9,8 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
-
-    <title>Starter Template for Bootstrap</title>
+    <title>Under The Hood</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -40,13 +39,15 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="/">Grow Hubway</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            {% block navbar %}
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">Under The Hood</a></li>
+            <li><a href="/contact">Contact</a></li>            
+            {% endblock %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -54,23 +55,12 @@
 
     <br><br>
 
-    <div class="container">
+  <div class="container">
+      {% block content %}
+      {% endblock %}
+  </div> <!-- /.container-->
+    
 
-      <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-      </div>
-    <table class="table table-hover">
-    <tr><th>Name</th><th>Country</th><th>Population</th></tr>
-    {% for city in cities %}
-    <tr><td>{{ city['name'] }}</td><td>{{ city['country']}}</td><td> {{ city['population'] }}</td></tr>
-    {% endfor %}
-    </table>
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="static/js/bootstrap.min.js"></script>
-
-
-    </div><!-- /.container -->
 
 
     <!-- Bootstrap core JavaScript
