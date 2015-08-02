@@ -77,6 +77,14 @@ def makemap():
 
     #foliummap = 5#inline_map(map_hubway)
 
+@app.route('/about')
+def aboutpage():
+    return render_template("about.html")
+
+@app.route('/contact')
+def contactpage():
+    return render_template("contact.html")
+
 @app.route('/')
 @app.route('/index')
 def station_input():

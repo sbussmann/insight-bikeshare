@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block navbar %}
+            <li><a href="/">Home</a></li>
+            <li class="active"><a href="/about">Under The Hood</a></li>
+            <li><a href="/contact">Contact</a></li>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+
+<h3>Technical Details</h3>
+
+
+<h4>The goal</h4>
+
+<p>My goal is to predict the number of rides per day at a new Hubway station
+placed at any location in the greater Boston area.</p>
+
+<h4>The data</h4>
+
+<p>I used publicly
+available data from <a href="http://hubwaydatachallenge.org">the Hubway system
+itself</a> for the years 2011 through 2013, as well as publicly available data on where people live, work, and
+use public transporation.</p>
+
+<p>Where people live: US census data from 2010 is available by zip code from
+<a href="http://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml">FactFinder</a>.
+
+<p>Where people work: US census data from 2012 is also available by zip code
+from <a href="http://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml">FactFinder</a>.
+I chose the year 2012 to provide the best match with the time range of the
+Hubway data.</p>
+
+<p>Where people use public transportation: MBTA ride data from 2013 are <a
+        href="http://www.mbta.com/uploadedfiles/documents/2014%20BLUEBOOK%2014th%20Edition.pdf">available
+in PDF format</a>.  I obtained station location data from <a
+        href="http://erikdemaine.org/maps/mbta/">Erik Demaine's
+        website</a>.</p>
+
+<p>Finally, I used Open Street Map data (e.g., <a
+        href="http://www.openstreetmap.org/way/303073344">near the Boston
+        University bridge</a>) to mask out the Charles River.</p>
+
+<h4>The model</h4>
+
+<p>For every existing station in the Hubway system, I generated a population
+score, employee score, and MBTA subway score.  The scores essentially quantify
+the amplitude of nearby measurements.  So, for example, a Hubway station close
+to a very active subway stop will have a very high subway score, whereas a
+Hubway station that has no nearby subway stops will get a low subway score.</p>
+
+<p>Since people use Hubway to move from one location to another, it's important
+to consider not just the origin scores for any given station, but also the
+destination scores.  Including a destination score in the model is how I make
+sure that a new Hubway station placed far away from any existing Hubway station
+would receive a low predicted ride total.</p>
+
+<p>A total of six features appear in the model (three for origin, three for
+destination).  I separate the database of Hubway stations into a training set
+and a validation set and use linear regression to predict the rides per day in the
+validation set.  I use five-fold cross-validation to determine a mean absolute
+error of -7.4, indicating that any given prediction I make is uncertain to
+about 7 rides per day.</p>
+
+<p>Once the model is trained, generating the maps shown on the homepage is a
+simple matter of stepping through a grid of longitude and latitude points and
+computing the predicted rides per day at each point.  After you add a station,
+this map is dynamically recomputed under the hood by python code.  Strictly for
+the use case of this web app, only a portion of the map is recomputed to reduce
+computational time (this explains why in some instances, adding a new station
+can show an odd-looking square shaped feature to the map).</p>
+
+<h4>Moving forward</h4>
+
+<p>It's worth emphasizing that in order for this model to go into production, I
+would need to reduce the mean absolute error by about a factor of 2.  Most of
+the best locations identified by my model have predicted rides per day of
+around 10-15, which is near the minimum significance level.  More sophisticated
+machine learning algorithms, such as random forest, don't improve the model's
+predictive ability.  This suggests that better data are needed.  The most
+important improvement in the data is increased granularity in the population
+and employee data.  Zip codes can be quite large, and the total population and
+employee size within that zip code can be a poor proxy for a given point within
+that zip code.  An excellent path forward would be to work with Boston city
+officials to obtain population and employee data with improved granularity,
+ideally on a block-by-block basis.  Hubway ride data in the more recent past
+will also be helpful.  </p>
+
+  </div> <!-- /.container-->
+{% endblock %}
