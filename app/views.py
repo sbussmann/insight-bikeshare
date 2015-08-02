@@ -13,7 +13,6 @@ import pandas as pd
 import StringIO
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from geopy.geocoders import Nominatim
 import googlemaps
 #from matplotlib.figure import Figure
 #from subprocess import call
@@ -105,10 +104,10 @@ def station_output_auto():
     longitude = the_results[1]
     riderate = the_results[2]
     ranking = the_results[3]
-    geolocator = Nominatim()
-    location = geolocator.reverse(str(latitude) + ',' + str(longitude))
-    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
+    #geolocator = Nominatim()
+    #location = geolocator.reverse(str(latitude) + ',' + str(longitude))
     api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
+    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
     gmaps = googlemaps.Client(key=api_key)
     location = gmaps.reverse_geocode((latitude, longitude))
     location = location[0]['formatted_address']
@@ -117,8 +116,8 @@ def station_output_auto():
 
 @app.route('/output_user')
 def station_output_user():
-    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
     api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
+    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
     gmaps = googlemaps.Client(key=api_key)
     #pull 'ID' from input field and store it
     useraddress = request.args.get('ID1')

@@ -9732,3 +9732,948 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
   nrides['nrides'][i] = iride
 
+2015-07-31 01:12:34,377 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-07-31 01:14:39,288 WARN received SIGTERM indicating exit request
+2015-07-31 01:14:39,288 DEBG killing myserver (pid 15807) with signal SIGTERM
+2015-07-31 01:14:39,304 INFO waiting for myserver to die
+2015-07-31 01:14:39,304 DEBG 'myserver' stdout output:
+/home/ubuntu/insight-bikeshare/app
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+../Data/Boston/growing/
+Remaking the grid of predicted rides
+Took 5 seconds to re-process the map.
+/home/ubuntu/insight-bikeshare/app
+Predicted rides = 6.
+18 stations have lower rides.
+This station would have these features:  [80.18961558634021, 91.314455521622435, 0.48118198517867444, 4.3096390807316567, 5.6922206402099649, 1.5063742818813082]
+../Data/Boston/growing/
+Remaking the grid of predicted rides
+Took 5 seconds to re-process the map.
+/home/ubuntu/insight-bikeshare/app
+Predicted rides = 10.
+33 stations have lower rides.
+This station would have these features:  [158.79207221409416, 392.49317498648304, 54.236159026026982, 7.9731863451592764, 19.656568908151215, 5.0156597326353394]
+../Data/Boston/growing/
+Remaking the grid of predicted rides
+Took 4 seconds to re-process the map.
+/home/ubuntu/insight-bikeshare/app
+Predicted rides = 5.
+15 stations have lower rides.
+This station would have these features:  [30.012241021159504, 198.3320099797148, 12.459425439143436, 5.3647635120377721, 15.884831782600145, 4.0040277204359151]
+../Data/Boston/growing/
+Remaking the grid of predicted rides
+Took 4 seconds to re-process the map.
+
+2015-07-31 01:14:39,411 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140086070039688 for <Subprocess at 140086070039544 with name myserver in state STOPPING> (stdout)>
+2015-07-31 01:14:39,411 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140086070040120 for <Subprocess at 140086070039544 with name myserver in state STOPPING> (stderr)>
+2015-07-31 01:14:39,411 INFO stopped: myserver (exit status 0)
+2015-07-31 01:14:39,411 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:14:40,728 CRIT Set uid to user 0
+2015-07-31 01:14:40,731 INFO daemonizing the supervisord process
+2015-07-31 01:14:40,731 INFO supervisord started with pid 16240
+2015-07-31 01:14:41,733 INFO spawned: 'myserver' with pid 16241
+2015-07-31 01:14:42,735 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:14:44,189 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995208 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:14:44,190 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360692995640 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:14:44,190 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:14:44,190 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:14:45,192 INFO spawned: 'myserver' with pid 16262
+2015-07-31 01:14:46,193 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:14:47,604 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:14:47,608 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995928 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:14:47,609 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065704 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:14:47,609 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:14:47,609 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:14:48,611 INFO spawned: 'myserver' with pid 16283
+2015-07-31 01:14:49,612 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:14:51,078 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692996144 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:14:51,078 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065704 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:14:51,078 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:14:51,078 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:14:52,080 INFO spawned: 'myserver' with pid 16304
+2015-07-31 01:14:53,082 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:14:54,476 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995568 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:14:54,476 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065776 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:14:54,477 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:14:54,477 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:14:55,479 INFO spawned: 'myserver' with pid 16325
+2015-07-31 01:14:56,480 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:14:57,934 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:14:57,934 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065848 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:14:57,934 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:14:57,934 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:14:58,936 INFO spawned: 'myserver' with pid 16348
+2015-07-31 01:14:59,938 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:01,357 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995712 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:01,357 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065920 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:01,357 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:01,357 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:02,359 INFO spawned: 'myserver' with pid 16369
+2015-07-31 01:15:03,360 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:04,792 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:04,793 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065992 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:04,793 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:04,793 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:05,795 INFO spawned: 'myserver' with pid 16407
+2015-07-31 01:15:06,796 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:08,410 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:08,410 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065776 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:08,410 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:08,410 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:09,412 INFO spawned: 'myserver' with pid 16428
+2015-07-31 01:15:10,414 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:11,916 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:15:11,923 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995712 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:11,923 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065632 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:11,923 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:15:11,923 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:12,925 INFO spawned: 'myserver' with pid 16449
+2015-07-31 01:15:13,927 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:15,384 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:15:15,391 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065704 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:15,391 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:15,391 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:15:15,391 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:16,393 INFO spawned: 'myserver' with pid 16470
+2015-07-31 01:15:17,396 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:18,818 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:18,818 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693066136 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:18,818 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:18,818 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:19,820 INFO spawned: 'myserver' with pid 16491
+2015-07-31 01:15:20,822 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:22,242 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995712 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:22,242 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693066208 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:22,243 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:22,243 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:23,245 INFO spawned: 'myserver' with pid 16512
+2015-07-31 01:15:24,246 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:25,644 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:25,644 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065992 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:25,644 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:25,644 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:26,646 INFO spawned: 'myserver' with pid 16533
+2015-07-31 01:15:27,650 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:29,068 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+
+2015-07-31 01:15:29,072 DEBG 'myserver' stderr output:
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:15:29,077 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:29,077 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065776 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:29,077 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:15:29,077 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:30,079 INFO spawned: 'myserver' with pid 16554
+2015-07-31 01:15:31,080 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:32,568 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995712 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:32,568 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065632 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:32,568 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:32,568 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:33,570 INFO spawned: 'myserver' with pid 16575
+2015-07-31 01:15:34,572 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:36,108 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:15:36,116 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:36,116 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065704 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:36,117 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:15:36,117 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:37,119 INFO spawned: 'myserver' with pid 16596
+2015-07-31 01:15:38,120 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:39,524 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:15:39,538 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693066136 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:39,538 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:39,538 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:15:39,538 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:40,540 INFO spawned: 'myserver' with pid 16617
+2015-07-31 01:15:41,541 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:42,988 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:15:42,996 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995712 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:42,996 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693066208 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:42,996 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:15:42,997 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:43,999 INFO spawned: 'myserver' with pid 16638
+2015-07-31 01:15:45,000 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:46,481 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:46,481 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065992 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:46,481 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:46,481 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:47,483 INFO spawned: 'myserver' with pid 16659
+2015-07-31 01:15:48,487 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:49,925 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:49,926 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065776 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:49,926 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:15:49,926 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:50,928 INFO spawned: 'myserver' with pid 16680
+2015-07-31 01:15:51,928 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:53,392 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:15:53,397 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995712 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:53,397 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065632 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:53,398 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:15:53,398 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:54,400 INFO spawned: 'myserver' with pid 16701
+2015-07-31 01:15:55,400 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:15:56,808 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:15:56,815 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:15:56,815 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065704 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:15:56,816 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:15:56,816 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:15:57,818 INFO spawned: 'myserver' with pid 16722
+2015-07-31 01:15:58,819 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:00,232 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:00,232 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693066136 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:00,232 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:00,232 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:01,234 INFO spawned: 'myserver' with pid 16743
+2015-07-31 01:16:02,236 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:03,748 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+
+2015-07-31 01:16:03,752 DEBG 'myserver' stderr output:
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:16:03,757 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995712 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:03,757 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693066208 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:03,757 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:16:03,757 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:04,759 INFO spawned: 'myserver' with pid 16764
+2015-07-31 01:16:05,760 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:07,288 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:07,288 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065992 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:07,296 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:07,296 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:08,299 INFO spawned: 'myserver' with pid 16785
+2015-07-31 01:16:09,302 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:10,780 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:16:10,786 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:10,786 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065632 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:10,787 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:16:10,787 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:11,789 INFO spawned: 'myserver' with pid 16806
+2015-07-31 01:16:12,790 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:14,260 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:14,260 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065776 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:14,260 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:14,260 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:15,262 INFO spawned: 'myserver' with pid 16836
+2015-07-31 01:16:16,264 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:17,660 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:16:17,665 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360693067720 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:17,665 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065992 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:17,665 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:16:17,665 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:18,667 INFO spawned: 'myserver' with pid 16857
+2015-07-31 01:16:19,671 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:21,091 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:21,091 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065848 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:21,092 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:21,092 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:22,094 INFO spawned: 'myserver' with pid 16878
+2015-07-31 01:16:23,095 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:24,525 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:24,525 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693065920 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:24,525 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:24,525 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:25,527 INFO spawned: 'myserver' with pid 16899
+2015-07-31 01:16:26,528 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:27,948 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+
+2015-07-31 01:16:27,952 DEBG 'myserver' stderr output:
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:16:27,957 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360693065920 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:27,957 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072096 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:27,957 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:16:27,957 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:28,959 INFO spawned: 'myserver' with pid 16920
+2015-07-31 01:16:29,962 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:31,412 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:16:31,420 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:31,420 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072096 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:31,420 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:16:31,420 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:32,422 INFO spawned: 'myserver' with pid 16941
+2015-07-31 01:16:33,424 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:34,825 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995784 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:34,825 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072096 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:34,825 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:34,825 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:35,827 INFO spawned: 'myserver' with pid 16962
+2015-07-31 01:16:36,828 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:38,237 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360693066136 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:38,237 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072024 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:38,237 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:38,238 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:39,240 INFO spawned: 'myserver' with pid 16983
+2015-07-31 01:16:40,240 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:41,718 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:41,718 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693071952 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:41,718 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:41,718 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:42,720 INFO spawned: 'myserver' with pid 17004
+2015-07-31 01:16:43,721 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:45,125 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360693066208 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:45,125 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072240 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:45,125 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:45,125 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:46,127 INFO spawned: 'myserver' with pid 17025
+2015-07-31 01:16:47,128 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:48,577 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360693065632 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:48,578 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072312 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:48,578 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:48,578 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:49,580 INFO spawned: 'myserver' with pid 17046
+2015-07-31 01:16:50,580 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:52,054 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:52,055 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072024 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:52,055 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:52,055 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:53,057 INFO spawned: 'myserver' with pid 17067
+2015-07-31 01:16:54,060 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:55,429 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360693066208 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:55,429 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072168 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:55,429 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:55,430 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:56,432 INFO spawned: 'myserver' with pid 17088
+2015-07-31 01:16:57,432 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:16:58,817 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360693065632 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:16:58,818 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072096 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:16:58,818 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:16:58,818 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:16:59,820 INFO spawned: 'myserver' with pid 17111
+2015-07-31 01:17:00,820 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:02,229 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360692995496 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:02,229 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072456 for <Subprocess at 140360692995064 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:02,229 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:02,229 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:03,231 INFO spawned: 'myserver' with pid 17135
+2015-07-31 01:17:04,232 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:04,907 WARN received SIGTERM indicating exit request
+2015-07-31 01:17:04,907 DEBG killing myserver (pid 17135) with signal SIGTERM
+2015-07-31 01:17:04,907 INFO waiting for myserver to die
+2015-07-31 01:17:05,669 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140360693066208 for <Subprocess at 140360692995064 with name myserver in state STOPPING> (stdout)>
+2015-07-31 01:17:05,670 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140360693072528 for <Subprocess at 140360692995064 with name myserver in state STOPPING> (stderr)>
+2015-07-31 01:17:05,670 INFO stopped: myserver (exit status 0)
+2015-07-31 01:17:05,670 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:05,903 CRIT Set uid to user 0
+2015-07-31 01:17:05,906 INFO daemonizing the supervisord process
+2015-07-31 01:17:05,906 INFO supervisord started with pid 17162
+2015-07-31 01:17:06,909 INFO spawned: 'myserver' with pid 17163
+2015-07-31 01:17:07,910 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:09,400 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267914888 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:09,401 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267915320 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:09,401 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:09,401 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:10,403 INFO spawned: 'myserver' with pid 17184
+2015-07-31 01:17:11,404 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:12,864 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:17:12,870 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915608 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:12,870 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985384 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:12,871 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:17:12,871 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:13,873 INFO spawned: 'myserver' with pid 17206
+2015-07-31 01:17:14,874 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:16,340 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:17:16,346 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915824 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:16,346 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985384 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:16,346 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:17:16,346 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:17,348 INFO spawned: 'myserver' with pid 17227
+2015-07-31 01:17:18,350 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:19,830 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915248 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:19,830 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985456 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:19,830 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:19,830 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:20,832 INFO spawned: 'myserver' with pid 17248
+2015-07-31 01:17:21,834 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:23,281 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915464 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:23,281 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985528 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:23,281 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:23,281 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:24,283 INFO spawned: 'myserver' with pid 17269
+2015-07-31 01:17:25,286 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:26,728 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:17:26,733 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915392 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:26,733 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985600 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:26,733 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:17:26,733 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:27,736 INFO spawned: 'myserver' with pid 17290
+2015-07-31 01:17:28,736 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:30,140 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915176 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:30,140 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985672 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:30,140 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:30,140 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:31,142 INFO spawned: 'myserver' with pid 17311
+2015-07-31 01:17:32,144 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:33,625 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915464 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:33,625 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985456 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:33,625 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:33,625 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:34,627 INFO spawned: 'myserver' with pid 17332
+2015-07-31 01:17:35,631 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:37,088 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:17:37,102 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985312 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:37,102 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915392 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:37,102 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:17:37,102 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:38,104 INFO spawned: 'myserver' with pid 17353
+2015-07-31 01:17:39,106 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:41,212 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:17:41,219 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915176 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:41,219 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985384 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:41,219 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:17:41,219 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:42,221 INFO spawned: 'myserver' with pid 17380
+2015-07-31 01:17:43,223 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:44,692 DEBG 'myserver' stderr output:
+Traceback (most recent call last):
+  File "/home/ubuntu/anaconda/bin/gunicorn", line 6, in <module>
+    sys.exit(run())
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/wsgiapp.py", line 74, in run
+    WSGIApplication("%(prog)s [OPTIONS] [APP_MODULE]").run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 185, in run
+    super(Application, self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/app/base.py", line 71, in run
+    Arbiter(self).run()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 196, in run
+    self.halt(reason=inst.reason, exit_status=inst.exit_status)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 292, in halt
+    self.stop()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 343, in stop
+    time.sleep(0.1)
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 209, in handle_chld
+    self.reap_workers()
+  File "/home/ubuntu/anaconda/lib/python2.7/site-packages/gunicorn-19.1.0-py2.7.egg/gunicorn/arbiter.py", line 459, in reap_workers
+    raise HaltServer(reason, self.WORKER_BOOT_ERROR)
+gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
+
+2015-07-31 01:17:44,698 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915464 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:44,698 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985816 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:44,698 INFO exited: myserver (exit status 1; not expected)
+2015-07-31 01:17:44,698 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:45,701 INFO spawned: 'myserver' with pid 17401
+2015-07-31 01:17:46,704 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:48,172 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915392 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:48,172 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985888 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:48,173 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:48,173 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:49,175 INFO spawned: 'myserver' with pid 17422
+2015-07-31 01:17:50,176 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:52,534 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915176 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:52,534 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985672 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:52,534 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:52,535 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:53,537 INFO spawned: 'myserver' with pid 17448
+2015-07-31 01:17:54,538 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:55,986 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915464 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:55,986 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985456 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:55,986 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:55,986 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:17:56,988 INFO spawned: 'myserver' with pid 17469
+2015-07-31 01:17:57,990 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:17:59,534 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915392 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stdout)>
+2015-07-31 01:17:59,534 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985312 for <Subprocess at 140695267914744 with name myserver in state RUNNING> (stderr)>
+2015-07-31 01:17:59,535 INFO exited: myserver (exit status 3; not expected)
+2015-07-31 01:17:59,535 DEBG received SIGCLD indicating a child quit
+2015-07-31 01:18:00,537 INFO spawned: 'myserver' with pid 17495
+2015-07-31 01:18:01,538 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-07-31 01:18:08,992 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-07-31 01:57:25,222 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-07-31 01:57:30,452 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-07-31 01:57:30,865 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-07-31 14:15:45,279 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-07-31 19:53:28,316 DEBG 'myserver' stdout output:
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 6 seconds to re-process the map.
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+
+2015-08-02 05:50:21,272 DEBG 'myserver' stdout output:
+Predicted rides = 0.
+0 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2243970191971547, 13.385280858628576, 3.3117212279345654]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 12 seconds to re-process the map.
+Predicted rides = 11.
+34 stations have lower rides.
+This station would have these features:  [62.29233736909665, 138.62957491006142, 75.904002093124447, 5.1873490375261877, 15.400271286845813, 3.8330361443646108]
+Remaking the grid of predicted rides
+(42.36833619999999, 10, 0.0014141414141448649)
+(-71.0384613, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+
+2015-08-02 14:12:23,440 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-02 19:44:37,713 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
