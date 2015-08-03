@@ -10677,3 +10677,150 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
   nrides['nrides'][i] = iride
 
+2015-08-02 20:54:36,602 WARN received SIGTERM indicating exit request
+2015-08-02 20:54:36,602 DEBG killing myserver (pid 17495) with signal SIGTERM
+2015-08-02 20:54:36,620 INFO waiting for myserver to die
+2015-08-02 20:54:36,620 DEBG 'myserver' stdout output:
+Predicted rides = 0.
+0 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2243970191971547, 13.385280858628576, 3.3117212279345654]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+Predicted rides = 4.
+12 stations have lower rides.
+This station would have these features:  [250.2638314200457, 327.01535401214755, 21.421996810585561, 9.2442584592031753, 16.553159606256731, 3.9889248070308208]
+Remaking the grid of predicted rides
+(42.3592362, 10, 0.0014141414141448649)
+(-71.1084336, 10, 0.002121212121210192)
+Took 4 seconds to re-process the map.
+Predicted rides = 1.
+0 stations have lower rides.
+This station would have these features:  [130.33134855325139, 143.91382610201569, 3.7160246456342669, 6.3622548266733059, 16.624419808741163, 4.186905457576521]
+Remaking the grid of predicted rides
+(42.3763541, 10, 0.0014141414141448649)
+(-71.0607764, 10, 0.002121212121210192)
+Took 6 seconds to re-process the map.
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 7 seconds to re-process the map.
+Predicted rides = 19.
+64 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2817564335182352, 13.533548242311243, 3.3516887412034406]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 7 seconds to re-process the map.
+Predicted rides = 0.
+0 stations have lower rides.
+This station would have these features:  [277.36495619311432, 701.95306637779277, 193.7483639836216, 9.4820895067681885, 20.533833659839743, 4.9665611400159753]
+Remaking the grid of predicted rides
+(42.3488956, 10, 0.0014141414141448649)
+(-71.0824216, 10, 0.002121212121210192)
+Took 4 seconds to re-process the map.
+Predicted rides = 0.
+0 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.1826128777679132, 13.29289290098861, 3.2898288287655655]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 11 seconds to re-process the map.
+Predicted rides = 6.
+20 stations have lower rides.
+This station would have these features:  [12.146984590943813, 10.666049747433867, 2.7856875564384251e-06, 3.6820017358767223, 4.7418231368862065, 1.2006324380668056]
+Remaking the grid of predicted rides
+(42.3761934, 10, 0.0014141414141448649)
+(-71.1546841, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+Predicted rides = 1.
+0 stations have lower rides.
+This station would have these features:  [179.52896374194142, 1167.0967378914052, 514.79381334784819, 7.5276407801721765, 17.394957191618314, 3.8898389596288587]
+Remaking the grid of predicted rides
+(42.357004, 10, 0.0014141414141448649)
+(-71.057619, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+Predicted rides = -20.
+0 stations have lower rides.
+This station would have these features:  [8.4989978736321388e-93, 8.0342578483161232e-93, 0.0, 0.070385372819933345, 0.13372276365051752, 0.033345233489103884]
+Remaking the grid of predicted rides
+(42.270109, 10, 0.0014141414141448649)
+(-71.616085, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+Predicted rides = -3.
+0 stations have lower rides.
+This station would have these features:  [105.57602011853382, 26.740568806556354, 2.5316414324003715, 3.5955937309664856, 5.0278871310719104, 1.1845331252677653]
+Remaking the grid of predicted rides
+(42.326713, 10, 0.0014141414141448649)
+(-71.14737319999999, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+
+2015-08-02 20:54:36,727 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140695267915176 for <Subprocess at 140695267914744 with name myserver in state STOPPING> (stdout)>
+2015-08-02 20:54:36,727 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140695267985384 for <Subprocess at 140695267914744 with name myserver in state STOPPING> (stderr)>
+2015-08-02 20:54:36,728 INFO stopped: myserver (exit status 0)
+2015-08-02 20:54:36,728 DEBG received SIGCLD indicating a child quit
+2015-08-02 20:54:44,623 CRIT Set uid to user 0
+2015-08-02 20:54:44,629 INFO daemonizing the supervisord process
+2015-08-02 20:54:44,630 INFO supervisord started with pid 27468
+2015-08-02 20:54:45,632 INFO spawned: 'myserver' with pid 27469
+2015-08-02 20:54:46,632 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-08-02 20:55:04,095 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-02 20:55:14,657 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-02 20:59:38,586 WARN received SIGTERM indicating exit request
+2015-08-02 20:59:38,586 DEBG killing myserver (pid 27469) with signal SIGTERM
+2015-08-02 20:59:38,604 INFO waiting for myserver to die
+2015-08-02 20:59:38,605 DEBG 'myserver' stdout output:
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 4 seconds to re-process the map.
+Predicted rides = 13.
+46 stations have lower rides.
+This station would have these features:  [92.285415574729825, 116.5826686544946, 0.0063958189601632034, 5.1426989441288944, 7.146182216312063, 1.8479968694744531]
+Remaking the grid of predicted rides
+(42.374848484799998, 10, 0.0014141414141448649)
+(-71.141212121199999, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+
+2015-08-02 20:59:38,710 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 139798392607880 for <Subprocess at 139798392607736 with name myserver in state STOPPING> (stdout)>
+2015-08-02 20:59:38,710 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 139798392608312 for <Subprocess at 139798392607736 with name myserver in state STOPPING> (stderr)>
+2015-08-02 20:59:38,710 INFO stopped: myserver (exit status 0)
+2015-08-02 20:59:38,711 DEBG received SIGCLD indicating a child quit
+2015-08-02 20:59:42,015 CRIT Set uid to user 0
+2015-08-02 20:59:42,017 INFO daemonizing the supervisord process
+2015-08-02 20:59:42,018 INFO supervisord started with pid 27535
+2015-08-02 20:59:43,020 INFO spawned: 'myserver' with pid 27536
+2015-08-02 20:59:44,020 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-08-02 20:59:53,690 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+

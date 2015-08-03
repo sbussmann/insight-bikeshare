@@ -137,10 +137,10 @@ def station_output_user():
           stations=stationslistdict)
 
 def makegmap():
-    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
-    #from home on aug 2
+    # from home on aug 2
     #api_key = 'AIzaSyABlrd95eCKHV2tad5FmsfXBtlODsIZRWA'
-    api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
+    # AWS access
+    api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
     gmaps = googlemaps.Client(key=api_key)
     return(gmaps)
 
