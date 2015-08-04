@@ -159,7 +159,7 @@ def station_input():
 
     
     # store user class in users dictionary
-    users[uid] = user.User(uid)
+    users[uid] = user.User()
 
     # reset to existing Hubway stations only
     gridpredict.resetiteration(basedir, growdir)

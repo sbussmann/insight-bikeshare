@@ -11,7 +11,7 @@ class User:
 
     """
 
-    def __init__(self, uid):
+    def __init__(self):
         self.last_activity_time = dt.datetime.today()
 
     def record_as_active(self):
