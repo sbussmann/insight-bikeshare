@@ -1,6 +1,7 @@
 *.swp
 *.swo
 *.pyc
+app/static/users.stat
 app/supervisord.log
 Data/Boston/user*
 Data/BayArea

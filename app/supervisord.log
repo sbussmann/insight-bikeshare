@@ -11034,3 +11034,377 @@ cannot create regular file ‘../Data/Boston/growing/ridelengthpdf.csv’
 2015-08-04 09:17:57,623 DEBG 'myserver' stderr output:
 
 
+2015-08-04 09:20:27,926 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:20:27,926 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/nridesmap.csv’
+2015-08-04 09:20:27,926 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:20:27,927 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:20:27,931 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:20:27,931 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/Station.csv’
+2015-08-04 09:20:27,931 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:20:27,932 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:20:27,936 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:20:27,936 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/Features.csv’
+2015-08-04 09:20:27,936 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:20:27,936 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:20:27,941 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:20:27,941 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/popemp.csv’
+2015-08-04 09:20:27,941 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:20:27,941 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:20:27,945 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:20:27,945 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/mbtarideratelocation.csv’
+2015-08-04 09:20:27,945 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:20:27,945 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:20:27,949 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:20:27,949 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/maskmap.csv’
+2015-08-04 09:20:27,949 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:20:27,949 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:20:27,953 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:20:27,953 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/ridelengthpdf.csv’
+2015-08-04 09:20:27,953 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:20:27,953 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:20:45,169 WARN received SIGTERM indicating exit request
+2015-08-04 09:20:45,169 DEBG killing myserver (pid 27536) with signal SIGTERM
+2015-08-04 09:20:45,184 INFO waiting for myserver to die
+2015-08-04 09:20:45,185 DEBG 'myserver' stdout output:
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 4 seconds to re-process the map.
+([u'48 Brighton Street, Charlestown, MA 02129, USA'], [19.600000000000001])
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+([u'48 Brighton Street, Charlestown, MA 02129, USA'], [19.600000000000001])
+Predicted rides = 13.
+46 stations have lower rides.
+This station would have these features:  [92.285415574729825, 116.5826686544946, 0.0063958189601632034, 5.1426989441288944, 7.146182216312063, 1.8479968694744531]
+Remaking the grid of predicted rides
+(42.374848484799998, 10, 0.0014141414141448649)
+(-71.141212121199999, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+(['48 Brighton Street, Charlestown, MA 02129, USA', u'Camellia Path, Cambridge, MA 02138, USA'], [19.600000000000001, 13.699999999999999])
+Predicted rides = 19.
+63 stations have lower rides.
+This station would have these features:  [100.32042988699935, 39.365519145964598, 76.983525852532139, 6.2667696696606106, 13.478970055108539, 3.3339219707538326]
+Remaking the grid of predicted rides
+(42.384747474699999, 10, 0.0014141414141448649)
+(-71.077575757600002, 10, 0.002121212121210192)
+Took 5 seconds to re-process the map.
+([u'48 Brighton Street, Charlestown, MA 02129, USA'], [19.600000000000001])
+Predicted rides = 3.
+9 stations have lower rides.
+This station would have these features:  [256.32097531877457, 190.65103246406665, 32.583196523461019, 5.1410727317076903, 7.3584917172606161, 1.9348638324386134]
+Remaking the grid of predicted rides
+(42.389004, 10, 0.0014141414141448649)
+(-71.126587, 10, 0.002121212121210192)
+Took 4 seconds to re-process the map.
+(['48 Brighton Street, Charlestown, MA 02129, USA', u'148 Richdale Avenue, Cambridge, MA 02140, USA'], [19.600000000000001, 3.9500000000000002])
+
+2015-08-04 09:20:45,295 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 139702314996872 for <Subprocess at 139702314996728 with name myserver in state STOPPING> (stdout)>
+2015-08-04 09:20:45,295 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 139702314997304 for <Subprocess at 139702314996728 with name myserver in state STOPPING> (stderr)>
+2015-08-04 09:20:45,295 INFO stopped: myserver (exit status 0)
+2015-08-04 09:20:45,295 DEBG received SIGCLD indicating a child quit
+2015-08-04 09:20:51,305 CRIT Set uid to user 0
+2015-08-04 09:20:51,308 INFO daemonizing the supervisord process
+2015-08-04 09:20:51,309 INFO supervisord started with pid 30331
+2015-08-04 09:20:52,311 INFO spawned: 'myserver' with pid 30332
+2015-08-04 09:20:53,312 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-08-04 09:23:13,629 WARN received SIGTERM indicating exit request
+2015-08-04 09:23:13,629 DEBG killing myserver (pid 30332) with signal SIGTERM
+2015-08-04 09:23:13,648 INFO waiting for myserver to die
+2015-08-04 09:23:13,649 DEBG 'myserver' stdout output:
+[]
+
+2015-08-04 09:23:13,753 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 140505598403720 for <Subprocess at 140505598403576 with name myserver in state STOPPING> (stdout)>
+2015-08-04 09:23:13,753 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 140505598404152 for <Subprocess at 140505598403576 with name myserver in state STOPPING> (stderr)>
+2015-08-04 09:23:13,753 INFO stopped: myserver (exit status 0)
+2015-08-04 09:23:13,753 DEBG received SIGCLD indicating a child quit
+2015-08-04 09:23:19,578 CRIT Set uid to user 0
+2015-08-04 09:23:19,580 INFO daemonizing the supervisord process
+2015-08-04 09:23:19,581 INFO supervisord started with pid 30441
+2015-08-04 09:23:20,583 INFO spawned: 'myserver' with pid 30442
+2015-08-04 09:23:21,584 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-08-04 09:23:25,493 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:23:25,493 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/nridesmap.csv’
+2015-08-04 09:23:25,493 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:23:25,493 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:23:25,496 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:23:25,496 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/Station.csv’
+2015-08-04 09:23:25,496 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:23:25,496 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:23:25,499 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:23:25,499 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/Features.csv’
+2015-08-04 09:23:25,499 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:23:25,499 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:23:25,502 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:23:25,502 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/popemp.csv’
+2015-08-04 09:23:25,502 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:23:25,502 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:23:25,504 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:23:25,505 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/mbtarideratelocation.csv’
+2015-08-04 09:23:25,505 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:23:25,505 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:23:25,507 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:23:25,507 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/maskmap.csv’
+2015-08-04 09:23:25,508 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:23:25,508 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:23:25,510 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:23:25,510 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/ridelengthpdf.csv’
+2015-08-04 09:23:25,511 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:23:25,511 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:25:40,722 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:25:40,722 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/nridesmap.csv’
+2015-08-04 09:25:40,722 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:25:40,722 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:25:40,726 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:25:40,726 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/Station.csv’
+2015-08-04 09:25:40,726 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:25:40,726 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:25:40,730 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:25:40,730 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/Features.csv’
+2015-08-04 09:25:40,731 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:25:40,731 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:25:40,734 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:25:40,734 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/popemp.csv’
+2015-08-04 09:25:40,735 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:25:40,735 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:25:40,738 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:25:40,738 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/mbtarideratelocation.csv’
+2015-08-04 09:25:40,738 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:25:40,738 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:25:40,743 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:25:40,743 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/maskmap.csv’
+2015-08-04 09:25:40,743 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:25:40,743 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:25:40,748 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:25:40,748 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/ridelengthpdf.csv’
+2015-08-04 09:25:40,748 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:25:40,748 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:25:59,784 WARN received SIGTERM indicating exit request
+2015-08-04 09:25:59,784 DEBG killing myserver (pid 30442) with signal SIGTERM
+2015-08-04 09:25:59,800 INFO waiting for myserver to die
+2015-08-04 09:25:59,801 DEBG 'myserver' stdout output:
+[u'userid']
+[u'userid']
+
+2015-08-04 09:25:59,907 DEBG fd 6 closed, stopped monitoring <POutputDispatcher at 139896287061128 for <Subprocess at 139896287060984 with name myserver in state STOPPING> (stdout)>
+2015-08-04 09:25:59,907 DEBG fd 8 closed, stopped monitoring <POutputDispatcher at 139896287061560 for <Subprocess at 139896287060984 with name myserver in state STOPPING> (stderr)>
+2015-08-04 09:25:59,907 INFO stopped: myserver (exit status 0)
+2015-08-04 09:25:59,907 DEBG received SIGCLD indicating a child quit
+2015-08-04 09:26:09,519 CRIT Set uid to user 0
+2015-08-04 09:26:09,522 INFO daemonizing the supervisord process
+2015-08-04 09:26:09,522 INFO supervisord started with pid 30538
+2015-08-04 09:26:10,524 INFO spawned: 'myserver' with pid 30539
+2015-08-04 09:26:11,526 INFO success: myserver entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2015-08-04 09:26:12,445 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:26:12,448 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/nridesmap.csv’
+2015-08-04 09:26:12,449 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:26:12,449 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:26:12,465 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:26:12,465 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/Station.csv’
+2015-08-04 09:26:12,465 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:26:12,465 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:26:12,481 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:26:12,481 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/Features.csv’
+2015-08-04 09:26:12,481 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:26:12,481 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:26:12,497 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:26:12,497 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/popemp.csv’
+2015-08-04 09:26:12,497 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:26:12,497 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:26:12,513 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:26:12,513 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/mbtarideratelocation.csv’
+2015-08-04 09:26:12,513 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:26:12,513 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:26:12,529 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:26:12,529 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/maskmap.csv’
+2015-08-04 09:26:12,529 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:26:12,529 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:26:12,545 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:26:12,548 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/user0/ridelengthpdf.csv’
+2015-08-04 09:26:12,548 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:26:12,549 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:27:46,546 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-04 09:28:33,058 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-04 09:28:42,922 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-04 09:29:41,918 DEBG 'myserver' stderr output:
+mkdir: 
+2015-08-04 09:29:41,918 DEBG 'myserver' stderr output:
+cannot create directory ‘../Data/Boston/user1/’
+2015-08-04 09:29:41,918 DEBG 'myserver' stderr output:
+: File exists
+2015-08-04 09:29:41,918 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:30:28,762 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
