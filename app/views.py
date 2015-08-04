@@ -1,7 +1,7 @@
 import matplotlib
 matplotlib.use('Agg')
 from flask import Flask
-from flask import render_template, request, make_response, session#, url_for
+from flask import render_template, request, make_response, session, redirect, url_for
 #from app import app
 import gridpredict
 import loadutil
@@ -116,16 +116,23 @@ def makemap():
 
 @app.route('/about')
 def aboutpage():
+    if 'userid' in session:
+        uid = session['userid']
+        if uid in users:
+            users[uid].record_as_active()
     return render_template("about.html")
 
 @app.route('/contact')
 def contactpage():
+    if 'userid' in session:
+        uid = session['userid']
+        if uid in users:
+            users[uid].record_as_active()
     return render_template("contact.html")
 
 @app.route('/')
 @app.route('/index')
 def station_input():
-    print(session.keys())
     # check existing users for activity, delete inactive users
     inactive_users = []
     now = dt.datetime.today()
@@ -146,13 +153,14 @@ def station_input():
         #session['userid'] = 1
     if 'userid' in session:
         uid = session['userid']
-        growdir = getgrowdir(next_user_id)
+        growdir = getgrowdir(uid)
     else:
-        uid = user.get_next_user_id()
-        exec 'next_user_id += 1' in globals()
-        user.put_next_user_id(next_user_id)
+        #uid = user.get_next_user_id()
+        uid = np.random.randint(1, high=1e6)
+        #exec 'next_user_id += 1' in globals()
+        #user.put_next_user_id(next_user_id)
         session['userid'] = uid
-        growdir = getgrowdir(next_user_id)
+        growdir = getgrowdir(uid)
         # make a new directory for this user
         cmd = 'mkdir ' + growdir
         call(cmd, shell=True)
@@ -186,9 +194,15 @@ def station_input():
 
 @app.route('/output_auto')
 def station_output_auto():
+    if 'userid' not in session:
+        return redirect(url_for('index'))
+    uid = session['userid']
+    if uid not in users:
+        return redirect(url_for('index'))
+    users[uid].record_as_active()    
 
     gmaps = makegmap()
-    growdir = getgrowdir(next_user_id)
+    growdir = getgrowdir(uid)
     the_results = gridpredict.autoinput(growdir)
     stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
     return render_template("output.html", riderate=riderate, ranking=ranking,
@@ -196,6 +210,12 @@ def station_output_auto():
 
 @app.route('/output_user')
 def station_output_user():
+    if 'userid' not in session:
+        return redirect(url_for('index'))
+    uid = session['userid']
+    if uid not in users:
+        return redirect(url_for('index'))
+    users[uid].record_as_active()    
 
     gmaps = makegmap()
     #pull 'ID' from input field and store it
@@ -205,7 +225,7 @@ def station_output_user():
     longitude = geocode[0]['geometry']['location']['lng']
     #longitude = 
     #latitude = request.args.get('ID2')
-    growdir = getgrowdir(next_user_id)
+    growdir = getgrowdir(uid)
     the_results = gridpredict.userinput(longitude, latitude, growdir)
     stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
 
@@ -226,8 +246,15 @@ def makeoutput(the_results, gmaps):
     location = gmaps.reverse_geocode((latitude, longitude))
     location = location[0]['formatted_address']
 
+    if 'userid' not in session:
+        return redirect(url_for('index'))
+    uid = session['userid']
+    if uid not in users:
+        return redirect(url_for('index'))
+    users[uid].record_as_active()    
+
     # load old results
-    growdir = getgrowdir(next_user_id)
+    growdir = getgrowdir(uid)
     stations = pd.read_csv(growdir + 'appresults.csv')
     newlocation = list(stations['address'].values)
     newriderate = list(stations['ridesperday'].values)
@@ -256,10 +283,17 @@ def makeoutput(the_results, gmaps):
 @app.route("/predictedridemap.png")
 def predictedridemap():
 
+    if 'userid' not in session:
+        return redirect(url_for('index'))
+    uid = session['userid']
+    if uid not in users:
+        return redirect(url_for('index'))
+    users[uid].record_as_active()    
+
     fig = plt.figure(figsize=(9,5))
 
     # plot predicted ride map
-    growdir = getgrowdir(next_user_id)
+    growdir = getgrowdir(uid)
     nrides = pd.read_csv(growdir + 'nridesmap.csv')
     longmin = nrides['longitude'].min()
     longmax = nrides['longitude'].max()
