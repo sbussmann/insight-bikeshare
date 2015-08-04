@@ -2,6 +2,7 @@
 *.swo
 *.pyc
 app/supervisord.log
+Data/Boston/user*
 Data/BayArea
 Data/Minneapolis
 Data/NYC
