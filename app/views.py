@@ -1,9 +1,8 @@
 import matplotlib
 matplotlib.use('Agg')
 from flask import Flask
-from flask import render_template, request, make_response#, url_for
+from flask import render_template, request, make_response, session#, url_for
 #from app import app
-#from predictride import predict
 import gridpredict
 import loadutil
 import folium
@@ -13,17 +12,42 @@ import StringIO
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import googlemaps
-#from matplotlib.figure import Figure
-#from subprocess import call
+import user
+from subprocess import call
+import datetime as dt
 
 
 #print(Flask.root_path)
 app = Flask(__name__)
 
+app.secret_key = '\x96\\\xf7\x93\xc4\xae:\x8c{iL\x91\x12\x13^\xec\xad\xe2\x9a\xe6\x97{\x8dW'
+
 #db = mdb.connect(user="root", host="localhost", password="password",
 #        db="BostonFeaturesByStation_db", charset='utf8')
+
+#def get_next_user_id():
+#    f = open('users.stat', 'r')
+#    match = re.search(r'total number of users = (\d+)', f.read())
+#    if match:
+#        next_user_id = int(match.group(1))
+#    else:
+#        next_user_id = 0
+#    f.close()
+#    return next_user_id
+
+#def put_next_user_id(next_id):
+#    f = open('users.stat', 'w')
+#    f.write('total number of users = ' + str(next_id))
+#    f.close()
+
+# define a unique results directory for each user
+next_user_id = user.get_next_user_id()
+users = {}
+
 basedir = '../Data/Boston/'
-growdir = '../Data/Boston/growing/'
+#growdir = '../Data/Boston/growing/'
+
+#next_user_id = get_next_user_id()
 
 #@app.route('/hubway')
 #def station_hubway():
@@ -36,6 +60,18 @@ growdir = '../Data/Boston/growing/'
 #                 'border: none"></iframe>'.format(srcdoc, width, height))
 #    return embed
 
+def getgrowdir(next_user_id):
+
+    """
+
+    Generate a new directory to store results for each user.
+
+    """
+
+    gd = basedir + 'user' + str(next_user_id) + '/'
+
+    return gd
+
 def makemap():
     # generate the map
     latvec, longvec = loadutil.grid()
@@ -46,6 +82,7 @@ def makemap():
     map_hubway = folium.Map(location=[lat0, long0], width=mapwidth, height=mapheight, zoom_start=9)
 
     # generate the station locations
+    growdir = getgrowdir(next_user_id)
     dataload = loadutil.load(growdir)
     stationfeatures = dataload[6]
     station = dataload[2]
@@ -88,6 +125,41 @@ def contactpage():
 @app.route('/')
 @app.route('/index')
 def station_input():
+    print(session.keys())
+    # check existing users for activity, delete inactive users
+    inactive_users = []
+    now = dt.datetime.today()
+
+    sessionlifetime = 24 * 3600
+    for uid in users:
+        if (now - users[uid].last_activity_time).seconds > sessionlifetime:
+            inactive_users.append(uid)
+    for uid in inactive_users:
+        del users[uid]
+        rottendir = getgrowdir(uid)
+        cmd = 'rm -rf ' + rottendir
+        call(cmd, shell=True)
+
+    #try:
+        #session['userid'] += 1
+    #except KeyError:
+        #session['userid'] = 1
+    if 'userid' in session:
+        uid = session['userid']
+        growdir = getgrowdir(next_user_id)
+    else:
+        uid = user.get_next_user_id()
+        exec 'next_user_id += 1' in globals()
+        user.put_next_user_id(next_user_id)
+        session['userid'] = uid
+        growdir = getgrowdir(next_user_id)
+        # make a new directory for this user
+        cmd = 'mkdir ' + growdir
+        call(cmd, shell=True)
+
+    
+    # store user class in users dictionary
+    users[uid] = user.User(uid)
 
     # reset to existing Hubway stations only
     gridpredict.resetiteration(basedir, growdir)
@@ -114,7 +186,9 @@ def station_input():
 
 @app.route('/output_auto')
 def station_output_auto():
+
     gmaps = makegmap()
+    growdir = getgrowdir(next_user_id)
     the_results = gridpredict.autoinput(growdir)
     stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
     return render_template("output.html", riderate=riderate, ranking=ranking,
@@ -122,6 +196,7 @@ def station_output_auto():
 
 @app.route('/output_user')
 def station_output_user():
+
     gmaps = makegmap()
     #pull 'ID' from input field and store it
     useraddress = request.args.get('ID1')
@@ -130,6 +205,7 @@ def station_output_user():
     longitude = geocode[0]['geometry']['location']['lng']
     #longitude = 
     #latitude = request.args.get('ID2')
+    growdir = getgrowdir(next_user_id)
     the_results = gridpredict.userinput(longitude, latitude, growdir)
     stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
 
@@ -138,13 +214,11 @@ def station_output_user():
 
 def makegmap():
     api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
-    #from home on aug 2
-    #api_key = 'AIzaSyABlrd95eCKHV2tad5FmsfXBtlODsIZRWA'
-    api_key = 'AIzaSyBM0FQfza4RMXKeN8rZpfk6--5RsRqWqyY'
     gmaps = googlemaps.Client(key=api_key)
     return(gmaps)
 
 def makeoutput(the_results, gmaps):    
+
     latitude = the_results[0]
     longitude = the_results[1]
     riderate = the_results[2]
@@ -153,6 +227,7 @@ def makeoutput(the_results, gmaps):
     location = location[0]['formatted_address']
 
     # load old results
+    growdir = getgrowdir(next_user_id)
     stations = pd.read_csv(growdir + 'appresults.csv')
     newlocation = list(stations['address'].values)
     newriderate = list(stations['ridesperday'].values)
@@ -181,11 +256,10 @@ def makeoutput(the_results, gmaps):
 @app.route("/predictedridemap.png")
 def predictedridemap():
 
-
     fig = plt.figure(figsize=(9,5))
 
     # plot predicted ride map
-    growdir = '../Data/Boston/growing/'
+    growdir = getgrowdir(next_user_id)
     nrides = pd.read_csv(growdir + 'nridesmap.csv')
     longmin = nrides['longitude'].min()
     longmax = nrides['longitude'].max()
