@@ -10824,3 +10824,213 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
   nrides['nrides'][i] = iride
 
+2015-08-03 13:59:57,269 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-03 19:15:16,923 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-03 19:15:35,629 DEBG 'myserver' stderr output:
+/home/ubuntu/insight-bikeshare/app/gridpredict.py:245: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+  nrides['nrides'][i] = iride
+
+2015-08-04 09:11:49,027 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:11:49,027 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/nridesmap.csv’
+2015-08-04 09:11:49,027 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:11:49,027 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:11:49,034 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:11:49,034 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/Station.csv’
+2015-08-04 09:11:49,034 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:11:49,034 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:11:49,041 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:11:49,041 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/Features.csv’
+2015-08-04 09:11:49,041 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:11:49,042 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:11:49,048 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:11:49,048 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/popemp.csv’
+2015-08-04 09:11:49,048 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:11:49,048 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:11:49,054 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:11:49,054 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/mbtarideratelocation.csv’
+2015-08-04 09:11:49,054 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:11:49,054 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:11:49,060 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:11:49,060 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/maskmap.csv’
+2015-08-04 09:11:49,061 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:11:49,061 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:11:49,066 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:11:49,066 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/ridelengthpdf.csv’
+2015-08-04 09:11:49,066 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:11:49,066 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:41,089 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:41,090 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/nridesmap.csv’
+2015-08-04 09:17:41,090 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:41,090 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:41,094 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:41,094 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/Station.csv’
+2015-08-04 09:17:41,095 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:41,095 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:41,099 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:41,099 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/Features.csv’
+2015-08-04 09:17:41,099 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:41,099 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:41,104 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:41,104 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/popemp.csv’
+2015-08-04 09:17:41,104 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:41,104 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:41,108 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:41,108 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/mbtarideratelocation.csv’
+2015-08-04 09:17:41,108 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:41,108 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:41,113 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:41,113 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/maskmap.csv’
+2015-08-04 09:17:41,113 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:41,113 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:41,117 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:41,118 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/ridelengthpdf.csv’
+2015-08-04 09:17:41,118 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:41,118 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:57,599 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:57,599 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/nridesmap.csv’
+2015-08-04 09:17:57,599 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:57,599 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:57,603 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:57,603 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/Station.csv’
+2015-08-04 09:17:57,603 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:57,603 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:57,606 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:57,607 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/Features.csv’
+2015-08-04 09:17:57,607 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:57,607 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:57,610 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:57,610 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/popemp.csv’
+2015-08-04 09:17:57,610 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:57,610 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:57,613 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:57,614 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/mbtarideratelocation.csv’
+2015-08-04 09:17:57,614 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:57,614 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:57,617 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:57,617 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/maskmap.csv’
+2015-08-04 09:17:57,617 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:57,617 DEBG 'myserver' stderr output:
+
+
+2015-08-04 09:17:57,622 DEBG 'myserver' stderr output:
+cp: 
+2015-08-04 09:17:57,622 DEBG 'myserver' stderr output:
+cannot create regular file ‘../Data/Boston/growing/ridelengthpdf.csv’
+2015-08-04 09:17:57,623 DEBG 'myserver' stderr output:
+: No such file or directory
+2015-08-04 09:17:57,623 DEBG 'myserver' stderr output:
+
+

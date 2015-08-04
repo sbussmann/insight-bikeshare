@@ -1,7 +1,7 @@
 *.swp
 *.swo
 *.pyc
-supervisord.log
+app/supervisord.log
 Data/BayArea
 Data/Minneapolis
 Data/NYC
