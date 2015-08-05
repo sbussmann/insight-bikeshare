@@ -203,6 +203,7 @@ def station_output_auto():
 
     gmaps = makegmap()
     growdir = getgrowdir(uid)
+    print(uid, growdir)
     the_results = gridpredict.autoinput(growdir)
     stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
     return render_template("output.html", riderate=riderate, ranking=ranking,
@@ -226,6 +227,7 @@ def station_output_user():
     #longitude = 
     #latitude = request.args.get('ID2')
     growdir = getgrowdir(uid)
+    print(uid, growdir)
     the_results = gridpredict.userinput(longitude, latitude, growdir)
     stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
 
@@ -255,6 +257,7 @@ def makeoutput(the_results, gmaps):
 
     # load old results
     growdir = getgrowdir(uid)
+    print(uid, growdir)
     stations = pd.read_csv(growdir + 'appresults.csv')
     newlocation = list(stations['address'].values)
     newriderate = list(stations['ridesperday'].values)
@@ -294,6 +297,7 @@ def predictedridemap():
 
     # plot predicted ride map
     growdir = getgrowdir(uid)
+    print(uid, growdir)
     nrides = pd.read_csv(growdir + 'nridesmap.csv')
     longmin = nrides['longitude'].min()
     longmax = nrides['longitude'].max()
