@@ -137,6 +137,11 @@ def makemask(dataloc):
 
 def getmask(dataloc):
 
+    """
+
+    Get the mask for the Charles River.
+
+    """
 
     latvec, longvec = grid()
     mask_df = pd.read_csv(dataloc + 'maskmap.csv')

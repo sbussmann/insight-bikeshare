@@ -9,7 +9,8 @@ def distvec(latvec, longvec, inlat, inlong):
 
     """
 
-    Compute the distance in miles from a given latitude and longitude.
+    Compute the distance in miles from a given latitude and longitude.  Use
+    geopy's vincenty module to get the correct distance.
     
     Input: 
         latvec: vector of latitudes [numpy 1D array]
@@ -66,13 +67,13 @@ def stationcouple(distancevec, dataloc='../Data/Boston/'):
     """
 
     Compute the coupling efficiency between a given location and a set of
-    zip code locations.  Model coupling efficiency with a normal distribution.
+    station locations.  Model coupling efficiency with the empirically derived
+    distribution of ride distances.  For now, approximate ride distance as ride
+    duration * avgspeed, assuming avg speed = 10 mph.
 
     Inputs: 
         distancevec: vector of distances from given station to all other points
         in Greater Boston area [numpy array]
-        scaledistance: length scale over which coupling efficiency is expected
-        to decrease to 1/e of the maximum [float]
 
     Outputs:
         couplingfactor: coupling efficiencies for each station [list]
@@ -86,8 +87,11 @@ def stationcouple(distancevec, dataloc='../Data/Boston/'):
 
     # ride times are given in minutes in this table
     x = ridelengthdf['ridetime'].values * avgspeed * 1./60
-    x = np.append(x, 120)
+
     y = ridelengthdf['probability'].values
+
+    # append one data point to have zero probability for very long rides
+    x = np.append(x, 120)
     y = np.append(y, 0)
 
     couplingfunction = interp1d(x, y)
@@ -107,7 +111,7 @@ def zipcouple(distancevec, scaledistance):
         distancevec: vector of distances from given station to all other points
         in Greater Boston area [numpy array]
         scaledistance: length scale over which coupling efficiency is expected
-        to decrease by 1/e [float]
+        to decrease to 1/e of the maximum [float]
 
     Outputs:
         couplingfactor: coupling efficiencies for each station [list]
@@ -169,6 +173,3 @@ def getscores(popemp, mbta, station, zipscale, stationscale, subwayscale):
     scores = [originpop, originwork, originsubway, destpop, destwork,
             destsubway]
     return scores
-
-#station['popdensity'] = popdensity
-#station['empdensity'] = empdensity

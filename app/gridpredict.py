@@ -13,36 +13,56 @@ import pandas as pd
 from sklearn import linear_model
 import loadutil
 from subprocess import call
-import matplotlib.pyplot as plt
 
 
 def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):
 
+    """
+
+    Compute features for where people live, work, and ride the subway.
+
+    """
+
+    # locations of where people live
     latbyzip = popemp['latitude'].values
     longbyzip = popemp['longitude'].values
+
+    # locations of where people work
     popbyzip = popemp['HD01'].values
     workbyzip = popemp['EMP'].values
-    # fix nans
+
+    # replace nans with average value
     finite = workbyzip * 0 == 0
     mwork = workbyzip[finite].mean()
     nans = workbyzip * 0 != 0
     workbyzip[nans] = mwork
+
+    # locations of where people ride the subway
     latbysubway = mbta['latitude']
     longbysubway = mbta['longitude']
     subwayrides = mbta['ridesperday'].values    
+
+    # get the distance from given location to all zip codes
     distancevec = densitymetric.distvec(latbyzip, longbyzip, ilat, ilong)
+
+    # compute the coupling factor to all zip codes
     couplingzip = densitymetric.zipcouple(distancevec, zipscale)
+
+    # use the weighted sum as the origin score
+    # normalize by number of zip codes
     nzip = len(workbyzip)
     originpop = np.sum(popbyzip * couplingzip) / nzip
     originwork = np.sum(workbyzip * couplingzip) / nzip
 
+    # get the distance from given location to all subway stops
     distancevecsubway = densitymetric.distvec(latbysubway, longbysubway, 
             ilat, ilong)
 
     # coupling efficiency between this station and all subway stops
     couplingsubway = densitymetric.zipcouple(distancevecsubway, subwayscale)
 
-    # weighted sum of subway rides
+    # use the weighted sum as the origin score
+    # normalize by number of subway stops
     nsubway = len(subwayrides)
     originsubway = np.sum(subwayrides * couplingsubway) / nsubway
 
@@ -51,21 +71,35 @@ def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):
 def getdestination(ilat, ilong, station, stationscale, zipscale, 
         stationfeatures, dataloc):
 
+    """
+
+    Compute features associated with all possible destinations.
+
+
+    """
+
+    # origin features for where people live, work and ride the subway
     originpop = stationfeatures['originpop'].values
     originwork = stationfeatures['originwork'].values
     originsubway = stationfeatures['originsubway'].values
 
+    # location of existing stations
     stationlat = station['lat'].values
     stationlong = station['lng'].values
+
+    # compute the distance in miles from input station to all existing stations
     distancevec = densitymetric.distvec(stationlat, stationlong, ilat, ilong)
 
-    # origin to origin coupling
+    # compute the station to station coupling factor
     stationcoupling = densitymetric.stationcouple(distancevec, dataloc)
 
-    # i may need to investigate maxcouple
-    othercoupling = densitymetric.zipcouple(distancevec, zipscale)
-    maxcouple = othercoupling.max()
+    # determine coupling factor of closest station; this is used subsequently
+    # to compute the cannibalism factor: nrides -= nrides * maxcouple
+    zipcoupling = densitymetric.zipcouple(distancevec, zipscale)
+    maxcouple = zipcoupling.max()
 
+    # use the weighted sum as the destination score
+    # normalize by number of stations
     norigin = len(originpop)
     destpop = np.sum(originpop * stationcoupling) / norigin
     destwork = np.sum(originwork * stationcoupling) / norigin
@@ -83,11 +117,15 @@ def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
     """
 
 
+    # get features associated with the input location itself
     originpop, originwork, originsubway = getorigin(ilat, ilong, popemp, mbta, 
             zipscale, subwayscale)
+
+    # get features associated with all possible destinations
     destpop, destwork, destsubway, maxcouple = getdestination(ilat, ilong, 
             station, stationscale, zipscale, stationfeatures, dataloc)
 
+    # store the feature vector in a list
     features = [originpop, originwork, originsubway, destpop, destwork,
             destsubway]
 
@@ -95,14 +133,25 @@ def getfeature(ilat, ilong, popemp, mbta, station, zipscale, stationscale,
     
 def predictride(features, stationfeatures):
 
+    """
+
+    Predict the number of rides per day for the given features by training on
+    the existing set of stationfeatures.
+
+
+    """
+
     # use linear regression
     clf = linear_model.LinearRegression()
-    
-    y = stationfeatures['ridesperday'].values
 
+    # features
     X = stationfeatures[['originpop', 'originwork', 'originsubway', \
             'destpop', 'destwork', 'destsubway']].values
     
+    # labels
+    y = stationfeatures['ridesperday'].values
+    
+    # number of rides per day
     nrides = clf.fit(X, y).predict(features)
 
     return nrides
@@ -110,11 +159,19 @@ def predictride(features, stationfeatures):
 def getride(ilat, ilong, popemp, mbta, station, zipscale, stationscale, 
         subwayscale, stationfeatures, dataloc):
 
+    """
+
+    Compute the predicted rides per day for the given location.
+
+    """
+
+    # get the features and cannibalism factor for the given location
     ifeatures, icannibal = getfeature(ilat, ilong, popemp, mbta, 
             station, zipscale, stationscale, subwayscale, stationfeatures, 
             dataloc)
+
+    # predict the rides per day given the features of the new location
     iride = predictride(ifeatures, stationfeatures)
-    #cannibalmap[i, j] = icannibal
 
     # account for cannibalism
     iride = iride[0]  - iride[0] * icannibal
@@ -135,6 +192,13 @@ def getpercentile(nride, stationfeatures):
     return place
 
 def makemap(dataloc):
+
+    """
+
+    This function is not used in the web app.  I need to move it to its own
+    file.  It is used to generate the initial map of rides per day.
+
+    """
 
     # Generate a sub grid of latitudes and longitudes
     latvec, longvec = loadutil.grid()
@@ -214,8 +278,8 @@ def remakemap(ilat, ilong, dataloc):
 
     # read in ride map from previous iteration
     nrides = pd.read_csv(dataloc + 'nridesmap.csv')
-    #cannibalmap = np.zeros([nlat, nlong])
-    #frides = open('../Data/Boston/nridesmap.csv', 'w')
+
+    # monitor how long this recomputing the subgrid takes
     import time
     currenttime = time.time()
     ngrid = len(nrides)
@@ -223,10 +287,6 @@ def remakemap(ilat, ilong, dataloc):
         ilat = nrides['latitude'][i]
         ilong = nrides['longitude'][i]
 
-        #if ilat > 42.34:
-        #    if ilong > -71.09:
-        #        print(ilat, ilong)
-        #print(ilat, ilong)
         # skip this latitude if it isn't present in the subgrid
         if ilat < sublatvec.min():
             continue
@@ -238,22 +298,22 @@ def remakemap(ilat, ilong, dataloc):
         if ilong > sublongvec.max():
             continue
 
+        # compute predicted rides per day given the new station
         iride = getride(ilat, ilong, popemp, mbta, station, zipscale, 
                 stationscale, subwayscale, stationfeatures, dataloc)
-        nrides['nrides'][i] = iride
-        #fmt = '{0:2} {1:9.5f} {2:9.5f} {3:8.1f} {4:8.1f} {5:8.1f} {6:8.1f} {7:8.1f} {8:8.1f} {9:6.1f}'
-        #if iride > 10:
-        #    print(fmt.format(i, ilat, ilong, ifeatures[0], ifeatures[1],
-        #    ifeatures[2], ifeatures[3], ifeatures[4], ifeatures[5], iride))
 
+        # store the result in the nrides dataframe
+        nrides['nrides'][i] = iride
+
+    # make sure the Charles river is still masked out
     mask = loadutil.getmask(dataloc)
     nrides['nrides'] *= (1 - mask)
+
+    # how long did it take?  should be 5-10 seconds
     newtime = time.time()
     runtime = newtime - currenttime
     print("Took %d seconds to re-process the map." % runtime)
     nrides.to_csv(dataloc + 'nridesmap.csv', index=False)
-
-    #frides.close()
 
 def peakfind(dataloc):
 
@@ -263,12 +323,16 @@ def peakfind(dataloc):
     
     """
 
+    # read the predicted rides per day
     ridedf = pd.read_csv(dataloc + 'nridesmap.csv')
     latmap = ridedf['latitude']
     longmap = ridedf['longitude']
     ridemap = ridedf['nrides']
 
+    # get the index where the max is located
     maxindx = np.argmax(ridemap)
+
+    # get the lat and long for that index
     latmax = latmap[maxindx]
     longmax = longmap[maxindx]
 
@@ -278,7 +342,7 @@ def addnewstation(station, ilat, ilong, dataloc):
 
     """
 
-    Add a row to station dataframe with location of new station.
+    Add a row to the station dataframe with the location of the new station.
 
     """
 
@@ -307,56 +371,17 @@ def updatefeatures(stationfeatures, features, nrides, dataloc):
 
     return stationfeatures
 
-def plotmap(dataloc):
-
-    # plot predicted ride map
-    nrides = pd.read_csv(dataloc + 'nridesmap.csv')
-    longmin = nrides['longitude'].min()
-    longmax = nrides['longitude'].max()
-    latmin = nrides['latitude'].min()
-    latmax = nrides['latitude'].max()
-    nlat = np.sqrt(np.float(len(nrides)))
-    ridemap = nrides['nrides'].values.reshape((nlat, nlat))
-
-    plt.clf()
-    plt.figure(figsize=(9,5))
-    plt.imshow(ridemap, vmin=0, cmap="Blues",
-            extent=[longmin,longmax,latmin,latmax], origin='lower')
-    cbar = plt.colorbar()
-    cbar.set_label('Predicted Daily Rides')
-
-    # plot existing Hubway stations
-    station = pd.read_csv(dataloc + 'Station.csv')
-    stationfeatures = pd.read_csv(dataloc + 'Features.csv')
-    plt.scatter(station['lng'], station['lat'], 
-            s=stationfeatures['ridesperday'], alpha=0.4, 
-            color='white', edgecolor='black', 
-            label='Existing Hubway stations')
-    stationnew = station[station['status'] == 'proposed']
-    stationfeaturesnew = stationfeatures[station['status'] == 'proposed']
-    plt.scatter(stationnew['lng'], stationnew['lat'], 
-            s=stationfeaturesnew['ridesperday'], alpha=0.4, 
-            color='red', edgecolor='black', 
-            label='Proposed Hubway stations')
-    plt.axis([longmin, longmax, latmin, latmax])
-    plt.xlabel('Longitude')
-    plt.ylabel('Latitude')
-    #plt.legend()
-    #plt.tight_layout()
-    #plt.show()
-    #canvas = FigureCanvas(fig)
-    #png_output = StringIO.StringIO()
-    #canvas.print_png(png_output)
-    #response = make_response(png_output.getvalue())
-    #response.headers['Content-Type'] = 'image/png'
-
-    #fig.clf()
-    #return response 
-    plt.savefig(dataloc + '/predictedridemap.png', bbox_inches='tight')
-    
-
 def giveninput(ilat, ilong, popemp, mbta, station, zipscale, 
             stationscale, subwayscale, stationfeatures, dataloc):
+
+    """
+
+    Given a location (ilat, ilong), input data (popemp, mbta, station), model
+    parameters (zipscale, stationscale, subwayscale), and the existing hubway
+    station features (stationfeatures), return the number of rides per day and
+    the ranking of the proposed station.
+
+    """
 
     # predict the number of daily rides for this location
     nrides = getride(ilat, ilong, popemp, mbta, station, zipscale, 
@@ -381,17 +406,20 @@ def giveninput(ilat, ilong, popemp, mbta, station, zipscale,
     # add the new features to stationfeatures
     stationfeatures = updatefeatures(stationfeatures, ifeatures, nrides, dataloc)
 
-    print("Remaking the grid of predicted rides")
     # update the grid of predicted rides
+    print("Remaking the grid of predicted rides")
     remakemap(ilat, ilong, dataloc)
-
-    # remake the image showing the predicted daily rides
-    #plotmap(dataloc)
 
     return nrides, place
 
 def autoinput(dataloc):
 
+    """
+
+    Identify the best station location and process that location.
+
+    """
+
     # load the data
     loaddata = loadutil.load(dataloc)
     popemp = loaddata[0]
@@ -402,16 +430,25 @@ def autoinput(dataloc):
     subwayscale = loaddata[5]
     stationfeatures = loaddata[6]
 
+    # identify the best location for a new Hubway station
     ilat, ilong = peakfind(dataloc)
 
+    # get the predicted rides per day and ranking for this location
     nrides, place = giveninput(ilat, ilong, popemp, mbta, station,
             zipscale, stationscale, subwayscale, stationfeatures, dataloc)
 
+    # round the number of rides per day to 1 decimal point
     nrides = np.round(nrides, decimals=1)
 
     return ilat, ilong, nrides, place
 
-def userinput(ilong, ilat, dataloc):
+def userinput(ilat, ilong, dataloc):
+
+    """
+
+    Process a given latitude and longitude.
+
+    """
 
     # load the data
     loaddata = loadutil.load(dataloc)
@@ -423,12 +460,16 @@ def userinput(ilong, ilat, dataloc):
     subwayscale = loaddata[5]
     stationfeatures = loaddata[6]
 
+    # convert latitude and longitude to floats
     ilat = np.float(ilat)
     ilong = np.float(ilong)
+
+    # get the predicted rides per day and ranking for this location
     nrides, place = giveninput(ilat, ilong, popemp, mbta, station,
             zipscale, stationscale, subwayscale, stationfeatures, dataloc)
 
-    nrides = np.round(nrides, decimals=2)
+    # round the number of rides per day to 1 decimal point
+    nrides = np.round(nrides, decimals=1)
 
     return ilat, ilong, nrides, place
 
@@ -436,12 +477,10 @@ def resetiteration(basedir, growdir):
 
     """
 
-    Remove all new stations from the "growing" database and start over.
+    Remove all new stations from growdir and start over.
 
     """
 
-    #cmd = 'rm -f ' + dataloc + '*iteration*'
-    #call(cmd, shell=True)
     filestocopy = ['nridesmap.csv', 'Station.csv', 'Features.csv', \
             'popemp.csv', 'mbtarideratelocation.csv', \
             'maskmap.csv', 'ridelengthpdf.csv']

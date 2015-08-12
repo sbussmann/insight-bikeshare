@@ -209,7 +209,7 @@ def station_output_user():
     growdir = getgrowdir(uid)
 
     # run the model on the user's chosen location
-    prediction = gridpredict.userinput(longitude, latitude, growdir)
+    prediction = gridpredict.userinput(latitude, longitude, growdir)
 
     # get the list of stations, daily rides, and ranking of the new station
     stationslistdict, riderate, ranking = makeoutput(prediction, googlegeo)
