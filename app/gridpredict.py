@@ -10,12 +10,10 @@ matplotlib.use('Agg')
 import numpy as np
 import densitymetric
 import pandas as pd
-#from sklearn import cross_validation
 from sklearn import linear_model
 import loadutil
 from subprocess import call
 import matplotlib.pyplot as plt
-#from pylab import savefig
 
 
 def getorigin(ilat, ilong, popemp, mbta, zipscale, subwayscale):

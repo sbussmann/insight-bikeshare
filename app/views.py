@@ -56,6 +56,28 @@ def userisactive():
         if uid in users:
             users[uid].record_as_active()
 
+def userisactive_output():
+
+    """
+
+    Make sure the user has been active in the past 24 hours.  If not, redirect
+    them to the input page so they can start again.  If yes, update
+    their most recent activity with the current time and return their user id.
+
+    """
+
+    # check for activity in session dictionary and in users dictionary
+    if 'userid' not in session:
+        return redirect(url_for('index'))
+    uid = session['userid']
+    if uid not in users:
+        return redirect(url_for('index'))
+
+    # if both tests pass, update their most recent activity with current time
+    users[uid].record_as_active()    
+
+    return uid
+
 @app.route('/about')
 def aboutpage():
 
@@ -103,17 +125,23 @@ def station_input():
         cmd = 'rm -rf ' + rottendir
         call(cmd, shell=True)
 
+    # if this user has a history with Grow Hubway, get their directory
     if 'userid' in session:
         uid = session['userid']
         growdir = getgrowdir(uid)
     else:
-        #uid = user.get_next_user_id()
-        uid = np.random.randint(1, high=1e6)
-        #exec 'next_user_id += 1' in globals()
-        #user.put_next_user_id(next_user_id)
+        # otherwise, make a new userid with a random number generator
+        # note, this solution may have problems related to collisions.  Need to
+        # investigate this in the future
+        uid = np.random.randint(1, high=1e8)
+
+        # add the user id to the session dictionary
         session['userid'] = uid
+
+        # get the users directory
         growdir = getgrowdir(uid)
-        # make a new directory for this user
+
+        # make the directory
         cmd = 'mkdir ' + growdir
         call(cmd, shell=True)
 
@@ -124,92 +152,106 @@ def station_input():
     # reset to existing Hubway stations only
     gridpredict.resetiteration(basedir, growdir)
 
-    # reset the webapp results database
+    # reset the results database for this user
     useraddress = []
     riderate = []
     dictnew = {"address": useraddress, "ridesperday": riderate}
     stations = pd.DataFrame(dictnew)
     stations.to_csv(growdir + 'appresults.csv', index=False)
 
-    #for line in fileinput.input('static/hubway.html', inplace=1):
-    #    if line.startswith('<head>'):
-    
-    #    else:
-    #        if processing_foo1s:
-    #            print('   <meta http-Equiv="Cache-Control" Content="no-cache" />')
-    #            print('   <meta http-Equiv="Pragma" Content="no-cache" />')
-    #            print('   <meta http-Equiv="Expires" Content="0" />')
-    #        processing_foo1s = False
-    #    print line,
-    ##render_template("hubway.html"
     return render_template("input.html")
 
 @app.route('/output_auto')
 def station_output_auto():
-    if 'userid' not in session:
-        return redirect(url_for('index'))
-    uid = session['userid']
-    if uid not in users:
-        return redirect(url_for('index'))
-    users[uid].record_as_active()    
 
-    gmaps = makegmap()
+    """
+
+    Obtain predicted average daily rides at the best possible location.
+    Add the new station to the station database.  Regenerate the predicted
+    average daily rides matrix.
+
+    """
+
+    # get the user id number
+    uid = userisactive_output()
+
+    # google geo code API plugin to translate between address and lat/long
+    googlegeo = makegeo()
+
+    # get the user's directory
     growdir = getgrowdir(uid)
-    print(uid, growdir)
-    the_results = gridpredict.autoinput(growdir)
-    stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
+
+    # run the model on the best possible location
+    prediction = gridpredict.autoinput(growdir)
+
+    # get the list of stations, daily rides, and ranking of the new station
+    stationslistdict, riderate, ranking = makeoutput(prediction, googlegeo)
+
     return render_template("output.html", riderate=riderate, ranking=ranking,
           stations=stationslistdict)
 
 @app.route('/output_user')
 def station_output_user():
-    if 'userid' not in session:
-        return redirect(url_for('index'))
-    uid = session['userid']
-    if uid not in users:
-        return redirect(url_for('index'))
-    users[uid].record_as_active()    
 
-    gmaps = makegmap()
-    #pull 'ID' from input field and store it
+    # get the user id number
+    uid = userisactive_output()
+
+    # google geo code API plugin to translate between address and lat/long
+    googlegeo = makegeo()
+
+    # convert address to latitude and longitude
     useraddress = request.args.get('ID1')
-    geocode = gmaps.geocode(useraddress)
+    geocode = googlegeo.geocode(useraddress)
     latitude = geocode[0]['geometry']['location']['lat']
     longitude = geocode[0]['geometry']['location']['lng']
-    #longitude = 
-    #latitude = request.args.get('ID2')
+
+    # get the user's directory
     growdir = getgrowdir(uid)
-    print(uid, growdir)
-    the_results = gridpredict.userinput(longitude, latitude, growdir)
-    stationslistdict, riderate, ranking = makeoutput(the_results, gmaps)
+
+    # run the model on the user's chosen location
+    prediction = gridpredict.userinput(longitude, latitude, growdir)
+
+    # get the list of stations, daily rides, and ranking of the new station
+    stationslistdict, riderate, ranking = makeoutput(prediction, googlegeo)
 
     return render_template("output.html", riderate=riderate, ranking=ranking,
           stations=stationslistdict)
 
-def makegmap():
+def makegeo():
+
+    """
+
+    Apply Google geo code API key.
+
+    """
+
     api_key = 'AIzaSyA1waGCAiSOdsKMI4mg_wrqAdouoVPIbXw'
-    gmaps = googlemaps.Client(key=api_key)
-    return(gmaps)
+    googlegeo = googlemaps.Client(key=api_key)
 
-def makeoutput(the_results, gmaps):    
+    return(googlegeo)
 
-    latitude = the_results[0]
-    longitude = the_results[1]
-    riderate = the_results[2]
-    ranking = the_results[3]
-    location = gmaps.reverse_geocode((latitude, longitude))
+def makeoutput(prediction, googlegeo):    
+
+    """
+
+    Build the table of new stations that will be displayed on the output html
+    page.
+
+    """
+
+    # convert predicted latitude and longitude to an address
+    latitude = prediction[0]
+    longitude = prediction[1]
+    riderate = prediction[2]
+    ranking = prediction[3]
+    location = googlegeo.reverse_geocode((latitude, longitude))
     location = location[0]['formatted_address']
 
-    if 'userid' not in session:
-        return redirect(url_for('index'))
-    uid = session['userid']
-    if uid not in users:
-        return redirect(url_for('index'))
-    users[uid].record_as_active()    
+    # get the user id number
+    uid = userisactive_output()
 
     # load old results
     growdir = getgrowdir(uid)
-    print(uid, growdir)
     stations = pd.read_csv(growdir + 'appresults.csv')
     newlocation = list(stations['address'].values)
     newriderate = list(stations['ridesperday'].values)
@@ -217,10 +259,13 @@ def makeoutput(the_results, gmaps):
     # append the new results
     newlocation.append(location)
     newriderate.append(riderate)
-    print(newlocation, newriderate)
     dictnew = {"address": newlocation, "ridesperday": newriderate}
+
+    # store the new results in a csv file
     stationsnew = pd.DataFrame(dictnew)
     stationsnew.to_csv(growdir + 'appresults.csv', index=False)
+
+    # build a list of dictionaries to pass to Flask
     stationslistdict = []
     for i in range(len(stationsnew)):
         stindex = str(i + 1)
@@ -231,59 +276,70 @@ def makeoutput(the_results, gmaps):
 
     return stationslistdict, riderate, ranking
 
-#@app.route("/osmmap")
-#def osmmap():
-#    return response
-
 @app.route("/predictedridemap.png")
 def predictedridemap():
 
-    if 'userid' not in session:
-        return redirect(url_for('index'))
-    uid = session['userid']
-    if uid not in users:
-        return redirect(url_for('index'))
-    users[uid].record_as_active()    
+    """
 
+    Generate the image showing the predicted daily rides after adding the new
+    station.
+
+    """
+
+    # get the user id number
+    uid = userisactive_output()
+
+    # get the user's directory
+    growdir = getgrowdir(uid)
+
+    # set the figure size
     fig = plt.figure(figsize=(9,5))
 
-    # plot predicted ride map
-    growdir = getgrowdir(uid)
-    print(uid, growdir)
+    # load the predicted ride data
     nrides = pd.read_csv(growdir + 'nridesmap.csv')
     longmin = nrides['longitude'].min()
     longmax = nrides['longitude'].max()
     latmin = nrides['latitude'].min()
     latmax = nrides['latitude'].max()
     nlat = np.sqrt(np.float(len(nrides)))
+
+    # generate the predicted ride matrix
     ridemap = nrides['nrides'].values.reshape((nlat, nlat))
 
+    # plot the predicted ride matrix
     plt.imshow(ridemap, vmin=0, cmap="Blues",
             extent=[longmin,longmax,latmin,latmax], origin='lower')
+
+    # add a colobar and label it
     cbar = plt.colorbar()
-    #cbar = matplotlib.colorbar.ColorbarBase(ax)
     cbar.set_label('Predicted Daily Rides')
 
-    # plot existing Hubway stations
+    # plot the Hubway stations in white
     station = pd.read_csv(growdir + 'Station.csv')
     stationfeatures = pd.read_csv(growdir + 'Features.csv')
     plt.scatter(station['lng'], station['lat'], 
             s=stationfeatures['ridesperday'], alpha=0.4, 
             color='white', edgecolor='black', 
             label='Existing Hubway stations')
+
+    # highlight the new stations added by this user in red
     stationnew = station[station['status'] == 'proposed']
     stationfeaturesnew = stationfeatures[station['status'] == 'proposed']
     plt.scatter(stationnew['lng'], stationnew['lat'], 
             s=stationfeaturesnew['ridesperday'], alpha=0.4, 
             color='red', edgecolor='black', 
             label='Proposed Hubway stations')
+
+    # refine the axis range
     plt.axis([longmin, longmax, latmin, latmax])
+
+    # add labels
     plt.xlabel('Longitude')
     plt.ylabel('Latitude')
-    #ax = plt.gca()
     fig.patch.set_facecolor('white')
     fig.patch.set_edgecolor('black')
 
+    # translate the figure into a format suitable for Flask
     canvas=FigureCanvas(fig)
     png_output = StringIO.StringIO()
     canvas.print_png(png_output)
@@ -291,5 +347,6 @@ def predictedridemap():
     response.headers['Content-Type'] = 'image/png'
     return response
 
+# run the app on the local machine on port 5000
 if __name__ == "__main__":
    app.run(host='0.0.0.0', port=5000, debug=True)
