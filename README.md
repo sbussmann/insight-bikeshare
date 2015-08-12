@@ -18,8 +18,8 @@ Calls gridpredict to do most of the heavy lifting.
 
 gridpredict.py: takes an input location from views.py and runs several
 subroutines that:
-   1.  obtain the predicted rides per day at that location.
-   2.  obtain the rank of the proposed location compared to existing stations.
+   1.  obtain the predicted rides per day at that location;
+   2.  obtain the rank of the proposed location compared to existing stations;
    3.  redraw the map of predicted rides per day in a subgrid centered on the
-   new location.
-   4.  store the results in a database
+   new location and serve the resulting image to Flask;
+   4.  store the results in a database.
