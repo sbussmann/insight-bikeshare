@@ -20,55 +20,28 @@ import datetime as dt
 #print(Flask.root_path)
 app = Flask(__name__)
 
+# use a secret key so that users cannot see their cookie data directly
 app.secret_key = '\x96\\\xf7\x93\xc4\xae:\x8c{iL\x91\x12\x13^\xec\xad\xe2\x9a\xe6\x97{\x8dW'
 
-#db = mdb.connect(user="root", host="localhost", password="password",
-#        db="BostonFeaturesByStation_db", charset='utf8')
-
-#def get_next_user_id():
-#    f = open('users.stat', 'r')
-#    match = re.search(r'total number of users = (\d+)', f.read())
-#    if match:
-#        next_user_id = int(match.group(1))
-#    else:
-#        next_user_id = 0
-#    f.close()
-#    return next_user_id
-
-#def put_next_user_id(next_id):
-#    f = open('users.stat', 'w')
-#    f.write('total number of users = ' + str(next_id))
-#    f.close()
-
-# define a unique results directory for each user
-next_user_id = user.get_next_user_id()
+# instantiate a dictionary for users
 users = {}
 
+# get the next user id
+next_user_id = user.get_next_user_id()
+
+# directory in which user directories are stored
 basedir = '../Data/Boston/'
-#growdir = '../Data/Boston/growing/'
 
-#next_user_id = get_next_user_id()
-
-#@app.route('/hubway')
-#def station_hubway():
-#def inline_map(m, width=650, height=500):
-#    """Takes a folium instance and embed HTML."""
-#    m._build_map()
-#    srcdoc = m.HTML.replace('"', '&quot;')
-#    embed = HTML('<iframe srcdoc="{}" '
-#                 'style="width: {}px; height: {}px; '
-#                 'border: none"></iframe>'.format(srcdoc, width, height))
-#    return embed
-
-def getgrowdir(next_user_id):
+def getgrowdir(user_id):
 
     """
 
-    Generate a new directory to store results for each user.
+    Generate a new directory to store results for each user.  Requires basedir
+    to be defined globally.
 
     """
 
-    gd = basedir + 'user' + str(next_user_id) + '/'
+    gd = basedir + 'user' + str(user_id) + '/'
 
     return gd
 
