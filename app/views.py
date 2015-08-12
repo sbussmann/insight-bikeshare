@@ -2,10 +2,7 @@ import matplotlib
 matplotlib.use('Agg')
 from flask import Flask
 from flask import render_template, request, make_response, session, redirect, url_for
-#from app import app
 import gridpredict
-import loadutil
-import folium
 import numpy as np
 import pandas as pd
 import StringIO
@@ -17,7 +14,7 @@ from subprocess import call
 import datetime as dt
 
 
-#print(Flask.root_path)
+# instantiate the flask app
 app = Flask(__name__)
 
 # use a secret key so that users cannot see their cookie data directly
@@ -45,71 +42,57 @@ def getgrowdir(user_id):
 
     return gd
 
-def makemap():
-    # generate the map
-    latvec, longvec = loadutil.grid()
-    lat0 = latvec.mean()
-    long0 = longvec.mean()
-    mapwidth = 600
-    mapheight = 500
-    map_hubway = folium.Map(location=[lat0, long0], width=mapwidth, height=mapheight, zoom_start=9)
+def userisactive():
 
-    # generate the station locations
-    growdir = getgrowdir(next_user_id)
-    dataload = loadutil.load(growdir)
-    stationfeatures = dataload[6]
-    station = dataload[2]
-    nstation = len(station)
-    for i in range(nstation):
-        ilat = station['lat'][i]
-        ilong = station['lng'][i]
-        iride = stationfeatures['ridesperday'][i] * 10
-        map_hubway.circle_marker(location=[ilat, ilong], radius=iride,
-                fill_color='white', edge_color='none', fill_opacity=0.5)
-    map_hubway.create_map(path="templates/hubway.html")
-    #import fileinput
-    #processing_foo1s = False
-    #for i, line in enumerate(fileinput.input('templates/hubway.html', inplace=1)):
-#	if i == 0:
-#		print('{% extends "input.html" %}')
-#		print('{% block map %}')
-#        #if line.startswith('<head>'):
-#        #    processing_foo1s = True
-#        #else:
-#        #    if processing_foo1s:
-#        #        print('   <meta http-Equiv="Cache-Control" Content="no-cache" />')
-#        #        print('   <meta http-Equiv="Pragma" Content="no-cache" />')
-#        #        print('   <meta http-Equiv="Expires" Content="0" />')
-#        #    processing_foo1s = False
-#        print line,
-#	if i == len(enumerate(fileinput.input('templates/hubway.html', inplace=1))) - 1:
-#		print('{% endblock %}')
+    """
 
-    #foliummap = 5#inline_map(map_hubway)
+    Check if the user has been active in the past 24 hours.  If so, update
+    their most recent activity with the current time.
 
-@app.route('/about')
-def aboutpage():
+    """
+
     if 'userid' in session:
         uid = session['userid']
         if uid in users:
             users[uid].record_as_active()
+
+@app.route('/about')
+def aboutpage():
+
+    """
+
+    Direct users to info on how I did this project.
+
+    """
+
+    # check for recent activity
+    userisactive()
+
     return render_template("about.html")
 
 @app.route('/contact')
 def contactpage():
-    if 'userid' in session:
-        uid = session['userid']
-        if uid in users:
-            users[uid].record_as_active()
+
+    """
+
+    Direct users to my contact info.
+
+    """
+
+    # check for recent activity
+    userisactive()
+
     return render_template("contact.html")
 
 @app.route('/')
 @app.route('/index')
 def station_input():
+
     # check existing users for activity, delete inactive users
     inactive_users = []
     now = dt.datetime.today()
 
+    # if inactive for longer than sessionlifetime, remove user from database
     sessionlifetime = 24 * 3600
     for uid in users:
         if (now - users[uid].last_activity_time).seconds > sessionlifetime:
@@ -120,10 +103,6 @@ def station_input():
         cmd = 'rm -rf ' + rottendir
         call(cmd, shell=True)
 
-    #try:
-        #session['userid'] += 1
-    #except KeyError:
-        #session['userid'] = 1
     if 'userid' in session:
         uid = session['userid']
         growdir = getgrowdir(uid)
