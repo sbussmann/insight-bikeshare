@@ -31,7 +31,7 @@ X_scaled = preprocessing.scale(X)
 # use linear regression
 clf = linear_model.LinearRegression()
 
-# compute r2 score using 5-fold cross-validation
+# compute mean absolute error score using 5-fold cross-validation
 scaledscores = cross_validation.cross_val_score(clf, X_scaled, y, cv=5,
         scoring='mean_absolute_error')
 scores = cross_validation.cross_val_score(clf, X, y, cv=5,
@@ -42,12 +42,62 @@ print("Scores for scaled linear regression: \n",
 print("Scores for linear regression: \n", 
         scores, scores.mean(), scores.std())
 
-clf = linear_model.RidgeCV(alphas=[0.1, 1.0, 10.0])
-scores = cross_validation.cross_val_score(clf, X_scaled, y, cv=5, scoring='r2')
-print("Scores for Ridge regression: \n", 
-        scores, scores.mean(), scores.std())
-clf.fit(X_scaled, y)       
-print(clf.alpha_, clf.coef_)
+alphas = list(10. ** (np.arange(10) - 5))
+alph1 = []
+coeff1 = []
+score1 = []
+for ialpha in alphas:
+    clf = linear_model.RidgeCV(alphas=[ialpha])
+    scores = cross_validation.cross_val_score(clf, X_scaled, y, cv=5,
+            scoring='mean_absolute_error')
+    print("Scores for Ridge regression: \n", 
+            scores.mean(), scores.std())
+    clf.fit(X_scaled, y)       
+    alph1.append(clf.alpha_)
+    coeff1.append(clf.coef_)
+    score1.append(scores.mean())
+
+plt.plot(alph1, coeff1)
+plt.semilogx()
+plt.xlabel('Regularization coefficient [alpha]')
+plt.ylabel('Coefficient')
+plt.savefig('../Figures/RidgeAlphaCoeff.png')
+
+plt.clf()
+plt.plot(alph1, score1)
+plt.semilogx()
+plt.xlabel('Regularization coefficient [alpha]')
+plt.ylabel('Mean absolute error score')
+plt.savefig('../Figures/RidgeAlphaScore.png')
+
+alph1 = []
+coeff1 = []
+score1 = []
+for ialpha in alphas:
+    clf = linear_model.LassoCV(alphas=[ialpha])
+    scores = cross_validation.cross_val_score(clf, X_scaled, y, cv=5,
+            scoring='mean_absolute_error')
+    print("Scores for Lasso regression: \n", 
+            scores.mean(), scores.std())
+    clf.fit(X_scaled, y)       
+    alph1.append(clf.alpha_)
+    coeff1.append(clf.coef_)
+    print(clf.coef_)
+    score1.append(scores.mean())
+
+plt.clf()
+plt.plot(alph1, coeff1)
+plt.semilogx()
+plt.xlabel('Regularization coefficient [alpha]')
+plt.ylabel('Coefficient')
+plt.savefig('../Figures/LassoAlphaCoeff.png')
+
+plt.clf()
+plt.plot(alph1, score1)
+plt.semilogx()
+plt.xlabel('Regularization coefficient [alpha]')
+plt.ylabel('Mean absolute error score')
+plt.savefig('../Figures/LassoAlphaScore.png')
 
 polynomial_features = PolynomialFeatures(degree=2)
 ridge_regression = linear_model.RidgeCV(alphas=[0.1, 1.0, 10.0])
